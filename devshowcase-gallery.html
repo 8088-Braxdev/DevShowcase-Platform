@@ -1,0 +1,1468 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DevShowcase — Project Gallery</title>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;700&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+  <link rel="shortcut icon" href="favicon.png" type="image/x-icon">
+  <style>
+    :root {
+      --bg: #060811;
+      --bg2: #0B0E1A;
+      --bg3: #111527;
+      --bg4: #181C2E;
+      --glass: rgba(255, 255, 255, 0.04);
+      --glass2: rgba(255, 255, 255, 0.07);
+      --border: rgba(255, 255, 255, 0.07);
+      --border2: rgba(255, 255, 255, 0.13);
+      --border3: rgba(255, 255, 255, 0.2);
+      --accent: #06D6A0;
+      --accent2: #7C6EFA;
+      --accent3: #FF6B6B;
+      --a1: #7C6EFA;
+      --a2: #06D6A0;
+      --a3: #FF6B6B;
+      --a4: #FFD166;
+      --text: #F0F2FF;
+      --muted: #6B7280;
+      --muted2: #9CA3AF;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Satoshi', 'Syne', sans-serif;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ANIMATED BG */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background: radial-gradient(ellipse 80% 50% at 50% -20%, rgba(124, 110, 250, 0.08) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 40% at 80% 80%, rgba(6, 214, 160, 0.06) 0%, transparent 50%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* NAV */
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      padding: 0 5%;
+      background: rgba(7, 8, 12, 0.85);
+      backdrop-filter: blur(24px);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 64px;
+    }
+
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+    }
+
+    .nav-logo-text {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.9rem;
+      font-weight: 700;
+      letter-spacing: 1px;
+      background: linear-gradient(135deg, #fff 40%, var(--a1));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .nav-btn {
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-size: 0.82rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-family: 'Satoshi', 'Syne', sans-serif;
+    }
+
+    .btn-ghost {
+      background: transparent;
+      border: 1px solid var(--border2);
+      color: var(--muted2);
+    }
+
+    .btn-ghost:hover {
+      border-color: var(--a1);
+      color: var(--a1);
+    }
+
+    .btn-accent {
+      background: linear-gradient(135deg, var(--a1), #5B52D6);
+      border: none;
+      color: #000;
+      font-weight: 600;
+    }
+
+    .btn-accent:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 20px rgba(124, 110, 250, 0.4);
+    }
+
+    /* HERO */
+    .hero {
+      position: relative;
+      z-index: 1;
+      padding: 80px 5% 60px;
+      text-align: center;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 14px;
+      border-radius: 100px;
+      background: rgba(124, 110, 250, 0.08);
+      border: 1px solid rgba(124, 110, 250, 0.2);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.72rem;
+      color: var(--a1);
+      letter-spacing: 1px;
+      margin-bottom: 24px;
+    }
+
+    .hero-badge::before {
+      content: '●';
+      font-size: 0.5rem;
+      animation: blink 2s infinite;
+    }
+
+    @keyframes blink {
+
+      0%,
+      100% {
+        opacity: 1;
+      }
+
+      50% {
+        opacity: 0.3;
+      }
+    }
+
+    .hero h1 {
+      font-family: 'JetBrains Mono', sans-serif;
+      font-size: clamp(3rem, 10vw, 7rem);
+      letter-spacing: 1.5px;
+      line-height: 0.95;
+      margin-bottom: 20px;
+    }
+
+    .hero h1 span {
+      -webkit-text-stroke: 1px rgba(255, 255, 255, 0.2);
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero p {
+      color: var(--muted2);
+      font-size: 1.05rem;
+      max-width: 500px;
+      margin: 0 auto 40px;
+      line-height: 1.7;
+      font-weight: 300;
+    }
+
+    .hero-stats {
+      display: flex;
+      justify-content: center;
+      gap: 40px;
+      margin-bottom: 48px;
+      flex-wrap: wrap;
+    }
+
+    .stat {
+      text-align: center;
+    }
+
+    .stat-num {
+      font-family: 'JetBrains Mono', sans-serif;
+      font-size: 2rem;
+      letter-spacing: 2px;
+      color: var(--a1);
+    }
+
+    .stat-label {
+      font-size: 0.75rem;
+      color: var(--muted);
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    /* SEARCH & FILTER */
+    .controls {
+      position: relative;
+      z-index: 1;
+      padding: 0 5% 40px;
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .search-box {
+      flex: 1;
+      min-width: 200px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 10px 16px;
+      transition: border-color 0.2s;
+    }
+
+    .search-box:focus-within {
+      border-color: var(--border2);
+    }
+
+    .search-box i {
+      color: var(--muted);
+      font-size: 0.85rem;
+    }
+
+    .search-box input {
+      background: transparent;
+      border: none;
+      outline: none;
+      color: var(--text);
+      font-family: 'Satoshi', 'Syne', sans-serif;
+      font-size: 0.9rem;
+      flex: 1;
+    }
+
+    .search-box input::placeholder {
+      color: var(--muted);
+    }
+
+    .filter-btn {
+      padding: 10px 16px;
+      border-radius: 10px;
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      color: var(--muted2);
+      font-size: 0.82rem;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-family: 'Satoshi', 'Syne', sans-serif;
+      white-space: nowrap;
+    }
+
+    .filter-btn:hover,
+    .filter-btn.active {
+      background: rgba(124, 110, 250, 0.08);
+      border-color: rgba(124, 110, 250, 0.3);
+      color: var(--a1);
+    }
+
+    /* GRID */
+    .gallery {
+      position: relative;
+      z-index: 1;
+      padding: 0 5% 80px;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    /* PROJECT CARD */
+    .project-card {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      overflow: hidden;
+      transition: all 0.3s ease;
+      cursor: pointer;
+      animation: fadeUp 0.5s ease both;
+    }
+
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .project-card:hover {
+      border-color: rgba(110, 231, 183, 0.2);
+      background: var(--bg3);
+      transform: translateY(-4px);
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(110, 231, 183, 0.05);
+    }
+
+    .card-img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+      display: block;
+      background: var(--bg3);
+      position: relative;
+    }
+
+    .card-img-placeholder {
+      width: 100%;
+      height: 200px;
+      background: linear-gradient(135deg, var(--bg3), var(--bg4));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 3rem;
+      color: var(--border2);
+    }
+
+    .card-body {
+      padding: 20px;
+    }
+
+    .card-top {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 10px;
+    }
+
+    .dev-info {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .dev-avatar {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.65rem;
+      font-weight: 700;
+      color: #000;
+      font-family: 'JetBrains Mono', monospace;
+      flex-shrink: 0;
+    }
+
+    .dev-name {
+      font-size: 0.78rem;
+      color: var(--muted2);
+      font-weight: 500;
+    }
+
+    .card-title {
+      font-size: 1.15rem;
+      font-weight: 600;
+      margin-bottom: 8px;
+      line-height: 1.3;
+    }
+
+    .card-desc {
+      font-size: 0.85rem;
+      color: var(--muted2);
+      line-height: 1.6;
+      margin-bottom: 16px;
+      font-weight: 300;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .tech-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 16px;
+    }
+
+    .tech-tag {
+      padding: 3px 10px;
+      border-radius: 100px;
+      background: rgba(129, 140, 248, 0.1);
+      border: 1px solid rgba(129, 140, 248, 0.2);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.65rem;
+      color: var(--accent2);
+      letter-spacing: 0.5px;
+    }
+
+    .card-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-top: 14px;
+      border-top: 1px solid var(--border);
+    }
+
+    .reactions {
+      display: flex;
+      gap: 6px;
+    }
+
+    .reaction-btn {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      padding: 5px 10px;
+      border-radius: 100px;
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--muted);
+      font-size: 0.75rem;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-family: 'DM Sans', sans-serif;
+    }
+
+    .reaction-btn:hover {
+      background: var(--bg3);
+      border-color: var(--border2);
+    }
+
+    .reaction-btn.reacted {
+      background: rgba(110, 231, 183, 0.08);
+      border-color: rgba(110, 231, 183, 0.3);
+      color: var(--accent);
+    }
+
+    .card-actions {
+      display: flex;
+      gap: 8px;
+    }
+
+    .action-btn {
+      width: 34px;
+      height: 34px;
+      border-radius: 8px;
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--muted);
+      font-size: 0.8rem;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .action-btn:hover {
+      border-color: var(--border2);
+      color: var(--text);
+    }
+
+    .wa-btn {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 7px 14px;
+      border-radius: 8px;
+      background: rgba(37, 211, 102, 0.1);
+      border: 1px solid rgba(37, 211, 102, 0.2);
+      color: #25D366;
+      font-size: 0.78rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+      text-decoration: none;
+    }
+
+    .wa-btn:hover {
+      background: rgba(37, 211, 102, 0.2);
+    }
+
+    /* EMPTY STATE */
+    .empty-state {
+      grid-column: 1/-1;
+      text-align: center;
+      padding: 80px 20px;
+      color: var(--muted);
+    }
+
+    .empty-state i {
+      font-size: 3rem;
+      margin-bottom: 16px;
+      display: block;
+      color: var(--border2);
+    }
+
+    .empty-state p {
+      font-size: 1rem;
+      line-height: 1.7;
+    }
+
+    /* ===== MODAL ===== */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.85);
+      backdrop-filter: blur(8px);
+      z-index: 2000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .modal-overlay.open {
+      display: flex;
+    }
+
+    .modal {
+      background: var(--bg2);
+      border: 1px solid var(--border2);
+      border-radius: 20px;
+      width: 100%;
+      max-width: 680px;
+      max-height: 90vh;
+      overflow-y: auto;
+      animation: modalIn 0.3s ease;
+    }
+
+    @keyframes modalIn {
+      from {
+        opacity: 0;
+        transform: scale(0.95) translateY(10px);
+      }
+
+      to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+      }
+    }
+
+    .modal::-webkit-scrollbar {
+      width: 4px;
+    }
+
+    .modal::-webkit-scrollbar-thumb {
+      background: var(--border2);
+      border-radius: 2px;
+    }
+
+    .modal-header {
+      padding: 24px 24px 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 12px;
+    }
+
+    .modal-close {
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      color: var(--muted);
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      transition: all 0.2s;
+      font-size: 0.9rem;
+    }
+
+    .modal-close:hover {
+      color: var(--text);
+      border-color: var(--border2);
+    }
+
+    .modal-img {
+      width: 100%;
+      height: 280px;
+      object-fit: cover;
+      margin: 20px 0 0;
+      display: block;
+    }
+
+    .modal-img-placeholder {
+      width: 100%;
+      height: 280px;
+      margin: 20px 0 0;
+      background: var(--bg3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 4rem;
+      color: var(--border2);
+    }
+
+    .modal-body {
+      padding: 24px;
+    }
+
+    .modal-title {
+      font-size: 1.6rem;
+      font-weight: 600;
+      letter-spacing: -0.5px;
+      margin-bottom: 8px;
+    }
+
+    .modal-dev {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+
+    .modal-desc {
+      color: var(--muted2);
+      line-height: 1.8;
+      margin-bottom: 20px;
+      font-weight: 300;
+    }
+
+    .modal-tech {
+      margin-bottom: 24px;
+    }
+
+    .modal-section-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.7rem;
+      color: var(--muted);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+
+    .modal-actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 24px;
+    }
+
+    .modal-btn {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 20px;
+      border-radius: 10px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+      text-decoration: none;
+      font-family: 'DM Sans', sans-serif;
+      border: none;
+    }
+
+    .btn-live {
+      background: var(--accent);
+      color: #000;
+    }
+
+    .btn-live:hover {
+      background: #5FD9A8;
+    }
+
+    .btn-wa {
+      background: rgba(37, 211, 102, 0.15);
+      color: #25D366;
+      border: 1px solid rgba(37, 211, 102, 0.3);
+    }
+
+    .btn-wa:hover {
+      background: rgba(37, 211, 102, 0.25);
+    }
+
+    /* COMMENTS */
+    .comments-section {
+      border-top: 1px solid var(--border);
+      padding-top: 20px;
+    }
+
+    .comments-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 16px;
+      max-height: 250px;
+      overflow-y: auto;
+    }
+
+    .comments-list::-webkit-scrollbar {
+      width: 3px;
+    }
+
+    .comments-list::-webkit-scrollbar-thumb {
+      background: var(--border2);
+    }
+
+    .comment-item {
+      display: flex;
+      gap: 10px;
+      padding: 12px;
+      border-radius: 10px;
+      background: var(--bg3);
+      border: 1px solid var(--border);
+    }
+
+    .comment-av {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent2), var(--accent3));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.65rem;
+      font-weight: 700;
+      color: #fff;
+      flex-shrink: 0;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .comment-content {}
+
+    .comment-name {
+      font-size: 0.78rem;
+      font-weight: 600;
+      margin-bottom: 3px;
+    }
+
+    .comment-text {
+      font-size: 0.83rem;
+      color: var(--muted2);
+      line-height: 1.5;
+      font-weight: 300;
+      word-break: break-word;
+      overflow-wrap: anywhere;
+      white-space: pre-wrap;
+    }
+
+    .comment-time {
+      font-size: 0.7rem;
+      color: var(--muted);
+      margin-top: 4px;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .comment-form {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .comment-inputs {
+      display: flex;
+      gap: 8px;
+    }
+
+    .comment-input {
+      flex: 1;
+      padding: 10px 14px;
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--text);
+      font-family: 'Satoshi', 'Syne', sans-serif;
+      font-size: 0.85rem;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .comment-input:focus {
+      border-color: var(--border2);
+    }
+
+    .comment-input::placeholder {
+      color: var(--muted);
+    }
+
+    .comment-textarea {
+      width: 100%;
+      padding: 10px 14px;
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--text);
+      font-family: 'Satoshi', 'Syne', sans-serif;
+      font-size: 0.85rem;
+      outline: none;
+      transition: border-color 0.2s;
+      resize: none;
+      min-height: 70px;
+      max-height: 120px;
+    }
+
+    .comment-textarea:focus {
+      border-color: var(--border2);
+    }
+
+    .comment-textarea::placeholder {
+      color: var(--muted);
+    }
+
+    .comment-submit {
+      align-self: flex-end;
+      padding: 9px 20px;
+      border-radius: 8px;
+      background: var(--accent);
+      color: #000;
+      border: none;
+      font-weight: 600;
+      font-size: 0.82rem;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-family: 'Satoshi', 'Syne', sans-serif;
+    }
+
+    .comment-submit:hover {
+      background: #5FD9A8;
+    }
+
+    /* LOADING */
+    .loading {
+      grid-column: 1/-1;
+      text-align: center;
+      padding: 80px 20px;
+      color: var(--muted);
+    }
+
+    .spinner {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      border: 2px solid var(--border2);
+      border-top-color: var(--accent);
+      animation: spin 0.8s linear infinite;
+      margin: 0 auto 16px;
+    }
+
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%) translateY(80px);
+      padding: 12px 24px;
+      border-radius: 12px;
+      background: var(--bg3);
+      border: 1px solid var(--border2);
+      font-size: 0.85rem;
+      color: var(--text);
+      z-index: 9999;
+      opacity: 0;
+      transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+      white-space: nowrap;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      backdrop-filter: blur(20px);
+      pointer-events: none;
+    }
+
+    .toast.show {
+      transform: translateX(-50%) translateY(0);
+      opacity: 1;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    /* MOBILE */
+    @media(max-width:768px) {
+      .gallery {
+        grid-template-columns: 1fr;
+        padding: 0 4% 60px;
+      }
+
+      .hero {
+        padding: 60px 4% 40px;
+      }
+
+      .controls {
+        padding: 0 4% 30px;
+      }
+
+      .hero-stats {
+        gap: 24px;
+      }
+
+      .form-row {
+        grid-template-columns: 1fr;
+      }
+
+      .modal-actions {
+        flex-direction: column;
+      }
+
+      .modal-btn {
+        justify-content: center;
+      }
+
+      .modal {
+        border-radius: 16px 16px 0 0;
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        max-width: 100%;
+        max-height: 92vh;
+      }
+
+      .modal-overlay {
+        align-items: flex-end;
+        padding: 0;
+      }
+
+      .modal-img {
+        height: 200px;
+      }
+
+      .comment-inputs {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- TOAST -->
+  <div class="toast" id="toast"></div>
+
+  <!-- NAV -->
+  <nav>
+    <a href="index.html" class="nav-logo">
+      <div
+        style="width:34px;height:34px;border-radius:9px;background:linear-gradient(135deg,var(--a1),var(--a2));display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-size:0.78rem;font-weight:700;color:#fff;flex-shrink:0;">
+        <i class="fa-solid fa-bolt"></i>
+      </div>
+      <span class="nav-logo-text">DevShowcase</span>
+    </a>
+
+
+    <div class="nav-right">
+      <a href="index.html" class="nav-btn btn-ghost" id="navJoinBtn">
+        <i class="fa-solid fa-rocket"></i> Join Free
+      </a>
+      <a href="devshowcase-dashboard.html" class="nav-btn btn-accent" id="navDashBtn" style="display:none;">
+        <i class="fa-solid fa-grid-2"></i> Dashboard
+      </a>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-badge">Open Developer Showcase</div>
+    <h1>Built by <span>Devs</span><br>For the World</h1>
+    <p>A showcase of real projects by real developers. Drop your work, get feedback, connect with clients.</p>
+    <div class="hero-stats">
+      <div class="stat">
+        <div class="stat-num" id="totalProjects">0</div>
+        <div class="stat-label">Projects</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num" id="totalDevs">0</div>
+        <div class="stat-label">Developers</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num" id="totalLikes">0</div>
+        <div class="stat-label">Reactions</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTROLS -->
+  <div class="controls">
+    <div class="search-box">
+      <i class="fa-solid fa-magnifying-glass"></i>
+      <input type="text" id="searchInput" placeholder="Search projects, devs, tech..." oninput="filterProjects()">
+    </div>
+    <button class="filter-btn active" onclick="setFilter('all', this)">All</button>
+    <button class="filter-btn" onclick="setFilter('Web', this)">Web</button>
+    <button class="filter-btn" onclick="setFilter('Mobile', this)">Mobile</button>
+    <button class="filter-btn" onclick="setFilter('AI', this)">AI</button>
+    <button class="filter-btn" onclick="setFilter('Design', this)">Design</button>
+  </div>
+
+  <!-- GALLERY -->
+  <div class="gallery" id="gallery">
+    <div class="loading">
+      <div class="spinner"></div>
+      <p>Loading projects...</p>
+    </div>
+  </div>
+
+  <!-- ===== PROJECT MODAL ===== -->
+  <div class="modal-overlay" id="projectModal">
+    <div class="modal" id="modalContent">
+      <div class="modal-header">
+        <div>
+          <h2 class="modal-title" id="modalTitle"></h2>
+          <div class="modal-dev" id="modalDev"></div>
+        </div>
+        <button class="modal-close" onclick="closeModal()"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div id="modalImgWrap"></div>
+      <div class="modal-body">
+        <p class="modal-desc" id="modalDesc"></p>
+        <div class="modal-section-label">Tech Stack</div>
+        <div class="tech-tags" id="modalTech" style="margin-bottom:20px;"></div>
+        <div class="modal-actions" id="modalActions"></div>
+        <div class="comments-section">
+          <div class="modal-section-label" style="margin-bottom:12px;">
+            Comments <span id="commentCount" style="color:var(--accent);"></span>
+          </div>
+          <div class="comments-list" id="commentsList"></div>
+          <div class="comment-form">
+            <div class="comment-inputs">
+              <input type="text" class="comment-input" id="commenterName" placeholder="Your name"
+                style="max-width:140px;">
+              <input type="text" class="comment-input" id="commenterRole" placeholder="Role (e.g. Designer)">
+            </div>
+            <textarea class="comment-textarea" id="commentText"
+              placeholder="Share your thoughts on this project..."></textarea>
+            <button class="comment-submit" onclick="submitComment()">Post Comment</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    // ================================================
+    // SUPABASE LOGIC
+    // ================================================
+    const SUPABASE_URL = 'https://embhkmxkuprdjkspsdii.supabase.co';
+    const SUPABASE_KEY = 'sb_publishable_B9vhC35VSzJ3VskrtSETYw_ueSS6p1e';
+    const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    // ================================================
+    // STATE
+    // ================================================
+    let allProjects = [];
+    let currentFilter = 'all';
+    let currentProjectId = null;
+    let userReactions = JSON.parse(localStorage.getItem('ds_reactions') || '{}');
+
+    // ================================================
+    function showToast(msg) {
+      const t = document.getElementById('toast');
+      t.innerHTML = msg;
+      t.classList.add('show');
+      setTimeout(() => t.classList.remove('show'), 3000);
+    }
+    // LOAD PROJECTS
+    // ================================================
+    async function loadProjects() {
+      const { data, error } = await _supabase
+        .from('showcase_projects')
+        .select('*')
+        .order('created_at', { ascending: false });
+
+      if (error) {
+        document.getElementById('gallery').innerHTML = `
+      <div class="empty-state">
+        <i class="fa-solid fa-triangle-exclamation"></i>
+        <p>Failed to load projects.<br>Check your internet connection.</p>
+      </div>`;
+        return;
+      }
+
+      allProjects = data || [];
+      updateStats();
+      renderProjects(allProjects);
+    }
+
+    function updateStats() {
+      document.getElementById('totalProjects').textContent = allProjects.length;
+      const devs = new Set(allProjects.map(p => p.dev_name)).size;
+      document.getElementById('totalDevs').textContent = devs;
+      const totalReactions = allProjects.reduce((sum, p) =>
+        sum + (p.likes || 0) + (p.fire || 0) + (p.clap || 0), 0);
+      document.getElementById('totalLikes').textContent = totalReactions;
+    }
+
+    // ================================================
+    // RENDER
+    // ================================================
+    function renderProjects(projects) {
+      const gallery = document.getElementById('gallery');
+
+      if (projects.length === 0) {
+        gallery.innerHTML = `
+      <div class="empty-state">
+        <i class="fa-solid fa-folder-open"></i>
+        <p>No projects yet.<br>Be the first to add yours! 🚀</p>
+      </div>`;
+        return;
+      }
+
+      gallery.innerHTML = projects.map((p, i) => buildCard(p, i)).join('');
+    }
+
+    function buildCard(p, i) {
+      const tech = (p.tech_stack || '').split(',').map(t => t.trim()).filter(Boolean);
+      const initials = (p.dev_name || 'D').slice(0, 2).toUpperCase();
+      const avatarHTML = (p.dev_avatar_url && p.dev_avatar_url.startsWith('http'))
+        ? `<img src="${p.dev_avatar_url}" style="width:28px;height:28px;border-radius:50%;object-fit:cover;">`
+        : `<div class="dev-avatar">${initials}</div>`;
+      const reacted = userReactions[p.id] || {};
+      const waMsg = encodeURIComponent(p.wa_message || `Hi ${p.dev_name}, I saw your project "${p.project_name}" on DevShowcase and I'm interested!`);
+      const waLink = `https://wa.me/${(p.dev_whatsapp || '').replace(/[^0-9]/g, '')}?text=${waMsg}`;
+
+      return `
+    <div class="project-card" style="animation-delay:${i * 0.06}s" onclick="openProject(${p.id})">
+      ${p.image_url
+          ? `<img class="card-img" src="${p.image_url}" alt="${p.project_name}" onerror="this.style.display='none'">`
+          : `<div class="card-img-placeholder"><i class="fa-solid fa-code"></i></div>`
+        }
+      <div class="card-body">
+        <div class="card-top">
+          <div class="dev-info">
+            ${avatarHTML}
+            <div>
+            <div class="dev-name" style="cursor:pointer;text-decoration:underline;text-underline-offset:3px;" 
+            onclick="event.stopPropagation();window.location.href='devshowcase-profile.html?dev=${p.user_id}'">
+            ${p.dev_name || 'Developer'}
+          </div>
+              <div style="font-size:0.7rem;color:var(--muted);">${p.dev_role || ''}</div>
+            </div>
+          </div>
+          ${p.category ? `<span class="tech-tag" style="height:fit-content;">${p.category}</span>` : ''}
+        </div>
+        <h3 class="card-title">${p.project_name}</h3>
+        <p class="card-desc">${p.description || ''}</p>
+        <div class="tech-tags">
+          ${tech.slice(0, 4).map(t => `<span class="tech-tag">${t}</span>`).join('')}
+          ${tech.length > 4 ? `<span class="tech-tag">+${tech.length - 4}</span>` : ''}
+        </div>
+        <div class="card-footer" onclick="event.stopPropagation()">
+          <div class="reactions">
+            <button class="reaction-btn ${reacted.like ? 'reacted' : ''}" onclick="react(${p.id},'likes',this)">
+              👍 <span>${p.likes || 0}</span>
+            </button>
+            <button class="reaction-btn ${reacted.fire ? 'reacted' : ''}" onclick="react(${p.id},'fire',this)">
+              🔥 <span>${p.fire || 0}</span>
+            </button>
+            <button class="reaction-btn ${reacted.clap ? 'reacted' : ''}" onclick="react(${p.id},'clap',this)">
+              👏 <span>${p.clap || 0}</span>
+            </button>
+          </div>
+          <div class="card-actions">
+            <a class="wa-btn" href="${waLink}" target="_blank" onclick="event.stopPropagation()">
+              <i class="fa-brands fa-whatsapp"></i> Chat
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
+    }
+
+    // ================================================
+    // REACTIONS
+    // ================================================
+    async function react(projectId, field, btn) {
+      const reactionKey = field === 'likes' ? 'like' : field;
+      const project = allProjects.find(p => p.id === projectId);
+      if (!project) return;
+
+      const reacted = userReactions[projectId] || {};
+      const span = btn.querySelector('span');
+      let newVal;
+
+      if (reacted[reactionKey]) {
+        // UN-REACT
+        newVal = Math.max(0, (project[field] || 0) - 1);
+        await _supabase.from('showcase_projects').update({ [field]: newVal }).eq('id', projectId);
+        project[field] = newVal;
+        delete reacted[reactionKey];
+        btn.classList.remove('reacted');
+      } else {
+        // REACT
+        newVal = (project[field] || 0) + 1;
+        await _supabase.from('showcase_projects').update({ [field]: newVal }).eq('id', projectId);
+        project[field] = newVal;
+        reacted[reactionKey] = true;
+        btn.classList.add('reacted');
+
+        // NOTIFICATION — mara moja tu kwa siku kwa kila project
+        if (project.user_id) {
+          const emoji = field === 'likes' ? '👍' : field === 'fire' ? '🔥' : '👏';
+          const todayStart = new Date();
+          todayStart.setHours(0, 0, 0, 0);
+
+          const { data: existing } = await _supabase
+            .from('notifications')
+            .select('id')
+            .eq('user_id', project.user_id)
+            .eq('type', 'reaction')
+            .gte('created_at', todayStart.toISOString())
+            .ilike('message', `%${project.project_name}%${emoji}%`)
+            .limit(1);
+
+          if (!existing || existing.length === 0) {
+            await _supabase.from('notifications').insert({
+              user_id: project.user_id,
+              type: 'reaction',
+              message: `Someone reacted ${emoji} to <strong>${project.project_name}</strong>`,
+              is_read: false
+            });
+          }
+        }
+      }
+
+      userReactions[projectId] = reacted;
+      localStorage.setItem('ds_reactions', JSON.stringify(userReactions));
+      if (span) span.textContent = newVal;
+      if (navigator.vibrate) navigator.vibrate(30);
+      updateStats();
+    }
+
+    // ================================================
+    // FILTER & SEARCH
+    // ================================================
+    function setFilter(filter, el) {
+      currentFilter = filter;
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      el.classList.add('active');
+      filterProjects();
+    }
+
+    function filterProjects() {
+      const search = document.getElementById('searchInput').value.toLowerCase().trim();
+      let filtered = allProjects;
+
+      if (currentFilter !== 'all') {
+        filtered = filtered.filter(p => p.category === currentFilter);
+      }
+
+      if (search) {
+        filtered = filtered.filter(p =>
+          (p.project_name || '').toLowerCase().includes(search) ||
+          (p.dev_name || '').toLowerCase().includes(search) ||
+          (p.tech_stack || '').toLowerCase().includes(search) ||
+          (p.description || '').toLowerCase().includes(search)
+        );
+      }
+
+      renderProjects(filtered);
+    }
+
+    // ================================================
+    // PROJECT MODAL
+    // ================================================
+    // FIX 1 — Project inafungua modal
+    async function openProject(id) {
+      const p = allProjects.find(pr => pr.id === id);
+      if (!p) return;
+
+      const tech = (p.tech_stack || '').split(',').map(t => t.trim()).filter(Boolean);
+      const waMsg = encodeURIComponent(p.wa_message || `Hi ${p.dev_name}, I saw your project "${p.project_name}" on DevShowcase!`);
+      const waLink = `https://wa.me/${(p.dev_whatsapp || '').replace(/[^0-9]/g, '')}?text=${waMsg}`;
+
+      document.getElementById('modalTitle').textContent = p.project_name;
+      document.getElementById('modalDev').innerHTML = `
+    <div style="width:24px;height:24px;border-radius:50%;background:linear-gradient(135deg,var(--a1),var(--a2));display:flex;align-items:center;justify-content:center;font-size:0.6rem;font-weight:700;color:#fff;">${(p.dev_name || 'D').slice(0, 2).toUpperCase()}</div>
+    <span style="font-size:0.82rem;color:var(--muted2);">${p.dev_name} · ${p.dev_role || 'Developer'}</span>`;
+
+      document.getElementById('modalImgWrap').innerHTML = p.image_url
+        ? `<img class="modal-img" src="${p.image_url}" alt="${p.project_name}">`
+        : `<div class="modal-img-placeholder"><i class="fa-solid fa-code"></i></div>`;
+
+      document.getElementById('modalDesc').textContent = p.description || '';
+      document.getElementById('modalTech').innerHTML = tech.map(t => `<span class="tech-tag">${t}</span>`).join('');
+
+      let actions = p.live_link ? `<a class="modal-btn btn-live" href="${p.live_link}" target="_blank"><i class="fa-solid fa-arrow-up-right-from-square"></i> View Live</a>` : '';
+      actions += `<a class="modal-btn btn-wa" href="${waLink}" target="_blank"><i class="fa-brands fa-whatsapp"></i> WhatsApp Dev</a>`;
+      document.getElementById('modalActions').innerHTML = actions;
+
+      document.getElementById('commentCount').textContent = '';
+      document.getElementById('commentsList').innerHTML = '<div style="color:var(--muted);font-size:0.82rem;">Loading...</div>';
+      document.getElementById('projectModal').classList.add('open');
+      document.body.style.overflow = 'hidden';
+
+      // Record profile view + notification
+      try {
+        const { data: { session } } = await _supabase.auth.getSession();
+        const viewerId = session?.user?.id || null;
+        if (p.user_id && viewerId !== p.user_id) {
+          await _supabase.from('profile_views').insert({
+            viewed_user_id: p.user_id,
+            viewer_id: viewerId,
+            page: 'gallery'
+          });
+          await _supabase.from('notifications').insert({
+            user_id: p.user_id,
+            type: 'view',
+            message: `Someone viewed your project <strong>${p.project_name}</strong>`,
+            is_read: false
+          });
+        }
+      } catch (e) {
+        console.log('View record failed:', e);
+      }
+
+      // Load comments
+      _supabase.from('showcase_comments').select('*')
+        .eq('project_id', id).order('created_at', { ascending: false })
+        .then(({ data }) => {
+          currentProjectId = id;
+          document.getElementById('commentCount').textContent = `(${data?.length || 0})`;
+          if (!data?.length) {
+            document.getElementById('commentsList').innerHTML = '<div style="color:var(--muted);font-size:0.82rem;padding:8px 0;">No comments yet 💬</div>';
+            return;
+          }
+          document.getElementById('commentsList').innerHTML = data.map(c => {
+            const ini = (c.commenter_name || 'A').slice(0, 2).toUpperCase();
+            const date = new Date(c.created_at).toLocaleDateString('en', { month: 'short', day: 'numeric' });
+            return `<div class="comment-item">
+          <div class="comment-av">${ini}</div>
+          <div class="comment-content">
+            <div class="comment-name">${c.commenter_name || 'Anonymous'} <span style="color:var(--muted);font-size:0.7rem;">${c.commenter_role || ''}</span></div>
+            <div class="comment-text">${c.comment_text}</div>
+            <div class="comment-time">${date}</div>
+          </div>
+        </div>`;
+          }).join('');
+        });
+    }
+
+    function closeModal() {
+      document.getElementById('projectModal').classList.remove('open');
+      document.body.style.overflow = '';
+      currentProjectId = null;
+    }
+
+    document.getElementById('projectModal').addEventListener('click', function (e) {
+      if (e.target === this) closeModal();
+    });
+
+    // FIX 2 — Session check — Join/Dashboard
+    async function checkSession() {
+      try {
+        const { data } = await _supabase.auth.getSession();
+        if (data?.session) {
+          const join = document.getElementById('navJoinBtn');
+          const dash = document.getElementById('navDashBtn');
+          if (join) join.style.display = 'none';
+          if (dash) dash.style.display = 'flex';
+        }
+      } catch (e) { }
+    }
+    checkSession();
+
+    // ================================================
+    // COMMENTS
+    // ================================================
+    async function loadComments(projectId) {
+      const list = document.getElementById('commentsList');
+      list.innerHTML = '<div style="color:var(--muted);font-size:0.82rem;padding:8px 0;">Loading...</div>';
+
+      const { data, error } = await _supabase
+        .from('showcase_comments')
+        .select('*')
+        .eq('project_id', projectId)
+        .order('created_at', { ascending: false });
+
+      if (error || !data) {
+        list.innerHTML = '<div style="color:var(--muted);font-size:0.82rem;">Could not load comments.</div>';
+        return;
+      }
+
+      document.getElementById('commentCount').textContent = `(${data.length})`;
+
+      if (data.length === 0) {
+        list.innerHTML = '<div style="color:var(--muted);font-size:0.82rem;padding:8px 0;">No comments yet. Be first! 💬</div>';
+        return;
+      }
+
+      list.innerHTML = data.map(c => {
+        const initials = (c.commenter_name || 'A').slice(0, 2).toUpperCase();
+        const date = new Date(c.created_at).toLocaleDateString('en', { month: 'short', day: 'numeric' });
+        return `
+      <div class="comment-item">
+        <div class="comment-av">${initials}</div>
+        <div class="comment-content">
+          <div class="comment-name">${c.commenter_name || 'Anonymous'} <span style="color:var(--muted);font-weight:300;font-size:0.72rem;">${c.commenter_role || ''}</span></div>
+          <div class="comment-text">${c.comment_text}</div>
+          <div class="comment-time">${date}</div>
+        </div>
+      </div>
+    `;
+      }).join('');
+    }
+
+    async function submitComment() {
+      const name = document.getElementById('commenterName').value.trim();
+      const role = document.getElementById('commenterRole').value.trim();
+      const text = document.getElementById('commentText').value.trim();
+
+      if (!name || !text) { showToast('Please enter your name and comment!', 'error'); return; }
+      if (!currentProjectId) return;
+
+      const { error } = await _supabase
+        .from('showcase_comments')
+        .insert({ project_id: currentProjectId, commenter_name: name, commenter_role: role, comment_text: text });
+
+      if (error) { showToast('Failed to post comment. Try again!', 'error'); return; }
+
+      document.getElementById('commentText').value = '';
+      showToast('Comment posted! 💬');
+      loadComments(currentProjectId);
+
+      // Notify project owner
+      const project = allProjects.find(p => p.id === currentProjectId);
+      if (project?.user_id) {
+        await _supabase.from('notifications').insert({
+          user_id: project.user_id,
+          type: 'comment',
+          message: `<strong>${name}</strong> commented on your project <strong>${project.project_name}</strong>: "${text.slice(0, 60)}${text.length > 60 ? '...' : ''}"`,
+          is_read: false
+        });
+      }
+    }
+
+    loadProjects();
+  </script>
+</body>
+
+</html>

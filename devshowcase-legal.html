@@ -1,0 +1,999 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Privacy Policy & Terms — DevShowcase</title>
+  <meta name="description"
+    content="DevShowcase Privacy Policy and Terms of Service — Built by BraxCode Digitals Foundation" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" />
+  <link rel="shortcut icon" href="favicon.png" type="image/x-icon">
+  <style>
+    :root {
+      --bg: #060811;
+      --bg2: #0b0e1a;
+      --bg3: #111527;
+      --glass: rgba(255, 255, 255, 0.04);
+      --border: rgba(255, 255, 255, 0.07);
+      --border2: rgba(255, 255, 255, 0.13);
+      --a1: #7c6efa;
+      --a2: #06d6a0;
+      --a3: #ff6b6b;
+      --text: #f0f2ff;
+      --muted: #6b7280;
+      --muted2: #9ca3af;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: "Syne", sans-serif;
+      min-height: 100vh;
+    }
+
+    /* MESH BG */
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 60% 40% at 20% 20%,
+          rgba(124, 110, 250, 0.08),
+          transparent 60%),
+        radial-gradient(ellipse 50% 40% at 80% 80%,
+          rgba(6, 214, 160, 0.06),
+          transparent 60%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* NAV */
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      padding: 0 5%;
+      height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: rgba(6, 8, 17, 0.85);
+      backdrop-filter: blur(24px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+    }
+
+    .logo-icon {
+      width: 34px;
+      height: 34px;
+      border-radius: 9px;
+      background: linear-gradient(135deg, var(--a1), var(--a2));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .logo-text {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.88rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, #fff 40%, var(--a1));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .nav-back {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 16px;
+      border-radius: 9px;
+      background: var(--glass);
+      border: 1px solid var(--border2);
+      color: var(--muted2);
+      text-decoration: none;
+      font-size: 0.82rem;
+      font-weight: 500;
+      transition: all 0.2s;
+    }
+
+    .nav-back:hover {
+      color: var(--text);
+      background: rgba(255, 255, 255, 0.07);
+    }
+
+    /* TABS */
+    .tabs-wrap {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      padding: 40px 5% 0;
+    }
+
+    .tab-btn {
+      padding: 10px 28px;
+      border-radius: 100px;
+      font-family: "Syne", sans-serif;
+      font-size: 0.88rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.25s;
+      border: 1px solid var(--border2);
+      background: var(--glass);
+      color: var(--muted2);
+    }
+
+    .tab-btn.active {
+      background: linear-gradient(135deg, var(--a1), #5b52d6);
+      border-color: transparent;
+      color: #fff;
+      box-shadow: 0 4px 20px rgba(124, 110, 250, 0.3);
+    }
+
+    /* CONTENT */
+    .page-content {
+      position: relative;
+      z-index: 1;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 40px 5% 80px;
+    }
+
+    .doc-panel {
+      display: none;
+    }
+
+    .doc-panel.active {
+      display: block;
+    }
+
+    /* HERO */
+    .doc-hero {
+      text-align: center;
+      margin-bottom: 48px;
+    }
+
+    .doc-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 6px 16px;
+      border-radius: 100px;
+      background: rgba(124, 110, 250, 0.08);
+      border: 1px solid rgba(124, 110, 250, 0.2);
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.7rem;
+      color: var(--a1);
+      letter-spacing: 1px;
+      margin-bottom: 20px;
+    }
+
+    .doc-title {
+      font-size: clamp(1.8rem, 5vw, 3rem);
+      font-weight: 800;
+      letter-spacing: -1px;
+      margin-bottom: 12px;
+    }
+
+    .doc-updated {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.72rem;
+      color: var(--muted);
+      letter-spacing: 1px;
+    }
+
+    /* SECTIONS */
+    .doc-section {
+      background: var(--glass);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 28px;
+      margin-bottom: 16px;
+      transition: border-color 0.2s;
+    }
+
+    .doc-section:hover {
+      border-color: var(--border2);
+    }
+
+    .section-num {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.62rem;
+      color: var(--a1);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+
+    .section-title {
+      font-size: 1.05rem;
+      font-weight: 700;
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .section-body {
+      font-size: 0.88rem;
+      color: var(--muted2);
+      line-height: 1.85;
+      font-weight: 400;
+    }
+
+    .section-body p {
+      margin-bottom: 12px;
+    }
+
+    .section-body p:last-child {
+      margin-bottom: 0;
+    }
+
+    .section-body ul {
+      padding-left: 20px;
+      margin: 10px 0;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .section-body ul li {
+      line-height: 1.6;
+    }
+
+    .highlight {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 6px;
+      background: rgba(124, 110, 250, 0.1);
+      border: 1px solid rgba(124, 110, 250, 0.2);
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.78rem;
+      color: var(--a1);
+    }
+
+    .highlight.green {
+      background: rgba(6, 214, 160, 0.1);
+      border-color: rgba(6, 214, 160, 0.2);
+      color: var(--a2);
+    }
+
+    .highlight.red {
+      background: rgba(255, 107, 107, 0.1);
+      border-color: rgba(255, 107, 107, 0.2);
+      color: var(--a3);
+    }
+
+    /* CONTACT BOX */
+    .contact-box {
+      background: rgba(124, 110, 250, 0.06);
+      border: 1px solid rgba(124, 110, 250, 0.2);
+      border-radius: 14px;
+      padding: 22px;
+      margin-top: 32px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .contact-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      background: rgba(124, 110, 250, 0.12);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+      flex-shrink: 0;
+    }
+
+    .contact-info {
+      flex: 1;
+    }
+
+    .contact-title {
+      font-size: 0.9rem;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    .contact-sub {
+      font-size: 0.8rem;
+      color: var(--muted2);
+    }
+
+    .contact-link {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      padding: 10px 18px;
+      border-radius: 10px;
+      background: rgba(37, 211, 102, 0.12);
+      border: 1px solid rgba(37, 211, 102, 0.25);
+      color: #25d366;
+      text-decoration: none;
+      font-size: 0.83rem;
+      font-weight: 600;
+      transition: all 0.2s;
+      white-space: nowrap;
+    }
+
+    .contact-link:hover {
+      background: rgba(37, 211, 102, 0.2);
+    }
+
+    /* FOOTER */
+    footer {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      padding: 20px 5%;
+      border-top: 1px solid var(--border);
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.68rem;
+      color: var(--muted);
+    }
+
+    footer a {
+      color: rgba(124, 110, 250, 0.7);
+      text-decoration: none;
+    }
+
+    @media (max-width: 600px) {
+      .tabs-wrap {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .doc-section {
+        padding: 20px;
+      }
+
+      .contact-box {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- NAV -->
+  <nav>
+    <a href="index.html" class="nav-logo">
+      <div class="logo-icon"><i class="fa solid fa-bolt"></i></div>
+      <span class="logo-text">DevShowcase</span>
+    </a>
+    <a href="devshowcase-gallery.html" class="nav-back">
+      <i class="fa-solid fa-arrow-left"></i> Back to Gallery
+    </a>
+  </nav>
+
+  <!-- TABS -->
+  <div class="tabs-wrap">
+    <button class="tab-btn active" onclick="showDoc('privacy', this)">
+      <i class="fa-solid fa-shield-halved"></i> Privacy Policy
+    </button>
+    <button class="tab-btn" onclick="showDoc('terms', this)">
+      <i class="fa-solid fa-file-contract"></i> Terms of Service
+    </button>
+  </div>
+
+  <!-- CONTENT -->
+  <div class="page-content">
+    <!-- ═══════════════════════════════════
+       PRIVACY POLICY
+  ═══════════════════════════════════ -->
+    <div class="doc-panel active" id="doc-privacy">
+      <div class="doc-hero">
+        <div class="doc-badge">
+          <i class="fa-solid fa-shield-halved"></i>
+          PRIVACY POLICY
+        </div>
+        <h1 class="doc-title">Your Privacy Matters</h1>
+        <div class="doc-updated">Last updated: April 25, 2026</div>
+      </div>
+
+      <div class="doc-section">
+        <div class="section-num">01 —</div>
+        <div class="section-title">👋 Introduction</div>
+        <div class="section-body">
+          <p>
+            Welcome to <strong>DevShowcase</strong>, a global platform built
+            by <strong>BraxCode Digitals Foundation</strong>, based in Mwanza,
+            Tanzania 🇹🇿.
+          </p>
+          <p>
+            We are committed to protecting your personal information. This
+            Privacy Policy explains what data we collect, how we use it, and
+            what rights you have over your information.
+          </p>
+          <p>
+            By using DevShowcase, you agree to the practices described in this
+            policy.
+          </p>
+        </div>
+      </div>
+
+      <div class="doc-section">
+        <div class="section-num">02 —</div>
+        <div class="section-title">📊 Information We Collect</div>
+        <div class="section-body">
+          <p>
+            We collect the following information when you use DevShowcase:
+          </p>
+          <ul>
+            <li>
+              <strong>Account Information</strong> — Your name, email address,
+              and password when you sign up
+            </li>
+            <li>
+              <strong>Profile Information</strong> — Your role, bio, skills,
+              WhatsApp number, GitHub, LinkedIn, and website links
+            </li>
+            <li>
+              <strong>Location Data</strong> — Your approximate location (city
+              and country) detected via GPS or IP address, used to connect you
+              with nearby clients
+            </li>
+            <li>
+              <strong>Project Data</strong> — Project names, descriptions,
+              screenshots, tech stack, and live links you upload
+            </li>
+            <li>
+              <strong>Usage Data</strong> — Reactions, comments, and
+              interactions on the platform
+            </li>
+            <li>
+              <strong>Device Information</strong> — Browser type and device
+              type for improving user experience
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="doc-section">
+        <div class="section-num">03 —</div>
+        <div class="section-title">🎯 How We Use Your Information</div>
+        <div class="section-body">
+          <p>We use your information to:</p>
+          <ul>
+            <li>
+              Display your developer profile and projects publicly on the
+              platform
+            </li>
+            <li>
+              Connect you with potential clients who are looking for
+              developers
+            </li>
+            <li>
+              Show location-based results to help clients find developers near
+              them
+            </li>
+            <li>
+              Send important account notifications (email verification,
+              password reset)
+            </li>
+            <li>Improve the platform based on usage patterns</li>
+            <li>Respond to your support requests</li>
+          </ul>
+          <p style="margin-top: 12px">
+            We do <strong>NOT</strong> use your information for advertising or
+            sell it to third parties.
+          </p>
+        </div>
+      </div>
+
+      <div class="doc-section">
+        <div class="section-num">04 —</div>
+        <div class="section-title">🤝 Information We Share</div>
+        <div class="section-body">
+          <p>
+            We share your information with the following trusted service
+            providers only:
+          </p>
+          <ul>
+            <li>
+              <span class="highlight">Supabase</span> — Our database and
+              authentication provider. Your data is stored securely on their
+              servers.
+            </li>
+            <li>
+              <span class="highlight">Groq AI</span> — Powers our AI customer
+              care assistant. Only your chat messages are processed — we do
+              not share personal data.
+            </li>
+            <li>
+              <span class="highlight">ipapi.co</span> — Used for IP-based
+              location detection when GPS is not available.
+            </li>
+          </ul>
+          <p style="margin-top: 12px">
+            We do not share your personal information with any other third
+            parties without your explicit consent.
+          </p>
+        </div>
+      </div>
+
+      <div class="doc-section">
+        <div class="section-num">05 —</div>
+        <div class="section-title">📍 Location Data</div>
+        <div class="section-body">
+          <p>
+            DevShowcase uses your location to help clients find developers in
+            their region and to show you relevant local opportunities.
+          </p>
+          <ul>
+            <li>
+              We request GPS permission from your browser — you can
+              <strong>deny</strong> this and the platform still works
+            </li>
+            <li>
+              If GPS is denied, we use your IP address to estimate your
+              location
+            </li>
+            <li>
+              Your exact GPS coordinates are never shown publicly — only your
+              city and country
+            </li>
+            <li>
+              You can update your location from your profile settings at any
+              time
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="doc-section">
+        <div class="section-num">06 —</div>
+        <div class="section-title">🔒 Data Security</div>
+        <div class="section-body">
+          <p>
+            We take security seriously and implement the following measures:
+          </p>
+          <ul>
+            <li>
+              All data is stored on <strong>Supabase</strong> — encrypted at
+              rest and in transit (HTTPS)
+            </li>
+            <li>
+              Passwords are never stored in plain text — they are hashed by
+              Supabase Auth
+            </li>
+            <li>
+              Row Level Security (RLS) ensures you can only access and modify
+              your own data
+            </li>
+            <li>
+              Admin access is password protected and not accessible to regular
+              users
+            </li>
+          </ul>
+          <p style="margin-top: 12px">
+            However, no system is 100% secure. If you believe your account has
+            been compromised, contact us immediately.
+          </p>
+        </div>
+      </div>
+
+      <div class="doc-section">
+        <div class="section-num">07 —</div>
+        <div class="section-title">⚖️ Your Rights</div>
+        <div class="section-body">
+          <p>You have the following rights regarding your personal data:</p>
+          <ul>
+            <li>
+              <span class="highlight green">Access</span> — Request a copy of
+              all data we hold about you
+            </li>
+            <li>
+              <span class="highlight green">Update</span> — Edit your profile
+              and project information at any time from your dashboard
+            </li>
+            <li>
+              <span class="highlight green">Delete</span> — Request deletion
+              of your account and all associated data
+            </li>
+            <li>
+              <span class="highlight green">Portability</span> — Request your
+              data in a portable format
+            </li>
+            <li>
+              <span class="highlight green">Withdraw consent</span> — Stop
+              using the platform and request data removal at any time
+            </li>
+          </ul>
+          <p style="margin-top: 12px">
+            To exercise any of these rights, contact us via WhatsApp or email.
+          </p>
+        </div>
+      </div>
+
+      <div class="doc-section">
+        <div class="section-num">08 —</div>
+        <div class="section-title">🍪 Cookies & Storage</div>
+        <div class="section-body">
+          <p>DevShowcase uses the following browser storage:</p>
+          <ul>
+            <li>
+              <strong>localStorage</strong> — To remember your reactions on
+              projects and AI chat history
+            </li>
+            <li>
+              <strong>sessionStorage</strong> — To keep you logged into the
+              admin panel during your session
+            </li>
+            <li>
+              <strong>Supabase session cookies</strong> — To keep you logged
+              in to your developer account
+            </li>
+          </ul>
+          <p style="margin-top: 12px">
+            We do not use advertising cookies or tracking pixels.
+          </p>
+        </div>
+      </div>
+
+      <div class="doc-section">
+        <div class="section-num">09 —</div>
+        <div class="section-title">👶 Children's Privacy</div>
+        <div class="section-body">
+          <p>
+            DevShowcase is not intended for users under the age of 13. We do
+            not knowingly collect personal information from children. If you
+            believe a child has created an account, please contact us and we
+            will delete the account immediately.
+          </p>
+        </div>
+      </div>
+
+      <div class="doc-section">
+        <div class="section-num">10 —</div>
+        <div class="section-title">🔄 Changes to This Policy</div>
+        <div class="section-body">
+          <p>
+            We may update this Privacy Policy from time to time. When we do,
+            we will update the "Last updated" date at the top of this page. We
+            encourage you to review this policy periodically.
+          </p>
+          <p>
+            Continued use of DevShowcase after changes means you accept the
+            updated policy.
+          </p>
+        </div>
+      </div>
+
+      <div class="contact-box">
+        <div class="contact-icon">📬</div>
+        <div class="contact-info">
+          <div class="contact-title">Questions about Privacy?</div>
+          <div class="contact-sub">
+            BraxCode Digitals Foundation · Mwanza, Tanzania 🇹🇿
+          </div>
+        </div>
+        <a href="https://wa.me/255618811359?text=Hi, I have a question about DevShowcase Privacy Policy"
+          class="contact-link" target="_blank">
+          <i class="fa-brands fa-whatsapp"></i> Contact Us
+        </a>
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════════════
+       TERMS OF SERVICE
+  ═══════════════════════════════════ -->
+    <div class="doc-panel" id="doc-terms">
+      <div class="doc-hero">
+        <div class="doc-badge">
+          <i class="fa-solid fa-file-contract"></i>
+          TERMS OF SERVICE
+        </div>
+        <h1 class="doc-title">Terms of Service</h1>
+        <div class="doc-updated">Last updated: April 25, 2026</div>
+      </div>
+
+      <div class="doc-section">
+        <div class="section-num">01 —</div>
+        <div class="section-title">📋 Agreement</div>
+        <div class="section-body">
+          <p>
+            These Terms of Service ("Terms") govern your use of
+            <strong>DevShowcase</strong>, operated by
+            <strong>BraxCode Digitals Foundation</strong>, Mwanza, Tanzania.
+          </p>
+          <p>
+            By creating an account or using DevShowcase, you agree to these
+            Terms. If you do not agree, please do not use the platform.
+          </p>
+        </div>
+      </div>
+
+      <div class="doc-section">
+        <div class="section-num">02 —</div>
+        <div class="section-title">👤 Account Responsibilities</div>
+        <div class="section-body">
+          <p>When you create an account on DevShowcase, you agree to:</p>
+          <ul>
+            <li>
+              Provide accurate and truthful information about yourself and
+              your projects
+            </li>
+            <li>Keep your password secure and not share it with others</li>
+            <li>
+              Be responsible for all activity that occurs under your account
+            </li>
+            <li>
+              Notify us immediately if you suspect unauthorized access to your
+              account
+            </li>
+            <li>Be at least 13 years old to create an account</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="doc-section">
+        <div class="section-num">03 —</div>
+        <div class="section-title">✅ Acceptable Use</div>
+        <div class="section-body">
+          <p>You may use DevShowcase to:</p>
+          <ul>
+            <li>Showcase your genuine development projects</li>
+            <li>Connect with potential clients and employers</li>
+            <li>React to and comment on other developers' projects</li>
+            <li>Build your professional developer profile</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="doc-section">
+        <div class="section-num">04 —</div>
+        <div class="section-title">
+          <span class="highlight red">❌ Prohibited Activities</span>
+        </div>
+        <div class="section-body">
+          <p>You may NOT use DevShowcase to:</p>
+          <ul>
+            <li>
+              Post projects that are not your own work without proper
+              attribution
+            </li>
+            <li>Upload offensive, illegal, or harmful content</li>
+            <li>Impersonate other developers or create fake profiles</li>
+            <li>Spam other users or send unsolicited messages</li>
+            <li>Attempt to hack, scrape, or disrupt the platform</li>
+            <li>Use the platform for any illegal activities</li>
+            <li>
+              Post misleading information about your skills or experience
+            </li>
+            <li>Harass or threaten other users</li>
+          </ul>
+          <p style="margin-top: 12px">
+            Violation of these rules may result in immediate account
+            suspension or deletion.
+          </p>
+        </div>
+      </div>
+
+      <div class="doc-section">
+        <div class="section-num">05 —</div>
+        <div class="section-title">📸 Your Content</div>
+        <div class="section-body">
+          <p>
+            When you upload projects, descriptions, or images to DevShowcase:
+          </p>
+          <ul>
+            <li>You retain full ownership of your content</li>
+            <li>
+              You grant DevShowcase a license to display your content on the
+              platform
+            </li>
+            <li>
+              You confirm that you have the right to share the content you
+              upload
+            </li>
+            <li>
+              You are responsible for ensuring your content does not violate
+              anyone's copyright
+            </li>
+          </ul>
+          <p style="margin-top: 12px">
+            We reserve the right to remove any content that violates these
+            Terms.
+          </p>
+        </div>
+      </div>
+
+      <div class="doc-section">
+        <div class="section-num">06 —</div>
+        <div class="section-title">🤝 Developer-Client Relationships</div>
+        <div class="section-body">
+          <p>
+            DevShowcase is a platform that connects developers and clients.
+            Important to understand:
+          </p>
+          <ul>
+            <li>
+              We are <strong>not</strong> a party to any agreement between
+              developers and clients
+            </li>
+            <li>
+              We do <strong>not</strong> guarantee that you will find work or
+              clients through the platform
+            </li>
+            <li>
+              All payments, contracts, and agreements are directly between
+              developers and clients
+            </li>
+            <li>
+              We are <strong>not</strong> responsible for disputes between
+              developers and clients
+            </li>
+            <li>
+              We recommend always using written agreements for any freelance
+              work
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="doc-section">
+        <div class="section-num">07 —</div>
+        <div class="section-title">💰 Payments & Pro Features</div>
+        <div class="section-body">
+          <p>
+            DevShowcase currently offers free access to all features. In the
+            future, paid features (Pro Badge, Featured Listings) may be
+            introduced.
+          </p>
+          <ul>
+            <li>
+              All paid features will be clearly communicated before purchase
+            </li>
+            <li>
+              Payments are currently processed manually via WhatsApp and
+              mobile money
+            </li>
+            <li>
+              Refunds are handled on a case-by-case basis — contact us within
+              7 days
+            </li>
+            <li>
+              We reserve the right to change pricing with 30 days notice
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="doc-section">
+        <div class="section-num">08 —</div>
+        <div class="section-title">⚠️ Disclaimer</div>
+        <div class="section-body">
+          <p>
+            DevShowcase is provided "as is" without warranties of any kind. We
+            do not guarantee:
+          </p>
+          <ul>
+            <li>That the platform will be available 100% of the time</li>
+            <li>
+              That you will find clients or employment through the platform
+            </li>
+            <li>That all developer profiles and projects are accurate</li>
+          </ul>
+          <p style="margin-top: 12px">
+            We are not liable for any damages arising from your use of
+            DevShowcase, including lost business opportunities or data loss.
+          </p>
+        </div>
+      </div>
+
+      <div class="doc-section">
+        <div class="section-num">09 —</div>
+        <div class="section-title">🔚 Account Termination</div>
+        <div class="section-body">
+          <p>We reserve the right to suspend or terminate your account if:</p>
+          <ul>
+            <li>You violate these Terms of Service</li>
+            <li>You engage in fraudulent or harmful behavior</li>
+            <li>Your account is reported multiple times by other users</li>
+          </ul>
+          <p style="margin-top: 12px">
+            You may delete your own account at any time from your dashboard
+            settings. Upon deletion, your data will be removed within 30 days.
+          </p>
+        </div>
+      </div>
+
+      <div class="doc-section">
+        <div class="section-num">10 —</div>
+        <div class="section-title">⚖️ Governing Law</div>
+        <div class="section-body">
+          <p>
+            These Terms are governed by the laws of the
+            <strong>United Republic of Tanzania</strong>. Any disputes will be
+            resolved under Tanzanian law.
+          </p>
+          <p style="margin-top: 10px">
+            BraxCode Digitals Foundation<br />Mwanza, Tanzania 🇹🇿
+          </p>
+        </div>
+      </div>
+
+      <div class="doc-section">
+        <div class="section-num">11 —</div>
+        <div class="section-title">🔄 Changes to Terms</div>
+        <div class="section-body">
+          <p>
+            We may update these Terms at any time. We will notify users of
+            significant changes by updating the "Last updated" date. Continued
+            use of the platform after changes constitutes acceptance of the
+            new Terms.
+          </p>
+        </div>
+      </div>
+
+      <div class="contact-box">
+        <div class="contact-icon">⚡</div>
+        <div class="contact-info">
+          <div class="contact-title">Questions about our Terms?</div>
+          <div class="contact-sub">
+            BraxCode Digitals Foundation · Mwanza, Tanzania 🇹🇿
+          </div>
+        </div>
+        <a href="https://wa.me/255618811359?text=Hi, I have a question about DevShowcase Terms of Service"
+          class="contact-link" target="_blank">
+          <i class="fa-brands fa-whatsapp"></i> Contact Us
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    © 2026 DevShowcase · <a href="braxcode-digitals-foundation.netlify.app">BraxCode Digitals Foundation</a> <i
+      class="fa solid fa-bolt"></i>
+    Mwanza, Tanzania 🇹🇿
+  </footer>
+
+  <script>
+    function showDoc(name, el) {
+      document
+        .querySelectorAll(".doc-panel")
+        .forEach((p) => p.classList.remove("active"));
+      document
+        .querySelectorAll(".tab-btn")
+        .forEach((b) => b.classList.remove("active"));
+      document.getElementById("doc-" + name).classList.add("active");
+      el.classList.add("active");
+      window.scrollTo({ top: 0, behavior: "smooth" });
+      if (navigator.vibrate) navigator.vibrate(30);
+    }
+  </script>
+</body>
+
+</html>
