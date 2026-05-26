@@ -1936,7 +1936,7 @@
 
       try {
         const { error } = await _supabase.auth.signInWithOAuth({
-          provider: 'google',
+          provider: provider,
           options: {
             redirectTo: 'https://devshowcase-braxcode-digitals.netlify.app/devshowcase-dashboard.html',
             queryParams: { prompt: 'select_account' }
