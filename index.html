@@ -1949,7 +1949,7 @@
       }
       try {
         const { error } = await _supabase.auth.resetPasswordForEmail(email, {
-          redirectTo: window.location.origin + "/devshowcase-landing.html",
+          redirectTo: window.location.origin + "https://devshowcase-braxcode-digitals.netlify.app/",
         });
         if (error) throw error;
         showAlert("Reset link sent! Check your inbox 📬", "success");
