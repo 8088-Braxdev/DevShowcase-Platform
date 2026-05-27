@@ -1935,13 +1935,13 @@
       btn.disabled = true;
 
       try {
-        const { error } = await _supabase.auth.signInWithOAuth({
-          provider: provider,
-          options: {
-            redirectTo: 'https://devshowcase-braxcode-digitals.netlify.app/devshowcase-dashboard.html',
-            queryParams: { prompt: 'select_account' }
-          },
-        });
+     const { error } = await _supabase.auth.signInWithOAuth({
+      provider: provider,
+     options: {
+         redirectTo: 'https://devshowcase-braxcode-digitals.netlify.app/devshowcase-dashboard.html',
+         queryParams: { prompt: 'select_account' }
+        },
+     });
         if (error) throw error;
       } catch (e) {
         showAlert(e.message || "Connection failed. Try again!");
