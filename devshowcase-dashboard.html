@@ -1600,14 +1600,26 @@
     // ================================================
     // INIT — CHECK AUTH
     // ================================================
-    async function init() {
-      const { data: { session } } = await _supabase.auth.getSession();
-      if (!session) {
-        window.location.href = 'https://devshowcase-braxcode-digitals.netlify.app/';
-        return;
-      }
+async function init() {
+  // Subiri Supabase isaync session kutoka OAuth callback
+  const { data: { session } } = await _supabase.auth.getSession();
+  
+  if (!session) {
+    // Jaribu tena baada ya sekunde 1 — OAuth inachukua muda
+    await new Promise(r => setTimeout(r, 1200));
+    const { data: { session: session2 } } = await _supabase.auth.getSession();
+    
+    if (!session2) {
+      window.location.href = 'https://devshowcase-braxcode-digitals.netlify.app/';
+      return;
+    }
+    // Session imepatikana baada ya kusubiri
+    currentUser = session2.user;
+  } else {
+    currentUser = session.user;
+  }
 
-      currentUser = session.user;
+    
       const meta = currentUser.user_metadata || {};
 
       const initials = meta.avatar_initials || (meta.full_name || 'D').slice(0, 2).toUpperCase();
