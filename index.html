@@ -1949,7 +1949,7 @@
       }
       try {
         const { error } = await _supabase.auth.resetPasswordForEmail(email, {
-          redirectTo: window.location.origin + "https://devshowcase-braxcode-digitals.netlify.app/",
+          redirectTo: "https://devshowcase-braxcode-digitals.netlify.app/",
         });
         if (error) throw error;
         showAlert("Reset link sent! Check your inbox 📬", "success");
@@ -2169,18 +2169,49 @@
     }
 
     // CHECK RESET TOKEN UKIFUNGUA LANDING
-    (async () => {
-      const hash = new URLSearchParams(window.location.hash.replace('#', '?'));
-      const token = hash.get('access_token');
-      const type = hash.get('type');
-      if (type === 'recovery' && token) {
-        await _supabase.auth.setSession({
-          access_token: token,
-          refresh_token: hash.get('refresh_token') || ''
-        });
+(async () => {
+  const hash = window.location.hash;
+  const search = window.location.search;
+
+  let access_token = null;
+  let refresh_token = null;
+  let type = null;
+
+  // Format ya zamani: #access_token=xxx&type=recovery
+  if (hash && hash.includes('access_token')) {
+    const params = new URLSearchParams(hash.replace('#', ''));
+    access_token = params.get('access_token');
+    refresh_token = params.get('refresh_token');
+    type = params.get('type');
+  }
+
+  // Supabase v2 PKCE format: ?token_hash=xxx&type=recovery
+  if (search && search.includes('token_hash')) {
+    const params = new URLSearchParams(search);
+    const token_hash = params.get('token_hash');
+    type = params.get('type');
+
+    if (type === 'recovery' && token_hash) {
+      const { data, error } = await _supabase.auth.verifyOtp({
+        token_hash,
+        type: 'recovery'
+      });
+      if (!error && data?.session) {
         openResetModal();
+        return;
       }
-    })();
+    }
+  }
+
+  // Implicit token format (fallback)
+  if (type === 'recovery' && access_token) {
+    const { error } = await _supabase.auth.setSession({
+      access_token,
+      refresh_token: refresh_token || ''
+    });
+    if (!error) openResetModal();
+  }
+})();
     // ================================================
     checkSession();
 
