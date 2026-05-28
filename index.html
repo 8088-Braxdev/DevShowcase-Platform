@@ -2104,6 +2104,10 @@
       const navRight = document.querySelector('.nav-right');
 
       let shortName = '';
+        if ((provider === 'github' || provider === 'google') && !meta.location) {
+    detectAndSaveLocation(user.id);
+  }
+
       if (provider === 'google' || provider === 'github') {
         shortName = meta.full_name?.split(' ')[0] || 'Developer';
       } else {
@@ -2257,7 +2261,60 @@
       hint.style.color = colors[score - 1];
       hint.textContent = labels[score - 1];
     }
+async function detectAndSaveLocation(userId) {
+  try {
+    // Jaribu GPS kwanza
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        async (position) => {
+          const { latitude, longitude } = position.coords;
+          const res = await fetch(
+            `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`
+          );
+          const data = await res.json();
+          const city = data.address.city || data.address.town || data.address.village || '';
+          const country = data.address.country || '';
 
+          await _supabase.auth.updateUser({
+            data: {
+              location: `${city}, ${country}`,
+              country,
+              latitude,
+              longitude
+            }
+          });
+
+          // Pia update profiles table kama unatumia
+          await _supabase.from('profiles').update({
+            location: `${city}, ${country}`,
+            country,
+          }).eq('id', userId);
+        },
+        async () => {
+          // GPS ilikataliwa — fallback kwa IP
+          const res = await fetch('https://ipapi.co/json/');
+          const data = await res.json();
+
+          await _supabase.auth.updateUser({
+            data: {
+              location: `${data.city}, ${data.country_name}`,
+              country: data.country_name,
+              latitude: data.latitude,
+              longitude: data.longitude
+            }
+          });
+
+          await _supabase.from('profiles').update({
+            location: `${data.city}, ${data.country_name}`,
+            country: data.country_name,
+          }).eq('id', userId);
+        }
+      );
+    }
+  } catch (e) {
+    console.log('Location save failed:', e);
+  }
+            }
   </script>
 </body>
 
