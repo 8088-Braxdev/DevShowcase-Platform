@@ -1521,7 +1521,7 @@
       © 2026 <span>DevShowcase</span> — Built for developers, by developers 🌍
     </div>
     <div class="footer-left">
-      Powered by <a href="braxcode-digitals-foundation-portifolio.netlify.app"
+      Powered by <a href="#"
         style="text-decoration: none; color:var(--a1)">BraxCode Digitals Foundation</a> <i class="fa-solid fa-bolt"></i>
     </div>
     <div class="footer-links">
@@ -1925,7 +1925,7 @@
      const { error } = await _supabase.auth.signInWithOAuth({
       provider: provider,
      options: {
-         redirectTo: 'https://devshowcase-braxcode-digitals.netlify.app/devshowcase-dashboard.html',
+         redirectTo: 'https://devshowcase-braxcode-digitals.vercel.app/devshowcase-dashboard.html'',
          queryParams: { prompt: 'select_account' }
         },
      });
@@ -1949,7 +1949,7 @@
       }
       try {
         const { error } = await _supabase.auth.resetPasswordForEmail(email, {
-          redirectTo: "https://devshowcase-braxcode-digitals.netlify.app/",
+          redirectTo: "https://devshowcase-braxcode-digitals.vercel.app/",
         });
         if (error) throw error;
         showAlert("Reset link sent! Check your inbox 📬", "success");
@@ -2169,7 +2169,7 @@
 
       alertEl.className = 'auth-alert success';
       alertEl.innerHTML = '<i class="fa-solid fa-circle-check"></i> Password updated! Redirecting... 🎉';
-      setTimeout(() => window.location.href = 'https://devshowcase-braxcode-digitals.netlify.app/devshowcase-dashboard.html', 2000);
+      setTimeout(() => window.location.href = 'https://devshowcase-braxcode-digitals.vercel.app/devshowcase-dashboard.html', 2000);
     }
 
     // CHECK RESET TOKEN UKIFUNGUA LANDING
