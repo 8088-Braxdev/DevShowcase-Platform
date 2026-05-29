@@ -4,17 +4,27 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>DevShowcase — Where Developers Shine</title>
-  <meta name="description"
-    content="The global platform where developers showcase their work, connect with clients, and get hired. Join thousands of developers worldwide." />
-  <meta property="og:title" content="DevShowcase — Where Developers Shine" />
-  <meta property="og:description" content="Showcase your projects. Get discovered. Get hired." />
+  
+  <title>DevShowcase — Global Platform for Developers to Get Hired</title>
+  <meta name="description" content="Showcase your coding projects globally. DevShowcase helps developers connect with clients, showcase portfolios, and land freelance tech deals with 0% commission." />
+  <meta name="keywords" content="DevShowcase, BraxCode, software developers, showcase projects, hire developers, Tanzania tech, portfolio website" />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://devshowcase-braxcode-digitals.vercel.app/" />
+
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://devshowcase-braxcode-digitals.vercel.app/" />
+  <meta property="og:title" content="DevShowcase — Where Developers Shine Globally" />
+  <meta property="og:description" content="Showcase your coding projects, connect with international clients, and land deals. Built by BraxCode Digitals Foundation." />
+  <meta property="og:image" content="https://devshowcase-braxcode-digitals.vercel.app/favicon.png" /> <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="DevShowcase — Where Developers Shine" />
+  <meta name="twitter:description" content="Showcase your projects. Get discovered. Get hired." />
+
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <link
-    href="https://fonts.googleapis.com/css2?family=Clash+Display:wght@400;500;600;700&family=Satoshi:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap"
-    rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Clash+Display:wght=400;500;600;700&family=Satoshi:wght=300;400;500;600&family=JetBrains+Mono:wght=400;500&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" />
-  <link rel="shortcut icon" href="favicon.png" type="image/x-icon" />
+  
+  <link rel="shortcut icon" href="./favicon.png" type="image/x-icon" />
+
   <style>
     :root {
       --bg: #060811;
@@ -1521,7 +1531,7 @@
       © 2026 <span>DevShowcase</span> — Built for developers, by developers 🌍
     </div>
     <div class="footer-left">
-      Powered by <a href="https://braxcode-digitals-ai-portifolio.vercel.app/"
+      Powered by <a href="https://braxcode.com"
         style="text-decoration: none; color:var(--a1)">BraxCode Digitals Foundation</a> <i class="fa-solid fa-bolt"></i>
     </div>
     <div class="footer-links">
@@ -1925,7 +1935,7 @@
      const { error } = await _supabase.auth.signInWithOAuth({
       provider: provider,
      options: {
-         redirectTo: 'https://devshowcase-braxcode-digitals.vercel.app/devshowcase-dashboard.html',
+         redirectTo: 'https://devshowcase.braxcode.com/devshowcase-dashboard.html',
          queryParams: { prompt: 'select_account' }
         },
      });
@@ -1949,7 +1959,7 @@
       }
       try {
         const { error } = await _supabase.auth.resetPasswordForEmail(email, {
-          redirectTo: "https://devshowcase-braxcode-digitals.vercel.app/",
+          redirectTo: "https://devshowcase.braxcode.com",
         });
         if (error) throw error;
         showAlert("Reset link sent! Check your inbox 📬", "success");
@@ -2169,7 +2179,7 @@
 
       alertEl.className = 'auth-alert success';
       alertEl.innerHTML = '<i class="fa-solid fa-circle-check"></i> Password updated! Redirecting... 🎉';
-      setTimeout(() => window.location.href = 'https://devshowcase-braxcode-digitals.vercel.app/devshowcase-dashboard.html', 2000);
+      setTimeout(() => window.location.href = 'https://devshowcase.braxcode.com/devshowcase-dashboard.html', 2000);
     }
 
     // CHECK RESET TOKEN UKIFUNGUA LANDING
