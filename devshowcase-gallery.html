@@ -1080,8 +1080,9 @@
     let allProjects = [];
     let currentFilter = 'all';
     let currentProjectId = null;
-    let userReactions = {};
-    let currentUserId = null;
+    let userReactions = {}; // Tutaload live kutoka Supabase sasa hivi!
+    let currentUserId = 'anonymous_user'; // Default kama hajalogin
+
 
     // ================================================
     function showToast(msg) {
@@ -1092,7 +1093,22 @@
     }
     // LOAD PROJECTS
     // ================================================
-    async function loadProjects() {
+      async function loadProjects() {
+      // 1. Jaribu kupata ID ya mtu aliyelogin
+      try {
+        const { data: { session } } = await _supabase.auth.getSession();
+        if (session?.user) {
+          currentUserId = session.user.id;
+        } else {
+          // Kama hajalogin, tunatengeneza ID ya kudumu kwenye browser yake
+          if (!localStorage.getItem('ds_user_uid')) {
+            localStorage.setItem('ds_user_uid', 'anon_' + Math.random().toString(36).substr(2, 9));
+          }
+          currentUserId = localStorage.getItem('ds_user_uid');
+        }
+      } catch (e) { console.log(e); }
+
+      // 2. Load projects zote
       const { data, error } = await _supabase
         .from('showcase_projects')
         .select('*')
@@ -1108,9 +1124,25 @@
       }
 
       allProjects = data || [];
+
+      // 3. Load reactions zote za huyu user aliyepo sasa hivi kutoka Supabase kama TikTok!
+      const { data: myReactions } = await _supabase
+        .from('project_reactions')
+        .select('*')
+        .eq('user_id', currentUserId);
+
+      userReactions = {};
+      if (myReactions) {
+        myReactions.forEach(r => {
+          if (!userReactions[r.project_id]) userReactions[r.project_id] = {};
+          userReactions[r.project_id][r.reaction_type] = true;
+        });
+      }
+
       updateStats();
       renderProjects(allProjects);
     }
+  
 
     function updateStats() {
       document.getElementById('totalProjects').textContent = allProjects.length;
@@ -1201,61 +1233,58 @@
     // ================================================
     // REACTIONS
     // ================================================
-async function react(projectId, field, btn) {
-  if (!currentUserId) {
-    showToast('⚡ Sign in to react to projects!');
-    return;
-  }
+    async function react(projectId, field, btn) {
+      const reactionKey = field === 'likes' ? 'like' : field; // 'like', 'fire', 'clap'
+      const project = allProjects.find(p => p.id === projectId);
+      if (!project) return;
 
-  const reactionKey = field === 'likes' ? 'like' : field;
-  const project = allProjects.find(p => p.id === projectId);
-  if (!project) return;
+      const hasReacted = userReactions[projectId] && userReactions[projectId][reactionKey];
+      const span = btn.querySelector('span');
+      let newVal;
 
-  const reacted = userReactions[projectId] || {};
-  const span = btn.querySelector('span');
-  let newVal;
+      if (hasReacted) {
+        // --- 1. UN-LIKE (TIKTOK STYLE) ---
+        newVal = Math.max(0, (project[field] || 0) - 1);
+        
+        // Punguza count kwenye mradi
+        await _supabase.from('showcase_projects').update({ [field]: newVal }).eq('id', projectId);
+        // Futa rekodi kule project_reactions table
+        await _supabase.from('project_reactions').delete().eq('project_id', projectId).eq('user_id', currentUserId).eq('reaction_type', reactionKey);
+        
+        project[field] = newVal;
+        userReactions[projectId][reactionKey] = false;
+        btn.classList.remove('reacted');
+      } else {
+        // --- 2. LIKE MPYA ---
+        newVal = (project[field] || 0) + 1;
+        
+        // Ongeza count kwenye mradi
+        await _supabase.from('showcase_projects').update({ [field]: newVal }).eq('id', projectId);
+        // Weka rekodi mpya ya ushindi
+        await _supabase.from('project_reactions').insert({ project_id: projectId, user_id: currentUserId, reaction_type: reactionKey });
+        
+        project[field] = newVal;
+        if (!userReactions[projectId]) userReactions[projectId] = {};
+        userReactions[projectId][reactionKey] = true;
+        btn.classList.add('reacted');
 
-  if (reacted[reactionKey]) {
-    // UN-REACT
-    newVal = Math.max(0, (project[field] || 0) - 1);
-    await _supabase.from('showcase_projects').update({ [field]: newVal }).eq('id', projectId);
-    await _supabase.from('project_reactions')
-      .delete()
-      .eq('project_id', projectId)
-      .eq('user_id', currentUserId)
-      .eq('reaction_type', field);
-    
-    project[field] = newVal;
-    delete reacted[reactionKey];
-    btn.classList.remove('reacted');
-  } else {
-    // REACT
-    newVal = (project[field] || 0) + 1;
-    await _supabase.from('showcase_projects').update({ [field]: newVal }).eq('id', projectId);
-    await _supabase.from('project_reactions')
-      .insert({ project_id: projectId, user_id: currentUserId, reaction_type: field });
-    
-    project[field] = newVal;
-    reacted[reactionKey] = true;
-    btn.classList.add('reacted');
+        // NOTIFICATION
+        if (project.user_id && project.user_id !== currentUserId) {
+          const emoji = field === 'likes' ? '👍' : field === 'fire' ? '🔥' : '👏';
+          await _supabase.from('notifications').insert({
+            user_id: project.user_id,
+            type: 'reaction',
+            message: `Someone reacted ${emoji} to <strong>${project.project_name}</strong>`,
+            is_read: false
+          });
+        }
+      }
 
-    // Notification
-    if (project.user_id && currentUserId !== project.user_id) {
-      const emoji = field === 'likes' ? '👍' : field === 'fire' ? '🔥' : '👏';
-      await _supabase.from('notifications').insert({
-        user_id: project.user_id,
-        type: 'reaction',
-        message: `Someone reacted ${emoji} to <strong>${project.project_name}</strong>`,
-        is_read: false
-      });
+      if (span) span.textContent = newVal;
+      if (navigator.vibrate) navigator.vibrate(30);
+      updateStats();
     }
-  }
 
-  userReactions[projectId] = reacted;
-  if (span) span.textContent = newVal;
-  if (navigator.vibrate) navigator.vibrate(30);
-  updateStats();
-}
 
     // ================================================
     // FILTER & SEARCH
