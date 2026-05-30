@@ -1,15 +1,18 @@
 <!doctype html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  
+
   <!-- SEO  -->
   <title>DevShowcase — Global Platform for Developers to Get Hired</title>
-  <meta name="description" content="Showcase your coding projects globally. DevShowcase helps developers connect with clients, showcase portfolios, and land freelance tech deals with 0% commission." />
-  <meta name="keywords" content="DevShowcase, BraxCode, software developers, showcase projects, hire developers, Tanzania tech, portfolio website" />
+  <meta name="description"
+    content="Showcase your coding projects globally. DevShowcase helps developers connect with clients, showcase portfolios, and land freelance tech deals with 0% commission." />
+  <meta name="keywords"
+    content="DevShowcase, BraxCode, software developers, showcase projects, hire developers, Tanzania tech, portfolio website" />
   <meta name="robots" content="index, follow" />
-  
+
   <!-- Braxcode... -->
   <link rel="canonical" href="https://devshowcase.braxcode.com/" />
 
@@ -17,7 +20,8 @@
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://devshowcase.braxcode.com/" />
   <meta property="og:title" content="DevShowcase — Where Developers Shine Globally" />
-  <meta property="og:description" content="Showcase your coding projects, connect with international clients, and land deals. Built by BraxCode Digitals Foundation." />
+  <meta property="og:description"
+    content="Showcase your coding projects, connect with international clients, and land deals. Built by BraxCode Digitals Foundation." />
   <meta property="og:image" content="https://devshowcase.braxcode.com/favicon.png" />
 
   <!-- TWITTER CARD TAGS -->
@@ -27,9 +31,11 @@
 
   <!-- SCRIPTS & FONTS -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Clash+Display:wght=400;500;600;700&family=Satoshi:wght=300;400;500;600&family=JetBrains+Mono:wght=400;500&display=swap" rel="stylesheet" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Clash+Display:wght=400;500;600;700&family=Satoshi:wght=300;400;500;600&family=JetBrains+Mono:wght=400;500&display=swap"
+    rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" />
-  
+
   <!-- FAVICON -->
   <link rel="shortcut icon" href="./favicon.png" type="image/x-icon" />
 
@@ -1375,25 +1381,6 @@
     </div>
   </section>
 
-  <!-- STATS -->
-  <div class="stats-strip">
-    <div class="stat-item">
-      <div class="stat-num">10K+</div>
-      <div class="stat-label">Developers</div>
-    </div>
-    <div class="stat-item">
-      <div class="stat-num">50K+</div>
-      <div class="stat-label">Projects</div>
-    </div>
-    <div class="stat-item">
-      <div class="stat-num">120+</div>
-      <div class="stat-label">Countries</div>
-    </div>
-    <div class="stat-item">
-      <div class="stat-num">$2M+</div>
-      <div class="stat-label">Deals Made</div>
-    </div>
-  </div>
 
   <!-- HOW IT WORKS -->
   <section class="section">
@@ -1541,8 +1528,8 @@
       © 2026 <span>DevShowcase</span> — Built for developers, by developers 🌍
     </div>
     <div class="footer-left">
-      Powered by <a href="https://braxcode.com"
-        style="text-decoration: none; color:var(--a1)">BraxCode Digitals Foundation</a> <i class="fa-solid fa-bolt"></i>
+      Powered by <a href="https://braxcode.com" style="text-decoration: none; color:var(--a1)">BraxCode Digitals
+        Foundation</a> <i class="fa-solid fa-bolt"></i>
     </div>
     <div class="footer-links">
       <a href="devshowcase-legal.html">Privacy & Terms</a>
@@ -1942,13 +1929,13 @@
       btn.disabled = true;
 
       try {
-     const { error } = await _supabase.auth.signInWithOAuth({
-      provider: provider,
-     options: {
-         redirectTo: 'https://devshowcase.braxcode.com/devshowcase-dashboard.html',
-         queryParams: { prompt: 'select_account' }
-        },
-     });
+        const { error } = await _supabase.auth.signInWithOAuth({
+          provider: provider,
+          options: {
+            redirectTo: 'https://devshowcase.braxcode.com/devshowcase-dashboard.html',
+            queryParams: { prompt: 'select_account' }
+          },
+        });
         if (error) throw error;
       } catch (e) {
         showAlert(e.message || "Connection failed. Try again!");
@@ -2124,9 +2111,9 @@
       const navRight = document.querySelector('.nav-right');
 
       let shortName = '';
-        if ((provider === 'github' || provider === 'google') && !meta.location) {
-    detectAndSaveLocation(user.id);
-  }
+      if ((provider === 'github' || provider === 'google') && !meta.location) {
+        detectAndSaveLocation(user.id);
+      }
 
       if (provider === 'google' || provider === 'github') {
         shortName = meta.full_name?.split(' ')[0] || 'Developer';
@@ -2193,49 +2180,49 @@
     }
 
     // CHECK RESET TOKEN UKIFUNGUA LANDING
-(async () => {
-  const hash = window.location.hash;
-  const search = window.location.search;
+    (async () => {
+      const hash = window.location.hash;
+      const search = window.location.search;
 
-  let access_token = null;
-  let refresh_token = null;
-  let type = null;
+      let access_token = null;
+      let refresh_token = null;
+      let type = null;
 
-  // Format ya zamani: #access_token=xxx&type=recovery
-  if (hash && hash.includes('access_token')) {
-    const params = new URLSearchParams(hash.replace('#', ''));
-    access_token = params.get('access_token');
-    refresh_token = params.get('refresh_token');
-    type = params.get('type');
-  }
-
-  // Supabase v2 PKCE format: ?token_hash=xxx&type=recovery
-  if (search && search.includes('token_hash')) {
-    const params = new URLSearchParams(search);
-    const token_hash = params.get('token_hash');
-    type = params.get('type');
-
-    if (type === 'recovery' && token_hash) {
-      const { data, error } = await _supabase.auth.verifyOtp({
-        token_hash,
-        type: 'recovery'
-      });
-      if (!error && data?.session) {
-        openResetModal();
-        return;
+      // Format ya zamani: #access_token=xxx&type=recovery
+      if (hash && hash.includes('access_token')) {
+        const params = new URLSearchParams(hash.replace('#', ''));
+        access_token = params.get('access_token');
+        refresh_token = params.get('refresh_token');
+        type = params.get('type');
       }
-    }
-  }
 
-  // Implicit token format (fallback)
-  if (type === 'recovery' && access_token) {
-    const { error } = await _supabase.auth.setSession({
-      access_token,
-      refresh_token: refresh_token || ''
-    });
-    if (!error) openResetModal();
-  }
-})();
+      // Supabase v2 PKCE format: ?token_hash=xxx&type=recovery
+      if (search && search.includes('token_hash')) {
+        const params = new URLSearchParams(search);
+        const token_hash = params.get('token_hash');
+        type = params.get('type');
+
+        if (type === 'recovery' && token_hash) {
+          const { data, error } = await _supabase.auth.verifyOtp({
+            token_hash,
+            type: 'recovery'
+          });
+          if (!error && data?.session) {
+            openResetModal();
+            return;
+          }
+        }
+      }
+
+      // Implicit token format (fallback)
+      if (type === 'recovery' && access_token) {
+        const { error } = await _supabase.auth.setSession({
+          access_token,
+          refresh_token: refresh_token || ''
+        });
+        if (!error) openResetModal();
+      }
+    })();
     // ================================================
     checkSession();
 
@@ -2281,60 +2268,61 @@
       hint.style.color = colors[score - 1];
       hint.textContent = labels[score - 1];
     }
-async function detectAndSaveLocation(userId) {
-  try {
-    // Jaribu GPS kwanza
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        async (position) => {
-          const { latitude, longitude } = position.coords;
-          const res = await fetch(
-            `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`
+    //Detect location when user enters via Github
+    async function detectAndSaveLocation(userId) {
+      try {
+        // Jaribu GPS kwanza
+        if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition(
+            async (position) => {
+              const { latitude, longitude } = position.coords;
+              const res = await fetch(
+                `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`
+              );
+              const data = await res.json();
+              const city = data.address.city || data.address.town || data.address.village || '';
+              const country = data.address.country || '';
+
+              await _supabase.auth.updateUser({
+                data: {
+                  location: `${city}, ${country}`,
+                  country,
+                  latitude,
+                  longitude
+                }
+              });
+
+              // Pia update profiles table kama unatumia
+              await _supabase.from('profiles').update({
+                location: `${city}, ${country}`,
+                country,
+              }).eq('id', userId);
+            },
+            async () => {
+              // GPS ilikataliwa — fallback kwa IP
+              const res = await fetch('https://ipapi.co/json/');
+              const data = await res.json();
+
+              await _supabase.auth.updateUser({
+                data: {
+                  location: `${data.city}, ${data.country_name}`,
+                  country: data.country_name,
+                  latitude: data.latitude,
+                  longitude: data.longitude
+                }
+              });
+
+              await _supabase.from('profiles').update({
+                location: `${data.city}, ${data.country_name}`,
+                country: data.country_name,
+              }).eq('id', userId);
+            }
           );
-          const data = await res.json();
-          const city = data.address.city || data.address.town || data.address.village || '';
-          const country = data.address.country || '';
-
-          await _supabase.auth.updateUser({
-            data: {
-              location: `${city}, ${country}`,
-              country,
-              latitude,
-              longitude
-            }
-          });
-
-          // Pia update profiles table kama unatumia
-          await _supabase.from('profiles').update({
-            location: `${city}, ${country}`,
-            country,
-          }).eq('id', userId);
-        },
-        async () => {
-          // GPS ilikataliwa — fallback kwa IP
-          const res = await fetch('https://ipapi.co/json/');
-          const data = await res.json();
-
-          await _supabase.auth.updateUser({
-            data: {
-              location: `${data.city}, ${data.country_name}`,
-              country: data.country_name,
-              latitude: data.latitude,
-              longitude: data.longitude
-            }
-          });
-
-          await _supabase.from('profiles').update({
-            location: `${data.city}, ${data.country_name}`,
-            country: data.country_name,
-          }).eq('id', userId);
         }
-      );
+      } catch (e) {
+        console.log('Location save failed:', e);
+      }
     }
-  } catch (e) {
-    console.log('Location save failed:', e);
-  }
-            }
   </script>
 </body>
 
