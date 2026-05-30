@@ -11,6 +11,7 @@
     rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
   <link rel="shortcut icon" href="favicon.png" type="image/x-icon">
+
   <style>
     :root {
       --bg: #060811;
@@ -1519,7 +1520,7 @@
 
         <div class="form-group">
           <label class="form-label">Project Name *</label>
-          <input type="text" class="form-input" id="apName" placeholder="e.g. Sarde Bakery">
+          <input type="text" class="form-input" id="apName" placeholder="e.g. DevShowcase">
         </div>
 
         <div class="form-group">
@@ -1600,26 +1601,26 @@
     // ================================================
     // INIT — CHECK AUTH
     // ================================================
-async function init() {
-  // Subiri Supabase isaync session kutoka OAuth callback
-  const { data: { session } } = await _supabase.auth.getSession();
-  
-  if (!session) {
-    // Jaribu tena baada ya sekunde 1 — OAuth inachukua muda
-    await new Promise(r => setTimeout(r, 1200));
-    const { data: { session: session2 } } = await _supabase.auth.getSession();
-    
-    if (!session2) {
-      window.location.href = 'https://devshowcase-braxcode-digitals.netlify.app/';
-      return;
-    }
-    // Session imepatikana baada ya kusubiri
-    currentUser = session2.user;
-  } else {
-    currentUser = session.user;
-  }
+    async function init() {
+      // Subiri Supabase isaync session kutoka OAuth callback
+      const { data: { session } } = await _supabase.auth.getSession();
 
-    
+      if (!session) {
+        // Jaribu tena baada ya sekunde 1 — OAuth inachukua muda
+        await new Promise(r => setTimeout(r, 1200));
+        const { data: { session: session2 } } = await _supabase.auth.getSession();
+
+        if (!session2) {
+          window.location.href = 'https://devshowcase.braxcode.com';
+          return;
+        }
+        // Session imepatikana baada ya kusubiri
+        currentUser = session2.user;
+      } else {
+        currentUser = session.user;
+      }
+
+
       const meta = currentUser.user_metadata || {};
 
       const initials = meta.avatar_initials || (meta.full_name || 'D').slice(0, 2).toUpperCase();
@@ -2179,10 +2180,6 @@ async function init() {
         ${!n.is_read ? '<div style="width:7px;height:7px;border-radius:50%;background:var(--a1);flex-shrink:0;margin-top:6px;"></div>' : ''}
       </div>`;
       }).join('');
-
-
-
-
     }
 
 
@@ -2263,8 +2260,7 @@ async function init() {
     }
 
     // ================================================
-    // BOOT
-    // ================================================
+
     init();
   </script>
 
