@@ -46,7 +46,6 @@
       z-index: 0;
     }
 
-    /* NAV */
     nav {
       height: 60px;
       padding: 0 5%;
@@ -105,10 +104,8 @@
       font-weight: 500;
       transition: all 0.2s;
     }
-
     .nav-back:hover { color: var(--text); }
 
-    /* CHAT */
     .chat-wrap {
       flex: 1;
       overflow-y: auto;
@@ -120,11 +117,9 @@
       z-index: 1;
       scroll-behavior: smooth;
     }
-
     .chat-wrap::-webkit-scrollbar { width: 3px; }
     .chat-wrap::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 2px; }
 
-    /* WELCOME */
     .welcome {
       text-align: center;
       padding: 20px 0 10px;
@@ -153,7 +148,6 @@
       margin: 0 auto 4px;
     }
 
-    /* AI badge */
     .ai-badge {
       display: inline-flex;
       align-items: center;
@@ -202,13 +196,11 @@
       font-family: "Syne", sans-serif;
       font-weight: 500;
     }
-
     .q-btn:hover {
       background: rgba(124,110,250,0.16);
       border-color: rgba(124,110,250,0.35);
     }
 
-    /* MESSAGES */
     .msg {
       max-width: 85%;
       padding: 11px 14px;
@@ -225,25 +217,19 @@
     }
 
     .msg.bot {
-      background: var(--glass2);
-      border: 1px solid var(--border);
+      background: rgba(6,214,160,0.04);
+      border: 1px solid rgba(6,214,160,0.15);
       border-bottom-left-radius: 3px;
       align-self: flex-start;
       color: var(--text);
     }
 
-    /* AI replied — subtle green tint */
-    .msg.bot.ai {
-      border-color: rgba(6,214,160,0.15);
-      background: rgba(6,214,160,0.04);
-    }
-
-    .msg.bot.ai::after {
+    .msg.bot::after {
       content: "✦ AI";
       display: block;
       font-size: 0.6rem;
       font-family: "JetBrains Mono", monospace;
-      color: rgba(6,214,160,0.45);
+      color: rgba(6,214,160,0.4);
       margin-top: 6px;
       text-align: right;
       letter-spacing: 0.5px;
@@ -255,6 +241,15 @@
       border-bottom-right-radius: 3px;
       align-self: flex-end;
       color: var(--text);
+    }
+
+    .msg.error {
+      background: rgba(255,80,80,0.07);
+      border: 1px solid rgba(255,80,80,0.2);
+      border-bottom-left-radius: 3px;
+      align-self: flex-start;
+      color: #ff9999;
+      font-size: 0.82rem;
     }
 
     .msg.typing {
@@ -272,18 +267,17 @@
       width: 6px;
       height: 6px;
       border-radius: 50%;
-      background: var(--muted);
+      background: var(--a2);
       animation: bounce 1.2s infinite;
     }
     .t-dot:nth-child(2) { animation-delay: 0.2s; }
     .t-dot:nth-child(3) { animation-delay: 0.4s; }
 
     @keyframes bounce {
-      0%,60%,100% { transform: translateY(0); opacity: 0.4; }
+      0%,60%,100% { transform: translateY(0); opacity: 0.3; }
       30% { transform: translateY(-5px); opacity: 1; }
     }
 
-    /* INPUT */
     .input-area {
       padding: 12px 5% 16px;
       flex-shrink: 0;
@@ -318,7 +312,6 @@
       line-height: 1.5;
       transition: border-color 0.2s;
     }
-
     textarea:focus { border-color: rgba(124,110,250,0.4); }
     textarea::placeholder { color: var(--muted); }
 
@@ -338,7 +331,6 @@
       transition: all 0.2s;
       box-shadow: 0 4px 14px rgba(124,110,250,0.35);
     }
-
     .send-btn:hover { transform: scale(1.05); }
     .send-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
 
@@ -402,180 +394,129 @@
   </div>
 
   <script>
-    // ─── CONVERSATION HISTORY (for AI context) ───────────────────────────────
-    var history = [];
+    var chatHistory = [];
+    var isBusy = false;
 
-    // ─── LOCAL KNOWLEDGE BASE (fast + offline) ────────────────────────────────
-    var KB = {
-      en: {
-        greeting:    ["Hi! 👋 I'm DevAssist, your DevShowcase helper. What can I help you with today?"],
-        free:        ["Yes! DevShowcase is 100% free to use. Sign up, add your projects, and get discovered by clients worldwide — no cost at all! 🚀"],
-        addproject:  ["To add a project:\n1. Sign in → Dashboard\n2. Click 'Add Project'\n3. Upload a screenshot (JPG/PNG/WebP, max 2MB)\n4. Fill in title, description, tech stack\n5. Hit Publish! 🎉\n\nYour project appears in the gallery immediately."],
-        gethired:    ["To get hired:\n1. Complete your profile 100%\n2. Add your WhatsApp number ← crucial!\n3. Upload quality project screenshots\n4. Write clear descriptions\n\nClients browse the gallery and contact you directly via WhatsApp 💼"],
-        contact:     ["Clients contact you directly via WhatsApp — no middleman, no commission! Make sure your WhatsApp number is saved: Dashboard → Profile → Edit. 📱"],
-        profile:     ["To edit your profile:\n1. Dashboard → Profile → Edit\n2. Update name, role, bio, skills, WhatsApp, GitHub, LinkedIn\n3. Click 'Save Changes' ✅"],
-        reactions:   ["Visitors can react with 👍 Like, 🔥 Fire, or 👏 Clap. More reactions = more visibility in the gallery!"],
-        contact_us:  ["Need to reach us?\n\n📱 WhatsApp: wa.me/255618811359\nWe're in Mwanza, Tanzania 🇹🇿 — response within 24 hours!"],
-        about:       ["DevShowcase is a global developer portfolio platform by BraxCode Digitals Foundation, Mwanza 🇹🇿\n\nHelping African developers get discovered and hired worldwide! 🌍"],
-      },
-      sw: {
-        greeting:    ["Habari! 👋 Mimi ni DevAssist. Ninawezaje kukusaidia leo?"],
-        free:        ["Ndiyo! DevShowcase ni bure kabisa. Jisajili, ongeza miradi, ugunduliwe na wateja duniani kote — bila malipo! 🚀"],
-        addproject:  ["Kuongeza mradi:\n1. Ingia → Dashboard\n2. Bonyeza 'Add Project'\n3. Pakia picha (JPG/PNG/WebP, max 2MB)\n4. Jaza maelezo na teknolojia\n5. Bonyeza Publish! 🎉\n\nMradi wako utaonekana gallery mara moja."],
-        gethired:    ["Kupata kazi:\n1. Kamilisha wasifu wako 100%\n2. Weka namba ya WhatsApp ← muhimu sana!\n3. Pakia picha nzuri za miradi\n4. Andika maelezo mazuri\n\nWateja wanakuwasiliana moja kwa moja kupitia WhatsApp 💼"],
-        contact:     ["Wateja wanakuwasiliana nawe moja kwa moja kupitia WhatsApp — hakuna mtu wa kati, hakuna kamisheni! Weka namba yako: Dashboard → Profile → Edit. 📱"],
-        profile:     ["Kubadilisha wasifu:\n1. Dashboard → Profile → Edit\n2. Badilisha jina, wadhifa, bio, ujuzi, WhatsApp, GitHub\n3. Bonyeza 'Save Changes' ✅"],
-        reactions:   ["Wageni wanaweza kupiga kura:\n👍 Like  🔥 Fire  👏 Clap\n\nKura zaidi = uonekano zaidi kwenye gallery!"],
-        contact_us:  ["Unataka kuwasiliana nasi?\n\n📱 WhatsApp: wa.me/255618811359\nTuko Mwanza, Tanzania 🇹🇿 — jibu ndani ya masaa 24!"],
-        about:       ["DevShowcase ni platform ya kimataifa ya portfolio, iliyojengwa na BraxCode Digitals Foundation, Mwanza 🇹🇿\n\nDhamira: Kusaidia wasanidi wa Afrika kugunduliwa na kuajiriwa duniani kote! 🌍"],
-      }
-    };
+    // ── DOM helpers ──────────────────────────────────────────────────────────
 
-    // ─── LANGUAGE DETECTION ───────────────────────────────────────────────────
-    function detectLang(text) {
-      var swWords = ['habari','nianze','wapi','jinsi','nini','vipi','nataka','ninaweza','tafadhali',
-        'mradi','kazi','bure','jisajili','wasifu','namba','nenosiri','bonyeza','nenda',
-        'ongeza','futa','pakia','karibu','hujambo','mambo','msaada','picha','gallery',
-        'wasanidi','wateja','kuwasiliana','platform','mwanza','safari'];
-      var lower = text.toLowerCase();
-      return swWords.filter(function(w){ return lower.includes(w); }).length >= 1 ? 'sw' : 'en';
-    }
-
-    // ─── LOCAL INTENT MATCH ───────────────────────────────────────────────────
-    // Returns KB reply array or null (null = send to AI)
-    function matchLocal(text, lang) {
-      var t = text.toLowerCase();
-      var L = KB[lang];
-
-      if (/hi\b|hello|hey|hujambo|habari|salaam|mambo|karibu|good (morning|evening|afternoon)/.test(t)) return L.greeting;
-      if (/\bfree\b|bei|malipo|cost|charge|gharama/.test(t)) return L.free;
-      if (/add|upload|post|ongeza|pakia|publish|new project/.test(t) && /project|mradi/.test(t)) return L.addproject;
-      if (/(nianze|start|begin|jinsi ya kuanza|how do i start)/.test(t)) return L.addproject;
-      if (/hired|hire|job|kazi|client|mteja|pata kazi|ajira/.test(t)) return L.gethired;
-      if (/contact us|wasiliana nasi|reach us|support team|timu/.test(t)) return L.contact_us;
-      if (/contact|wasiliana|reach|chat/.test(t) && !/us|sisi|team/.test(t)) return L.contact;
-      if (/profile|wasifu|bio|edit profile/.test(t)) return L.profile;
-      if (/react|reaction|like|fire|clap|kura|vote/.test(t)) return L.reactions;
-      if (/about|nini|what is devshowcase|braxcode|platform/.test(t)) return L.about;
-
-      return null; // → goes to AI
-    }
-
-    // ─── AI CALL via Vercel API route ─────────────────────────────────────────
-    async function callAI(message) {
-      var res = await fetch('/api/chat', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ message: message, history: history })
-      });
-
-      if (!res.ok) throw new Error('API error ' + res.status);
-      var data = await res.json();
-      return data.reply;
-    }
-
-    // ─── DOM HELPERS ──────────────────────────────────────────────────────────
-    function addMsg(text, type) {
+    function addMsg(text, cls) {
       var wrap = document.getElementById('chatWrap');
       var div = document.createElement('div');
-      div.className = 'msg ' + type;
+      div.className = cls;
       div.textContent = text;
       wrap.appendChild(div);
       wrap.scrollTop = wrap.scrollHeight;
       return div;
     }
 
-    function addMsgHTML(html, type) {
+    function addMsgHTML(html, cls) {
       var wrap = document.getElementById('chatWrap');
       var div = document.createElement('div');
-      div.className = 'msg ' + type;
+      div.className = cls;
       div.innerHTML = html;
       wrap.appendChild(div);
       wrap.scrollTop = wrap.scrollHeight;
       return div;
     }
 
-    function addTyping() {
+    function showTyping() {
       var wrap = document.getElementById('chatWrap');
       var div = document.createElement('div');
       div.className = 'msg typing';
-      div.id = 'typing';
+      div.id = 'typingDot';
       div.innerHTML = '<div class="t-dot"></div><div class="t-dot"></div><div class="t-dot"></div>';
       wrap.appendChild(div);
       wrap.scrollTop = wrap.scrollHeight;
     }
 
-    function removeTyping() {
-      var el = document.getElementById('typing');
+    function hideTyping() {
+      var el = document.getElementById('typingDot');
       if (el) el.remove();
     }
 
     function linkify(text) {
-      return text
-        .replace('wa.me/255618811359',
-          '<a href="https://wa.me/255618811359" target="_blank" style="color:var(--a2);text-decoration:underline;">wa.me/255618811359</a>')
-        .replace('devshowcase@gmail.com',
-          '<a href="mailto:braxtonbruzzzy@gmail.com" style="color:var(--a2);text-decoration:underline;">devshowcase@gmail.com</a>');
+      return text.replace(/wa\.me\/255618811359/g,
+        '<a href="https://wa.me/255618811359" target="_blank" style="color:var(--a2);text-decoration:underline;">wa.me/255618811359</a>');
     }
 
-    // ─── MAIN SEND ────────────────────────────────────────────────────────────
+    // ── AI call → /api/chat (Vercel serverless) ──────────────────────────────
+
+    async function callAI(message) {
+      var res = await fetch('/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: message, history: chatHistory })
+      });
+      if (!res.ok) throw new Error('API ' + res.status);
+      var data = await res.json();
+      return data.reply;
+    }
+
+    // ── Main send ─────────────────────────────────────────────────────────────
+
     async function send() {
+      if (isBusy) return;
+
       var inp = document.getElementById('inp');
       var text = inp.value.trim();
       if (!text) return;
 
+      isBusy = true;
       inp.value = '';
       inp.style.height = 'auto';
       document.getElementById('sendBtn').disabled = true;
 
-      addMsg(text, 'user');
+      addMsg(text, 'msg user');
 
-      // Add to history for AI context
-      history.push({ role: 'user', content: text });
-      // Keep history lean
-      if (history.length > 12) history = history.slice(-12);
+      chatHistory.push({ role: 'user', content: text });
+      if (chatHistory.length > 14) chatHistory = chatHistory.slice(-14);
 
-      addTyping();
+      showTyping();
 
       var reply = '';
-      var isAI = false;
 
       try {
-        var lang = detectLang(text);
-        var localMatch = matchLocal(text, lang);
-
-        if (localMatch) {
-          // ── Bot path: answer from KB instantly ──
-          await new Promise(function(r){ setTimeout(r, 400 + Math.random() * 300); });
-          reply = localMatch[Math.floor(Math.random() * localMatch.length)];
-        } else {
-          // ── AI path: call Vercel API ──
-          reply = await callAI(text);
-          isAI = true;
-        }
+        reply = await callAI(text);
       } catch (err) {
-        // Fallback if AI call fails
-        var lang2 = detectLang(text);
-        reply = lang2 === 'sw'
-          ? 'Samahani, kuna tatizo kidogo. Jaribu tena au wasiliana nasi: wa.me/255618811359 📱'
-          : 'Sorry, something went wrong. Please try again or contact us: wa.me/255618811359 📱';
+        hideTyping();
+        addMsg(
+          '⚠️ Samahani, tatizo la muunganiko. Jaribu tena au wasiliana nasi: wa.me/255618811359',
+          'msg error'
+        );
+        isBusy = false;
+        document.getElementById('sendBtn').disabled = false;
+        inp.focus();
+        return;
       }
 
-      removeTyping();
+      hideTyping();
 
-      // Add assistant reply to history
-      history.push({ role: 'assistant', content: reply });
+      chatHistory.push({ role: 'assistant', content: reply });
 
-      var htmlReply = linkify(reply);
-      addMsgHTML(htmlReply, isAI ? 'msg bot ai' : 'msg bot');
+      addMsgHTML(linkify(reply), 'msg bot');
 
+      isBusy = false;
       document.getElementById('sendBtn').disabled = false;
-      document.getElementById('inp').focus();
+      inp.focus();
     }
 
-    function ask(q) { document.getElementById('inp').value = q; send(); }
-    function handleKey(e) { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); send(); } }
-    function resize(el) { el.style.height = 'auto'; el.style.height = Math.min(el.scrollHeight, 120) + 'px'; }
+    function ask(q) {
+      if (isBusy) return;
+      document.getElementById('inp').value = q;
+      send();
+    }
+
+    function handleKey(e) {
+      if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        send();
+      }
+    }
+
+    function resize(el) {
+      el.style.height = 'auto';
+      el.style.height = Math.min(el.scrollHeight, 120) + 'px';
+    }
   </script>
 </body>
 </html>
