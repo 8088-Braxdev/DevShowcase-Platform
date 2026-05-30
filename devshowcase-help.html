@@ -1,23 +1,20 @@
 <!doctype html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Help — DevShowcase</title>
-  <link
-    href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
-    rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" />
   <link rel="shortcut icon" href="favicon.png" type="image/x-icon">
   <style>
     :root {
       --bg: #060811;
       --bg2: #0b0e1a;
-      --glass: rgba(255, 255, 255, 0.04);
-      --glass2: rgba(255, 255, 255, 0.07);
-      --border: rgba(255, 255, 255, 0.07);
-      --border2: rgba(255, 255, 255, 0.13);
+      --glass: rgba(255,255,255,0.04);
+      --glass2: rgba(255,255,255,0.07);
+      --border: rgba(255,255,255,0.07);
+      --border2: rgba(255,255,255,0.13);
       --a1: #7c6efa;
       --a2: #06d6a0;
       --text: #f0f2ff;
@@ -25,16 +22,8 @@
       --muted2: #9ca3af;
     }
 
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    html,
-    body {
-      height: 100%;
-    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { height: 100%; }
 
     body {
       background: var(--bg);
@@ -51,23 +40,20 @@
       position: fixed;
       inset: 0;
       background:
-        radial-gradient(ellipse 60% 50% at 10% 10%,
-          rgba(124, 110, 250, 0.1),
-          transparent 60%),
-        radial-gradient(ellipse 50% 40% at 90% 90%,
-          rgba(6, 214, 160, 0.07),
-          transparent 60%);
+        radial-gradient(ellipse 60% 50% at 10% 10%, rgba(124,110,250,0.1), transparent 60%),
+        radial-gradient(ellipse 50% 40% at 90% 90%, rgba(6,214,160,0.07), transparent 60%);
       pointer-events: none;
       z-index: 0;
     }
 
+    /* NAV */
     nav {
       height: 60px;
       padding: 0 5%;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      background: rgba(6, 8, 17, 0.85);
+      background: rgba(6,8,17,0.85);
       backdrop-filter: blur(24px);
       border-bottom: 1px solid var(--border);
       flex-shrink: 0;
@@ -120,10 +106,9 @@
       transition: all 0.2s;
     }
 
-    .nav-back:hover {
-      color: var(--text);
-    }
+    .nav-back:hover { color: var(--text); }
 
+    /* CHAT */
     .chat-wrap {
       flex: 1;
       overflow-y: auto;
@@ -136,15 +121,10 @@
       scroll-behavior: smooth;
     }
 
-    .chat-wrap::-webkit-scrollbar {
-      width: 3px;
-    }
+    .chat-wrap::-webkit-scrollbar { width: 3px; }
+    .chat-wrap::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 2px; }
 
-    .chat-wrap::-webkit-scrollbar-thumb {
-      background: var(--border2);
-      border-radius: 2px;
-    }
-
+    /* WELCOME */
     .welcome {
       text-align: center;
       padding: 20px 0 10px;
@@ -160,21 +140,46 @@
       justify-content: center;
       font-size: 1.4rem;
       margin: 0 auto 12px;
-      box-shadow: 0 8px 24px rgba(124, 110, 250, 0.3);
+      box-shadow: 0 8px 24px rgba(124,110,250,0.3);
     }
 
-    .welcome h2 {
-      font-size: 1.1rem;
-      font-weight: 700;
-      margin-bottom: 6px;
-    }
+    .welcome h2 { font-size: 1.1rem; font-weight: 700; margin-bottom: 6px; }
 
     .welcome p {
       font-size: 0.82rem;
       color: var(--muted2);
       line-height: 1.6;
       max-width: 300px;
-      margin: 0 auto 16px;
+      margin: 0 auto 4px;
+    }
+
+    /* AI badge */
+    .ai-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 3px 10px;
+      border-radius: 100px;
+      background: rgba(6,214,160,0.08);
+      border: 1px solid rgba(6,214,160,0.2);
+      color: var(--a2);
+      font-size: 0.68rem;
+      font-family: "JetBrains Mono", monospace;
+      margin-bottom: 14px;
+      letter-spacing: 0.5px;
+    }
+
+    .ai-badge .dot {
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: var(--a2);
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.3; }
     }
 
     .quick-grid {
@@ -188,8 +193,8 @@
     .q-btn {
       padding: 7px 13px;
       border-radius: 100px;
-      background: rgba(124, 110, 250, 0.08);
-      border: 1px solid rgba(124, 110, 250, 0.2);
+      background: rgba(124,110,250,0.08);
+      border: 1px solid rgba(124,110,250,0.2);
       color: #9b8fff;
       font-size: 0.75rem;
       cursor: pointer;
@@ -199,10 +204,11 @@
     }
 
     .q-btn:hover {
-      background: rgba(124, 110, 250, 0.16);
-      border-color: rgba(124, 110, 250, 0.35);
+      background: rgba(124,110,250,0.16);
+      border-color: rgba(124,110,250,0.35);
     }
 
+    /* MESSAGES */
     .msg {
       max-width: 85%;
       padding: 11px 14px;
@@ -214,15 +220,8 @@
     }
 
     @keyframes msgIn {
-      from {
-        opacity: 0;
-        transform: translateY(8px);
-      }
-
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
+      from { opacity: 0; transform: translateY(8px); }
+      to   { opacity: 1; transform: translateY(0); }
     }
 
     .msg.bot {
@@ -233,9 +232,26 @@
       color: var(--text);
     }
 
+    /* AI replied — subtle green tint */
+    .msg.bot.ai {
+      border-color: rgba(6,214,160,0.15);
+      background: rgba(6,214,160,0.04);
+    }
+
+    .msg.bot.ai::after {
+      content: "✦ AI";
+      display: block;
+      font-size: 0.6rem;
+      font-family: "JetBrains Mono", monospace;
+      color: rgba(6,214,160,0.45);
+      margin-top: 6px;
+      text-align: right;
+      letter-spacing: 0.5px;
+    }
+
     .msg.user {
-      background: rgba(124, 110, 250, 0.12);
-      border: 1px solid rgba(124, 110, 250, 0.2);
+      background: rgba(124,110,250,0.12);
+      border: 1px solid rgba(124,110,250,0.2);
       border-bottom-right-radius: 3px;
       align-self: flex-end;
       color: var(--text);
@@ -259,36 +275,21 @@
       background: var(--muted);
       animation: bounce 1.2s infinite;
     }
-
-    .t-dot:nth-child(2) {
-      animation-delay: 0.2s;
-    }
-
-    .t-dot:nth-child(3) {
-      animation-delay: 0.4s;
-    }
+    .t-dot:nth-child(2) { animation-delay: 0.2s; }
+    .t-dot:nth-child(3) { animation-delay: 0.4s; }
 
     @keyframes bounce {
-
-      0%,
-      60%,
-      100% {
-        transform: translateY(0);
-        opacity: 0.4;
-      }
-
-      30% {
-        transform: translateY(-5px);
-        opacity: 1;
-      }
+      0%,60%,100% { transform: translateY(0); opacity: 0.4; }
+      30% { transform: translateY(-5px); opacity: 1; }
     }
 
+    /* INPUT */
     .input-area {
       padding: 12px 5% 16px;
       flex-shrink: 0;
       position: relative;
       z-index: 1;
-      background: rgba(6, 8, 17, 0.5);
+      background: rgba(6,8,17,0.5);
       backdrop-filter: blur(12px);
       border-top: 1px solid var(--border);
     }
@@ -318,13 +319,8 @@
       transition: border-color 0.2s;
     }
 
-    textarea:focus {
-      border-color: rgba(124, 110, 250, 0.4);
-    }
-
-    textarea::placeholder {
-      color: var(--muted);
-    }
+    textarea:focus { border-color: rgba(124,110,250,0.4); }
+    textarea::placeholder { color: var(--muted); }
 
     .send-btn {
       width: 44px;
@@ -340,18 +336,11 @@
       justify-content: center;
       flex-shrink: 0;
       transition: all 0.2s;
-      box-shadow: 0 4px 14px rgba(124, 110, 250, 0.35);
+      box-shadow: 0 4px 14px rgba(124,110,250,0.35);
     }
 
-    .send-btn:hover {
-      transform: scale(1.05);
-    }
-
-    .send-btn:disabled {
-      opacity: 0.5;
-      cursor: not-allowed;
-      transform: none;
-    }
+    .send-btn:hover { transform: scale(1.05); }
+    .send-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
 
     .input-hint {
       text-align: center;
@@ -380,6 +369,10 @@
       <div class="welcome-avatar">🤖</div>
       <h2>DevAssist</h2>
       <p>Ask me anything about the platform</p>
+      <div class="ai-badge">
+        <div class="dot"></div>
+        AI-Powered
+      </div>
       <div class="quick-grid">
         <button class="q-btn" onclick="ask('How do I add a project?')">➕ Add project</button>
         <button class="q-btn" onclick="ask('How do I get hired?')">💼 Get hired</button>
@@ -389,46 +382,107 @@
         <button class="q-btn" onclick="ask('How do reactions work?')">🔥 Reactions</button>
         <button class="q-btn" onclick="ask('Contact us')">📞 Contact us</button>
         <button class="q-btn" onclick="ask('Nianze wapi?')">🇹🇿 Nianze wapi?</button>
-        <button class="q-btn" onclick="ask('Habari DevShowcase ni nini?')">🌍 DevShowcase ni nini?</button>
+        <button class="q-btn" onclick="ask('DevShowcase ni nini?')">🌍 DS ni nini?</button>
       </div>
-
     </div>
   </div>
 
   <div class="input-area">
     <div class="input-row">
-      <textarea id="inp" placeholder="Ask anything..." rows="1" onkeydown="handleKey(event)"
-        oninput="resize(this)"></textarea>
+      <textarea id="inp" placeholder="Ask anything..." rows="1"
+        onkeydown="handleKey(event)" oninput="resize(this)"></textarea>
       <button class="send-btn" id="sendBtn" onclick="send()">
         <i class="fa-solid fa-paper-plane"></i>
       </button>
     </div>
-    <div class="input-hint">Powered by <a href="https://braxcode.com"
-        style="color: var(--a1); text-decoration: none;">BraxCode Digitals Foundation</a> <i
-        class="fa solid fa-bolt"></i></div>
+    <div class="input-hint">
+      Powered by <a href="https://braxcode.com" style="color:var(--a1);text-decoration:none;">BraxCode Digitals Foundation</a>
+      <i class="fa solid fa-bolt"></i>
+    </div>
   </div>
 
   <script>
+    // ─── CONVERSATION HISTORY (for AI context) ───────────────────────────────
+    var history = [];
 
+    // ─── LOCAL KNOWLEDGE BASE (fast + offline) ────────────────────────────────
+    var KB = {
+      en: {
+        greeting:    ["Hi! 👋 I'm DevAssist, your DevShowcase helper. What can I help you with today?"],
+        free:        ["Yes! DevShowcase is 100% free to use. Sign up, add your projects, and get discovered by clients worldwide — no cost at all! 🚀"],
+        addproject:  ["To add a project:\n1. Sign in → Dashboard\n2. Click 'Add Project'\n3. Upload a screenshot (JPG/PNG/WebP, max 2MB)\n4. Fill in title, description, tech stack\n5. Hit Publish! 🎉\n\nYour project appears in the gallery immediately."],
+        gethired:    ["To get hired:\n1. Complete your profile 100%\n2. Add your WhatsApp number ← crucial!\n3. Upload quality project screenshots\n4. Write clear descriptions\n\nClients browse the gallery and contact you directly via WhatsApp 💼"],
+        contact:     ["Clients contact you directly via WhatsApp — no middleman, no commission! Make sure your WhatsApp number is saved: Dashboard → Profile → Edit. 📱"],
+        profile:     ["To edit your profile:\n1. Dashboard → Profile → Edit\n2. Update name, role, bio, skills, WhatsApp, GitHub, LinkedIn\n3. Click 'Save Changes' ✅"],
+        reactions:   ["Visitors can react with 👍 Like, 🔥 Fire, or 👏 Clap. More reactions = more visibility in the gallery!"],
+        contact_us:  ["Need to reach us?\n\n📱 WhatsApp: wa.me/255618811359\nWe're in Mwanza, Tanzania 🇹🇿 — response within 24 hours!"],
+        about:       ["DevShowcase is a global developer portfolio platform by BraxCode Digitals Foundation, Mwanza 🇹🇿\n\nHelping African developers get discovered and hired worldwide! 🌍"],
+      },
+      sw: {
+        greeting:    ["Habari! 👋 Mimi ni DevAssist. Ninawezaje kukusaidia leo?"],
+        free:        ["Ndiyo! DevShowcase ni bure kabisa. Jisajili, ongeza miradi, ugunduliwe na wateja duniani kote — bila malipo! 🚀"],
+        addproject:  ["Kuongeza mradi:\n1. Ingia → Dashboard\n2. Bonyeza 'Add Project'\n3. Pakia picha (JPG/PNG/WebP, max 2MB)\n4. Jaza maelezo na teknolojia\n5. Bonyeza Publish! 🎉\n\nMradi wako utaonekana gallery mara moja."],
+        gethired:    ["Kupata kazi:\n1. Kamilisha wasifu wako 100%\n2. Weka namba ya WhatsApp ← muhimu sana!\n3. Pakia picha nzuri za miradi\n4. Andika maelezo mazuri\n\nWateja wanakuwasiliana moja kwa moja kupitia WhatsApp 💼"],
+        contact:     ["Wateja wanakuwasiliana nawe moja kwa moja kupitia WhatsApp — hakuna mtu wa kati, hakuna kamisheni! Weka namba yako: Dashboard → Profile → Edit. 📱"],
+        profile:     ["Kubadilisha wasifu:\n1. Dashboard → Profile → Edit\n2. Badilisha jina, wadhifa, bio, ujuzi, WhatsApp, GitHub\n3. Bonyeza 'Save Changes' ✅"],
+        reactions:   ["Wageni wanaweza kupiga kura:\n👍 Like  🔥 Fire  👏 Clap\n\nKura zaidi = uonekano zaidi kwenye gallery!"],
+        contact_us:  ["Unataka kuwasiliana nasi?\n\n📱 WhatsApp: wa.me/255618811359\nTuko Mwanza, Tanzania 🇹🇿 — jibu ndani ya masaa 24!"],
+        about:       ["DevShowcase ni platform ya kimataifa ya portfolio, iliyojengwa na BraxCode Digitals Foundation, Mwanza 🇹🇿\n\nDhamira: Kusaidia wasanidi wa Afrika kugunduliwa na kuajiriwa duniani kote! 🌍"],
+      }
+    };
+
+    // ─── LANGUAGE DETECTION ───────────────────────────────────────────────────
+    function detectLang(text) {
+      var swWords = ['habari','nianze','wapi','jinsi','nini','vipi','nataka','ninaweza','tafadhali',
+        'mradi','kazi','bure','jisajili','wasifu','namba','nenosiri','bonyeza','nenda',
+        'ongeza','futa','pakia','karibu','hujambo','mambo','msaada','picha','gallery',
+        'wasanidi','wateja','kuwasiliana','platform','mwanza','safari'];
+      var lower = text.toLowerCase();
+      return swWords.filter(function(w){ return lower.includes(w); }).length >= 1 ? 'sw' : 'en';
+    }
+
+    // ─── LOCAL INTENT MATCH ───────────────────────────────────────────────────
+    // Returns KB reply array or null (null = send to AI)
+    function matchLocal(text, lang) {
+      var t = text.toLowerCase();
+      var L = KB[lang];
+
+      if (/hi\b|hello|hey|hujambo|habari|salaam|mambo|karibu|good (morning|evening|afternoon)/.test(t)) return L.greeting;
+      if (/\bfree\b|bei|malipo|cost|charge|gharama/.test(t)) return L.free;
+      if (/add|upload|post|ongeza|pakia|publish|new project/.test(t) && /project|mradi/.test(t)) return L.addproject;
+      if (/(nianze|start|begin|jinsi ya kuanza|how do i start)/.test(t)) return L.addproject;
+      if (/hired|hire|job|kazi|client|mteja|pata kazi|ajira/.test(t)) return L.gethired;
+      if (/contact us|wasiliana nasi|reach us|support team|timu/.test(t)) return L.contact_us;
+      if (/contact|wasiliana|reach|chat/.test(t) && !/us|sisi|team/.test(t)) return L.contact;
+      if (/profile|wasifu|bio|edit profile/.test(t)) return L.profile;
+      if (/react|reaction|like|fire|clap|kura|vote/.test(t)) return L.reactions;
+      if (/about|nini|what is devshowcase|braxcode|platform/.test(t)) return L.about;
+
+      return null; // → goes to AI
+    }
+
+    // ─── AI CALL via Vercel API route ─────────────────────────────────────────
+    async function callAI(message) {
+      var res = await fetch('/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: message, history: history })
+      });
+
+      if (!res.ok) throw new Error('API error ' + res.status);
+      var data = await res.json();
+      return data.reply;
+    }
+
+    // ─── DOM HELPERS ──────────────────────────────────────────────────────────
     function addMsg(text, type) {
-      var wrap = document.getElementById("chatWrap");
-      var div = document.createElement("div");
-      div.className = "msg " + type;
+      var wrap = document.getElementById('chatWrap');
+      var div = document.createElement('div');
+      div.className = 'msg ' + type;
       div.textContent = text;
       wrap.appendChild(div);
       wrap.scrollTop = wrap.scrollHeight;
       return div;
-    }
-
-    function addTyping() {
-      var wrap = document.getElementById("chatWrap");
-      var div = document.createElement("div");
-      div.className = "msg typing";
-      div.id = "typing";
-      div.innerHTML =
-        '<div class="t-dot"></div><div class="t-dot"></div><div class="t-dot"></div>';
-      wrap.appendChild(div);
-      wrap.scrollTop = wrap.scrollHeight;
     }
 
     function addMsgHTML(html, type) {
@@ -441,199 +495,30 @@
       return div;
     }
 
-
-    var KB = {
-      en: {
-        greeting: [
-          "Hi! 👋 I'm DevAssist, your DevShowcase helper. What can I help you with today?",
-          "Hello! 👋 Welcome to DevShowcase support. Ask me anything about the platform!"
-        ],
-        free: [
-          "Yes! DevShowcase is 100% free to use. Sign up, add your projects, and get discovered by clients worldwide — no cost at all! 🚀"
-        ],
-        addproject: [
-          "To add a project:\n1. Sign in to your account\n2. Go to your Dashboard\n3. Click 'Add Project' button\n4. Upload a screenshot from your device\n5. Fill in your project details\n6. Hit Publish! 🎉\n\nYour project will appear in the gallery immediately!"
-        ],
-        gethired: [
-          "To get hired on DevShowcase:\n1. Complete your profile 100%\n2. Add your WhatsApp number ← very important!\n3. Upload high-quality project screenshots\n4. Write clear project descriptions\n5. Clients browse the gallery and contact you directly via WhatsApp 💼"
-        ],
-        contact: [
-          "Clients contact you directly via WhatsApp — no middleman, no commission taken! Make sure your WhatsApp number is saved in your profile under Dashboard → Profile → Edit. 📱"
-        ],
-        signup: [
-          "To sign up:\n1. Click 'Get Started' on the homepage\n2. Enter your first name, email & password\n3. Select your developer role\n4. Verify your email (check inbox)\n5. Done! Start adding projects ✅"
-        ],
-        profile: [
-          "To edit your profile:\n1. Go to Dashboard\n2. Click 'Profile' in the sidebar\n3. Click 'Edit' button\n4. Update your name, role, bio, skills, WhatsApp, GitHub, LinkedIn & website\n5. Click 'Save Changes' ✅"
-        ],
-        avatar: [
-          "To change your profile photo:\n1. Go to Dashboard → Profile\n2. Click on your avatar/photo\n3. Select an image from your device\n4. It uploads automatically! 📸\n\nYour photo will appear across the platform including on your projects in the gallery."
-        ],
-        delete: [
-          "To delete a project:\n1. Go to Dashboard\n2. Click 'My Projects'\n3. Find the project\n4. Click the 🗑️ trash icon\n5. Confirm deletion\n\n⚠️ This cannot be undone!"
-        ],
-        edit: [
-          "To edit a project:\n1. Go to Dashboard → My Projects\n2. Click the ✏️ pen icon next to your project\n3. Update any details\n4. Click 'Save Changes' ✅"
-        ],
-        reactions: [
-          "Visitors can react to your projects with:\n👍 Like — they found it useful\n🔥 Fire — they think it's hot!\n👏 Clap — they appreciate the work\n\nMore reactions = more visibility in the gallery! Share your profile to get more reactions."
-        ],
-        comments: [
-          "Visitors can leave comments on your projects directly from the gallery. You'll get a notification when someone comments. Engage with feedback to build your reputation! 💬"
-        ],
-        notifications: [
-          "You receive notifications when:\n💬 Someone comments on your project\n👍 Someone reacts to your project\n👁️ Someone views your project\n\nCheck your notifications by clicking the 🔔 bell icon in your Dashboard!"
-        ],
-        whatsapp: [
-          "To add your WhatsApp:\n1. Dashboard → Profile → Edit\n2. Enter your number with country code (e.g. +255618811359)\n3. Save Changes\n\nClients will use this to contact you directly for work! 📲"
-        ],
-        location: [
-          "DevShowcase detects your location to help local clients find you first. You can:\n✅ Allow GPS — most accurate\n✅ Allow IP-based — less accurate but works\n❌ Deny both — profile still works, just no location shown"
-        ],
-        password: [
-          "Forgot your password?\n1. Go to the Sign In page\n2. Click 'Forgot Password?'\n3. Enter your email address\n4. Check your inbox for a reset link\n5. Click the link and set a new password 📬"
-        ],
-        share: [
-          "To share your profile:\n1. Go to your Profile page\n2. Click 'Share Profile'\n3. On mobile — choose WhatsApp, Telegram, or any app\n4. On desktop — link is copied to clipboard\n\nShare it with potential clients to get more visibility! 🔗"
-        ],
-        gallery: [
-          "The Gallery (Explore page) shows all developer projects from around the world. You can:\n🔍 Search by name, tech, or developer\n🗂️ Filter by category (Web, Mobile, AI, Design)\n💬 React and comment on projects\n🔗 Click on a developer's name to view their full profile!"
-        ],
-        pro: [
-          "DevShowcase is currently free for all features! 🎉 In the future, we plan to offer:\n⭐ Pro Badge — stand out as a verified dev\n📌 Featured Listing — appear at top of gallery\n\nPayments will be via mobile money or WhatsApp. Stay tuned!"
-        ],
-        tech: [
-          "When adding a project, enter your tech stack as comma-separated values:\nExample: React, Node.js, Supabase, Tailwind\n\nThis helps clients search for developers with specific skills! 💻"
-        ],
-        image: [
-          "For project screenshots:\n✅ Upload from your device (JPG, PNG, WebP)\n✅ Max file size: 2MB\n✅ Recommended: 1280×720 or larger\n\nHigh quality images get more attention from clients! 🖼️"
-        ],
-        contact_us: [
-          "Need to reach us? Here's how:\n\n📱 WhatsApp: wa.me/255618811359\nWe're based in Mwanza, Tanzania 🇹🇿 — response within 24 hours!"
-        ],
-        about: [
-          "DevShowcase is a global developer portfolio platform built by BraxCode Digitals Foundation, Mwanza, Tanzania 🇹🇿\n\nOur mission: Help African developers get discovered and hired by clients worldwide — starting from Mwanza, going global! 🌍"
-        ],
-        default: [
-          "Hmm, I'm not sure about that one. Try asking about:\n• Adding projects\n• Getting hired\n• Editing your profile\n• WhatsApp contact\n• Reactions & comments\n\nOr contact us directly! 😊",
-          "I didn't quite get that. Could you rephrase? You can also contact our team directly via WhatsApp for personalized help! 🙏"
-        ]
-      },
-      sw: {
-        greeting: [
-          "Habari! 👋 Mimi ni DevAssist, msaidizi wako wa DevShowcase. Ninawezaje kukusaidia leo?",
-          "Karibu! 👋 Una swali lolote kuhusu DevShowcase? Niulize!"
-        ],
-        free: [
-          "Ndiyo! DevShowcase ni bure kabisa. Jisajili, ongeza miradi yako, na ugunduliwe na wateja duniani kote — bila malipo yoyote! 🚀"
-        ],
-        addproject: [
-          "Kuongeza mradi:\n1. Ingia kwenye akaunti yako\n2. Nenda Dashboard\n3. Bonyeza 'Add Project'\n4. Pakia picha kutoka kwenye kifaa chako\n5. Jaza maelezo ya mradi\n6. Bonyeza Publish! 🎉\n\nMradi wako utaonekana kwenye gallery mara moja!"
-        ],
-        gethired: [
-          "Kupata kazi kupitia DevShowcase:\n1. Kamilisha wasifu wako 100%\n2. Weka namba yako ya WhatsApp ← muhimu sana!\n3. Pakia picha nzuri za miradi yako\n4. Andika maelezo mazuri\n5. Wateja watakuwasiliana nawe moja kwa moja! 💼"
-        ],
-        contact: [
-          "Wateja wanakuwasiliana nawe moja kwa moja kupitia WhatsApp — hakuna mtu wa kati, hakuna kamisheni! Hakikisha namba yako ya WhatsApp ipo kwenye wasifu wako. 📱"
-        ],
-        signup: [
-          "Kujisajili:\n1. Bonyeza 'Get Started' ukurasa wa nyumbani\n2. Weka jina lako, barua pepe na nenosiri\n3. Chagua wadhifa wako\n4. Thibitisha barua pepe yako\n5. Anza kuongeza miradi! ✅"
-        ],
-        profile: [
-          "Kubadilisha wasifu:\n1. Nenda Dashboard\n2. Bonyeza 'Profile' upande wa kushoto\n3. Bonyeza kitufe cha 'Edit'\n4. Badilisha jina, wadhifa, bio, ujuzi, WhatsApp, GitHub na zaidi\n5. Bonyeza 'Save Changes' ✅"
-        ],
-        avatar: [
-          "Kubadilisha picha ya wasifu:\n1. Nenda Dashboard → Profile\n2. Bonyeza kwenye picha yako\n3. Chagua picha kutoka kwa simu yako\n4. Inapakia moja kwa moja! 📸\n\nPicha yako itaonekana kila mahali kwenye platform!"
-        ],
-        delete: [
-          "Kufuta mradi:\n1. Nenda Dashboard\n2. Bonyeza 'My Projects'\n3. Tafuta mradi wako\n4. Bonyeza ikoni ya 🗑️\n5. Thibitisha kufuta\n\n⚠️ Hii haiwezi kutenduliwa!"
-        ],
-        edit: [
-          "Kuhariri mradi:\n1. Nenda Dashboard → My Projects\n2. Bonyeza ikoni ya ✏️ karibu na mradi\n3. Badilisha maelezo unayotaka\n4. Bonyeza 'Save Changes' ✅"
-        ],
-        reactions: [
-          "Wageni wanaweza kupigia kura miradi yako na:\n👍 Like — wanaipenda\n🔥 Fire — inawachangamsha!\n👏 Clap — wanashangilia kazi yako\n\nKura zaidi = uonekano zaidi kwenye gallery!"
-        ],
-        comments: [
-          "Wageni wanaweza kuacha maoni kwenye miradi yako moja kwa moja kutoka kwenye gallery. Utapata taarifa mtu akiandika maoni. Jibu maoni ili kujenga sifa yako! 💬"
-        ],
-        notifications: [
-          "Unapata taarifa wakati:\n💬 Mtu anaandika maoni kwenye mradi wako\n👍 Mtu anapiga kura mradi wako\n👁️ Mtu anaona mradi wako\n\nAngalia taarifa zako kwa kubonyeza ikoni ya 🔔 kwenye Dashboard!"
-        ],
-        whatsapp: [
-          "Kuongeza WhatsApp yako:\n1. Dashboard → Profile → Edit\n2. Weka namba na nambari ya nchi (mfano: +255618811359)\n3. Bonyeza Save Changes\n\nWateja watatumia hii kukuwasiliana moja kwa moja! 📲"
-        ],
-        location: [
-          "DevShowcase inagundua mahali ulipo ili wateja wa karibu wakupate kwanza. Unaweza:\n✅ Ruhusu GPS — sahihi zaidi\n✅ Ruhusu IP — inafanya kazi pia\n❌ Kataa — wasifu bado unafanya kazi, bila mahali tu"
-        ],
-        password: [
-          "Umesahau nenosiri?\n1. Nenda ukurasa wa kuingia\n2. Bonyeza 'Forgot Password?'\n3. Weka barua pepe yako\n4. Angalia kisanduku chako cha barua pepe\n5. Bonyeza kiungo na weka nenosiri jipya 📬"
-        ],
-        share: [
-          "Kushiriki wasifu wako:\n1. Nenda ukurasa wako wa Profile\n2. Bonyeza 'Share Profile'\n3. Kwenye simu — chagua WhatsApp, Telegram au app nyingine\n4. Kwenye kompyuta — kiungo kinakiliwa\n\nShiriki na wateja wanaoweza kukuajiri! 🔗"
-        ],
-        gallery: [
-          "Gallery (Explore) inaonyesha miradi yote ya wasanidi kutoka duniani kote. Unaweza:\n🔍 Tafuta kwa jina, teknolojia au msanidi\n🗂️ Chuja kwa aina (Web, Mobile, AI, Design)\n💬 Pigia kura na kuandika maoni\n🔗 Bonyeza jina la msanidi kuona wasifu wake kamili!"
-        ],
-        pro: [
-          "DevShowcase kwa sasa ni bure kwa vipengele vyote! 🎉 Siku zijazo, tutaanzisha:\n⭐ Pro Badge — jionyeshe kama msanidi aliyethibitishwa\n📌 Featured Listing — onekana juu ya gallery\n\nMalipo yatakuwa kupitia pesa ya simu au WhatsApp. Endelea kuangalia!"
-        ],
-        tech: [
-          "Unapoongeza mradi, weka teknolojia zako zikitengwa na koma:\nMfano: React, Node.js, Supabase, Tailwind\n\nHii inasaidia wateja kutafuta wasanidi wenye ujuzi maalum! 💻"
-        ],
-        image: [
-          "Kwa picha za mradi:\n✅ Pakia kutoka kwa kifaa chako (JPG, PNG, WebP)\n✅ Ukubwa wa juu: 2MB\n✅ Inayopendekezwa: 1280×720 au kubwa zaidi\n\nPicha nzuri zinapata wateja wengi zaidi! 🖼️"
-        ],
-        contact_us: [
-          "Unataka kuwasiliana nasi? Hivi ndivyo:\n\n📱 WhatsApp: wa.me/255618811359\nTuko Mwanza, Tanzania 🇹🇿 — jibu ndani ya masaa 24!"
-        ],
-        about: [
-          "DevShowcase ni platform ya kimataifa ya portfolio ya wasanidi, iliyojengwa na BraxCode Digitals Foundation, Mwanza, Tanzania 🇹🇿\n\nDhamira yetu: Kusaidia wasanidi wa Afrika kugunduliwa na kuajiriwa na wateja duniani kote! 🌍"
-        ],
-        default: [
-          "Sijaelewana nawe vizuri. Jaribu kuuliza kuhusu:\n• Kuongeza mradi\n• Kupata kazi\n• Kubadilisha wasifu\n• WhatsApp ya mawasiliano\n• Maoni na kura\n\nAu wasiliana nasi moja kwa moja! 😊",
-          "Sijapata vizuri swali lako. Unaweza kuuliza tena? Au wasiliana na timu yetu kupitia WhatsApp kwa msaada wa kibinafsi! 🙏"
-        ]
-      }
-    };
-
-    function detectLang(text) {
-      const sw = ['habari', 'nianze', 'wapi', 'sijui', 'jinsi', 'nini', 'vipi', 'sema', 'nataka', 'ninaweza', 'asante', 'tafadhali', 'mradi', 'dashboard', 'kazi', 'bure', 'jisajili', 'wasifu', 'namba', 'nenosiri', 'bonyeza', 'nenda', 'ongeza', 'futa', 'pakia', 'karibu', 'hujambo', 'mambo', 'salamu', 'sijapata', 'niambie', 'naomba', 'msaada', 'taarifa', 'picha', 'wasifu', 'gallery', 'explore'];
-      const lower = text.toLowerCase();
-      const score = sw.filter(w => lower.includes(w)).length;
-      return score >= 1 ? 'sw' : 'en';
+    function addTyping() {
+      var wrap = document.getElementById('chatWrap');
+      var div = document.createElement('div');
+      div.className = 'msg typing';
+      div.id = 'typing';
+      div.innerHTML = '<div class="t-dot"></div><div class="t-dot"></div><div class="t-dot"></div>';
+      wrap.appendChild(div);
+      wrap.scrollTop = wrap.scrollHeight;
     }
 
-    function matchIntent(text, lang) {
-      const t = text.toLowerCase();
-      const L = KB[lang];
-
-      if (/hi|hello|hey|hujambo|habari|salaam|mambo|karibu|sup|good/.test(t)) return L.greeting;
-      if (/free|bei|malipo|cost|charge|pesa|gharama|tosha/.test(t)) return L.free;
-      if (/avatar|photo|picha|image|profile pic|selfie|dp/.test(t)) return L.avatar;
-      if (/add|upload|post|ongeza|pakia|weka|publish|mradi|project|new project/.test(t)) return L.addproject;
-      if (/edit|update|change|badilisha|hariri|rekebisha/.test(t) && /project|mradi/.test(t)) return L.edit;
-      if (/delete|remove|futa|ondoa|trash/.test(t)) return L.delete;
-      if (/hired|hire|job|kazi|client|mteja|pata kazi|kupata kazi|found|ajira/.test(t)) return L.gethired;
-      if (/contact|wasiliana|reach|chat|message/.test(t) && !/us|sisi|team/.test(t)) return L.contact;
-      if (/contact us|wasiliana nasi|reach us|support|help team|timu/.test(t)) return L.contact_us;
-      if (/whatsapp|namba|number|phone|simu/.test(t)) return L.whatsapp;
-      if (/sign|signup|register|jisajili|create account|akaunti|account|new account/.test(t)) return L.signup;
-      if (/profile|wasifu|edit profile|bio|skills|ujuzi/.test(t)) return L.profile;
-      if (/react|reaction|like|fire|clap|kura|vote/.test(t)) return L.reactions;
-      if (/comment|maoni|feedback|jibu/.test(t)) return L.comments;
-      if (/notif|taarifa|bell|kengele|alert/.test(t)) return L.notifications;
-      if (/location|mahali|gps|detect|country|nchi|city|mji/.test(t)) return L.location;
-      if (/password|nenosiri|forgot|reset|sahau|lock/.test(t)) return L.password;
-      if (/share|shiriki|link|kiungo|send profile/.test(t)) return L.share;
-      if (/gallery|explore|browse|tafuta|search|filter/.test(t)) return L.gallery;
-      if (/pro|badge|featured|premium|paid|listing/.test(t)) return L.pro;
-      if (/tech|stack|teknolojia|framework|language|lugha ya/.test(t)) return L.tech;
-      if (/image|screenshot|picha|photo|upload image|2mb/.test(t)) return L.image;
-      if (/about|nini|what is|platform|devshowcase|braxcode/.test(t)) return L.about;
-      return L.default;
+    function removeTyping() {
+      var el = document.getElementById('typing');
+      if (el) el.remove();
     }
 
+    function linkify(text) {
+      return text
+        .replace('wa.me/255618811359',
+          '<a href="https://wa.me/255618811359" target="_blank" style="color:var(--a2);text-decoration:underline;">wa.me/255618811359</a>')
+        .replace('devshowcase@gmail.com',
+          '<a href="mailto:braxtonbruzzzy@gmail.com" style="color:var(--a2);text-decoration:underline;">devshowcase@gmail.com</a>');
+    }
+
+    // ─── MAIN SEND ────────────────────────────────────────────────────────────
     async function send() {
       var inp = document.getElementById('inp');
       var text = inp.value.trim();
@@ -644,27 +529,46 @@
       document.getElementById('sendBtn').disabled = true;
 
       addMsg(text, 'user');
+
+      // Add to history for AI context
+      history.push({ role: 'user', content: text });
+      // Keep history lean
+      if (history.length > 12) history = history.slice(-12);
+
       addTyping();
 
-      await new Promise(r => setTimeout(r, 600 + Math.random() * 500));
+      var reply = '';
+      var isAI = false;
 
-      var loader = document.getElementById('typing');
-      if (loader) loader.remove();
+      try {
+        var lang = detectLang(text);
+        var localMatch = matchLocal(text, lang);
 
-      const lang = detectLang(text);
-      const responses = matchIntent(text, lang);
-      const reply = responses[Math.floor(Math.random() * responses.length)];
+        if (localMatch) {
+          // ── Bot path: answer from KB instantly ──
+          await new Promise(function(r){ setTimeout(r, 400 + Math.random() * 300); });
+          reply = localMatch[Math.floor(Math.random() * localMatch.length)];
+        } else {
+          // ── AI path: call Vercel API ──
+          reply = await callAI(text);
+          isAI = true;
+        }
+      } catch (err) {
+        // Fallback if AI call fails
+        var lang2 = detectLang(text);
+        reply = lang2 === 'sw'
+          ? 'Samahani, kuna tatizo kidogo. Jaribu tena au wasiliana nasi: wa.me/255618811359 📱'
+          : 'Sorry, something went wrong. Please try again or contact us: wa.me/255618811359 📱';
+      }
 
-      // Contact us — make WhatsApp clickable
-      const finalReply = reply.replace(
-        'wa.me/255618811359',
-        '<a href="https://wa.me/255618811359" target="_blank" style="color:var(--a2);text-decoration:underline;">wa.me/255618811359</a>'
-      ).replace(
-        'devshowcase@gmail.com',
-        '<a href="mailto:braxtonbruzzzy@gmail.com" style="color:var(--a2);text-decoration:underline;">devshowcase@gmail.com</a>'
-      );
+      removeTyping();
 
-      addMsgHTML(finalReply, 'bot');
+      // Add assistant reply to history
+      history.push({ role: 'assistant', content: reply });
+
+      var htmlReply = linkify(reply);
+      addMsgHTML(htmlReply, isAI ? 'msg bot ai' : 'msg bot');
+
       document.getElementById('sendBtn').disabled = false;
       document.getElementById('inp').focus();
     }
@@ -674,5 +578,4 @@
     function resize(el) { el.style.height = 'auto'; el.style.height = Math.min(el.scrollHeight, 120) + 'px'; }
   </script>
 </body>
-
 </html>
