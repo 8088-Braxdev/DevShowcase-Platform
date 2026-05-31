@@ -1292,10 +1292,7 @@
       <button class="btn btn-primary btn-hero" onclick="openAuth('signup')">
         <i class="fa-solid fa-rocket"></i> Start Showcasing — It's Free
       </button>
-      <button class="btn btn-ghost btn-hero" onclick="
-            document
-              .scrollIntoView({ behavior: 'smooth' })
-          ">
+      <button class="btn btn-ghost btn-hero" onclick="window.scrollTo({ top: document.getElementById('how-it-works').offsetTop - 68, behavior: 'smooth' })">
         <i class="fa-solid fa-play"></i> See How It Works
       </button>
     </div>
@@ -1380,7 +1377,7 @@
 
 
   <!-- HOW IT WORKS -->
-  <section class="section">
+  <section class="section" id="how-it-works">
     <div class="section-tag">How it works</div>
     <h2 class="section-title">
       Simple. Powerful.<br />Built for Developers.
