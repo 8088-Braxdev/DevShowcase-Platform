@@ -75,7 +75,7 @@ Act as a knowledgeable, tech-savvy friend, not a rigid corporate support bot. Be
         Authorization: `Bearer ${apiKey}`,
       },
       body: JSON.stringify({
-        model: "llama-3.3-70b-versatile",
+        model: "openai/gpt-oss-120b",
         messages: [{ role: "system", content: SYSTEM_PROMPT }, ...messages],
         max_tokens: 400,
         temperature: 0.6,
