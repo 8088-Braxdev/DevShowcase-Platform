@@ -1,18 +1,22 @@
-import { createClient } from '@supabase/supabase-js';
-
-const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_ANON_KEY);
-
 export default async function handler(req, res) {
-  const { data: profiles, error } = await supabase
-    .from('profiles')
-    .select('id, updated_at')
-    .not('full_name', 'is', null)
-    .order('updated_at', { ascending: false });
+  const SUPABASE_URL = process.env.SUPABASE_URL;
+  const SUPABASE_ANON_KEY = process.env.SUPABASE_ANON_KEY;
 
-  if (error) {
+  const query = `${SUPABASE_URL}/rest/v1/profiles?select=id,updated_at&full_name=not.is.null&order=updated_at.desc`;
+
+  const response = await fetch(query, {
+    headers: {
+      'apikey': SUPABASE_ANON_KEY,
+      'Authorization': `Bearer ${SUPABASE_ANON_KEY}`
+    }
+  });
+
+  if (!response.ok) {
     res.status(500).send('Error generating sitemap');
     return;
   }
+
+  const profiles = await response.json();
 
   const staticUrls = [
     { loc: 'https://devshowcase.braxcode.com/', priority: '1.00' },
