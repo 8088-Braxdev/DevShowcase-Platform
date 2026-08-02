@@ -525,6 +525,7 @@
     }
 
  function linkify(text) {
+  // Escape HTML first (important since we use innerHTML)
   var escaped = text
     .replace(/&/g, '&amp;')
     .replace(/</g, '&lt;')
@@ -533,19 +534,22 @@
   // **bold** -> <b>
   escaped = escaped.replace(/\*\*(.+?)\*\*/g, '<b>$1</b>');
 
-  // wa.me links -> clickable
-  escaped = escaped.replace(/(https?:\/\/)?wa\.me\/(\d+)/g,
-    '<a href="https://wa.me/$2" target="_blank" style="color:var(--a2);text-decoration:underline;">wa.me/$2</a>');
+  // Single combined pass: wa.me links OR bare phone numbers (never both, no overlap)
+  var combined = /(https?:\/\/)?wa\.me\/(\d{6,15})|(\+?\d[\d\s-]{7,}\d)/g;
 
-  // bare phone numbers (e.g. +255 618 811 359) -> tel: link
-  escaped = escaped.replace(/(\+?\d[\d\s-]{7,}\d)/g, function (m) {
-    var digits = m.replace(/[\s-]/g, '');
-    return '<a href="tel:' + digits + '" style="color:var(--a2);text-decoration:underline;">' + m + '</a>';
+  escaped = escaped.replace(combined, function (match, protocol, waDigits, barePhone) {
+    if (waDigits) {
+      return '<a href="https://wa.me/' + waDigits + '" target="_blank" style="color:var(--a2);text-decoration:underline;">wa.me/' + waDigits + '</a>';
+    }
+    if (barePhone) {
+      var digits = barePhone.replace(/[\s-]/g, '');
+      return '<a href="tel:' + digits + '" style="color:var(--a2);text-decoration:underline;">' + barePhone + '</a>';
+    }
+    return match;
   });
 
   return escaped;
 }
-
     // ── AI call → /api/chat (Vercel serverless) ──────────────────────────────
 
     async function callAI(message) {
