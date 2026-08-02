@@ -1569,7 +1569,7 @@
   <!-- DELETE CONFIRM -->
   <div class="delete-confirm" id="deleteConfirm">
     <div class="delete-box">
-      <div class="delete-icon">🗑️</div>
+     <div class="delete-icon"><i class="fa-solid fa-trash-can" style="color:var(--a3);"></i></div>
       <div class="delete-title">Delete Project?</div>
       <div class="delete-desc">This action cannot be undone. Your project will be permanently removed from DevShowcase.
       </div>
@@ -1855,7 +1855,8 @@
       if (!file) return;
 
       if (file.size > 2 * 1024 * 1024) {
-        showToast('⚠️ Image too large — max 2MB'); return;
+        
+showToast('Image too large — max 2MB', 'warning'); return;
       }
 
       const box = document.getElementById('imgPreviewBox');
@@ -1869,7 +1870,7 @@
         .upload(fileName, file, { upsert: true });
 
       if (error) {
-        showToast('❌ Upload failed: ' + error.message);
+        showToast('Upload failed: ' + error.message, 'error');
         box.innerHTML = '<i class="fa-solid fa-cloud-arrow-up" style="font-size:1.5rem;"></i><span>Click to upload image</span>';
         return;
       }
@@ -1880,7 +1881,7 @@
 
       document.getElementById('imgUrlInput').value = urlData.publicUrl;
       box.innerHTML = `<img src="${urlData.publicUrl}" style="width:100%;height:100%;object-fit:cover;border-radius:10px;">`;
-      showToast('✅ Image uploaded!');
+     showToast('Image uploaded!', 'success');
     }
 
 
@@ -1896,7 +1897,7 @@
       const meta = currentUser.user_metadata || {};
 
       if (!name || !desc || !category || !image) {
-        showToast('⚠️ Fill all required fields!'); return;
+        showToast('Fill all required fields!', 'warning'); return;
       }
 
       btn.disabled = true;
@@ -1948,11 +1949,11 @@
         : '<i class="fa-solid fa-rocket"></i> Publish Project';
 
       if (error) {
-        showToast('❌ ' + (error.message || 'Failed!'));
+       showToast(error.message || 'Failed!', 'error');
         return;
       }
 
-      showToast(editTargetId ? '✅ Project updated!' : '🚀 Project published!');
+     showToast(editTargetId ? 'Project updated!' : 'Project published!', 'success');
       if (navigator.vibrate) navigator.vibrate([40, 20, 40]);
       closeAddProject();
 
@@ -1989,10 +1990,10 @@
 
       closeDeleteConfirm();
 
-      if (error) { showToast('❌ Failed to delete'); return; }
+      if (error) { showToast('Failed to delete', 'error'); return; }
 
       if (navigator.vibrate) navigator.vibrate(60);
-      showToast('🗑️ Project deleted');
+     showToast('Project deleted', 'delete');
       await loadProjects();
     }
 
@@ -2042,7 +2043,7 @@
       };
 
       const { error } = await _supabase.auth.updateUser({ data: updates });
-      if (error) { showToast('❌ Failed to save'); return; }
+      if (error) { showToast('Failed to save', 'error'); return; }
 
       document.getElementById('profileName').textContent = fullName;
       document.getElementById('profileRole').textContent = role;
@@ -2050,7 +2051,7 @@
       document.getElementById('sidebarRole').textContent = role;
 
       if (navigator.vibrate) navigator.vibrate([40, 20, 40]);
-      showToast('✅ Profile saved!');
+      showToast('Profile saved!', 'success');
       document.getElementById('profileForm').style.display = 'none';
 
       // Update projects zote za user huyu
@@ -2079,10 +2080,10 @@
       if (!file) return;
 
       if (file.size > 2 * 1024 * 1024) {
-        showToast('⚠️ Image too large — max 2MB'); return;
+       showToast('Image too large — max 2MB', 'warning'); return;
       }
 
-      showToast('⏳ Uploading avatar...');
+      showToast('Uploading avatar...', 'loading');
 
       const ext = file.name.split('.').pop();
       const fileName = `avatar_${currentUser.id}.${ext}`;
@@ -2092,7 +2093,7 @@
         .upload(fileName, file, { upsert: true });
 
       if (uploadError) {
-        showToast('❌ Upload failed: ' + uploadError.message); return;
+        showToast('Upload failed: ' + error.message, 'error'); return;
       }
 
       const { data: urlData } = _supabase.storage
@@ -2106,7 +2107,7 @@
       });
 
       if (updateError) {
-        showToast('❌ Failed to save avatar'); return;
+        showToast('Failed to save avatar', 'error'); return;
       }
 
       // Update everywhere
@@ -2126,7 +2127,7 @@
       document.getElementById('sidebarAvatar').innerHTML = `<img src="${avatarUrl}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">`;
 
       currentUser.user_metadata.avatar_url = avatarUrl;
-      showToast('✅ Avatar updated!');
+    showToast('Avatar updated!', 'success')
       if (navigator.vibrate) navigator.vibrate([40, 20, 40]);
     }
     // ================================================
@@ -2160,19 +2161,19 @@
         return;
       }
 
-      const icons = {
-        reaction: { bg: 'rgba(255,209,102,0.15)', icon: '🔥' },
-        comment: { bg: 'rgba(6,214,160,0.15)', icon: '💬' },
-        view: { bg: 'rgba(124,110,250,0.15)', icon: '👁️' },
-        default: { bg: 'rgba(255,255,255,0.05)', icon: '🔔' }
-      };
+   const icons = {
+  reaction: { bg: 'rgba(255,209,102,0.15)', icon: '<i class="fa-solid fa-fire" style="color:var(--a4);"></i>' },
+  comment:  { bg: 'rgba(6,214,160,0.15)',  icon: '<i class="fa-solid fa-comment-dots" style="color:var(--a2);"></i>' },
+  view:     { bg: 'rgba(124,110,250,0.15)', icon: '<i class="fa-solid fa-eye" style="color:var(--a1);"></i>' },
+  default:  { bg: 'rgba(255,255,255,0.05)', icon: '<i class="fa-regular fa-bell" style="color:var(--muted2);"></i>' }
+};
 
       list.innerHTML = notifs.map(n => {
         const ic = icons[n.type] || icons.default;
         const time = timeAgo(n.created_at);
         return `
       <div class="notif-item ${n.is_read ? '' : 'unread'}" data-notif-id="${n.id}" onclick="markRead(${n.id})">
-        <div class="notif-icon" style="background:${ic.bg};">${ic.icon}</div>
+       <div class="notif-icon" style="background:${ic.bg};">${ic.icon}</div>
         <div style="flex:1;">
           <div class="notif-text">${n.message}</div>
           <div class="notif-time">${time}</div>
@@ -2252,12 +2253,20 @@
     // ================================================
     // TOAST
     // ================================================
-    function showToast(msg) {
-      const t = document.getElementById('toast');
-      t.innerHTML = msg;
-      t.classList.add('show');
-      setTimeout(() => t.classList.remove('show'), 3000);
-    }
+  function showToast(msg, type = 'default') {
+  const icons = {
+    success: '<i class="fa-solid fa-circle-check" style="color:var(--a2);"></i>',
+    error:   '<i class="fa-solid fa-circle-xmark" style="color:var(--a3);"></i>',
+    warning: '<i class="fa-solid fa-triangle-exclamation" style="color:var(--a4);"></i>',
+    delete:  '<i class="fa-solid fa-trash" style="color:var(--a3);"></i>',
+    loading: '<i class="fa-solid fa-spinner fa-spin" style="color:var(--a1);"></i>',
+    default: '<i class="fa-solid fa-circle-info" style="color:var(--a1);"></i>'
+  };
+  const t = document.getElementById('toast');
+  t.innerHTML = (icons[type] || icons.default) + ' ' + msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3000);
+}
 
     // ================================================
 
