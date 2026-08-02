@@ -2233,7 +2233,7 @@ showToast('Image too large — max 2MB', 'warning'); return;
         .delete()
         .eq('user_id', currentUser.id);
       loadNotifications();
-      showToast('🗑 Notifications cleared')
+      showToast('Notifications cleared', 'delete')
     }
     // SIGN OUT
     // ================================================
