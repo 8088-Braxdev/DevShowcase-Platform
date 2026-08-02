@@ -311,6 +311,16 @@
       padding: 12px 16px;
     }
 
+.q-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.q-btn i {
+  font-size: 0.75rem;
+  color: var(--a2);
+}
     .t-dot {
       width: 6px;
       height: 6px;
@@ -443,17 +453,17 @@
         <div class="dot"></div>
         AI-Powered
       </div>
-      <div class="quick-grid">
-        <button class="q-btn" onclick="ask('How do I add a project?')">➕ Add project</button>
-        <button class="q-btn" onclick="ask('How do I get hired?')">💼 Get hired</button>
-        <button class="q-btn" onclick="ask('Is DevShowcase free?')">💸 Is it free?</button>
-        <button class="q-btn" onclick="ask('How do clients contact me?')">📱 Client contact</button>
-        <button class="q-btn" onclick="ask('How do I edit my profile?')">✏️ Edit profile</button>
-        <button class="q-btn" onclick="ask('How do reactions work?')">🔥 Reactions</button>
-        <button class="q-btn" onclick="ask('Contact us')">📞 Contact us</button>
-        <button class="q-btn" onclick="ask('Nianze wapi?')">🇹🇿 Nianze wapi?</button>
-        <button class="q-btn" onclick="ask('DevShowcase ni nini?')">🌍 DS ni nini?</button>
-      </div>
+<div class="quick-grid">
+  <button class="q-btn" onclick="ask('How do I add a project?')"><i class="fa-solid fa-plus"></i> Add project</button>
+  <button class="q-btn" onclick="ask('How do I get hired?')"><i class="fa-solid fa-briefcase"></i> Get hired</button>
+  <button class="q-btn" onclick="ask('Is DevShowcase free?')"><i class="fa-solid fa-sack-dollar"></i> Is it free?</button>
+  <button class="q-btn" onclick="ask('How do clients contact me?')"><i class="fa-solid fa-mobile-screen"></i> Client contact</button>
+  <button class="q-btn" onclick="ask('How do I edit my profile?')"><i class="fa-solid fa-pen"></i> Edit profile</button>
+  <button class="q-btn" onclick="ask('How do reactions work?')"><i class="fa-solid fa-fire"></i> Reactions</button>
+  <button class="q-btn" onclick="ask('Contact us')"><i class="fa-solid fa-phone"></i> Contact us</button>
+  <button class="q-btn" onclick="ask('Nianze wapi?')"><i class="fa-solid fa-flag"></i> Nianze wapi?</button>
+  <button class="q-btn" onclick="ask('DevShowcase ni nini?')"><i class="fa-solid fa-globe"></i> DS ni nini?</button>
+</div>
     </div>
   </div>
 
