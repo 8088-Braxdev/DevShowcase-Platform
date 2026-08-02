@@ -476,6 +476,32 @@
       color: var(--accent);
     }
 
+.reaction-btn i {
+  font-size: 0.8rem;
+  transition: transform 0.2s ease;
+}
+
+.reaction-btn:active i {
+  transform: scale(1.3);
+}
+
+.reaction-btn.rx-like.reacted {
+  background: rgba(77, 148, 255, 0.1);
+  border-color: rgba(77, 148, 255, 0.35);
+  color: #4D94FF;
+}
+
+.reaction-btn.rx-fire.reacted {
+  background: rgba(255, 107, 53, 0.1);
+  border-color: rgba(255, 107, 53, 0.35);
+  color: #FF6B35;
+}
+
+.reaction-btn.rx-clap.reacted {
+  background: rgba(255, 209, 102, 0.1);
+  border-color: rgba(255, 209, 102, 0.35);
+  color: #FFD166;
+}
     .card-actions {
       display: flex;
       gap: 8px;
@@ -540,6 +566,7 @@
       font-size: 1rem;
       line-height: 1.7;
     }
+
 
     /* ===== MODAL ===== */
     .modal-overlay {
@@ -1219,17 +1246,17 @@
           ${tech.length > 4 ? `<span class="tech-tag">+${tech.length - 4}</span>` : ''}
         </div>
         <div class="card-footer" onclick="event.stopPropagation()">
-          <div class="reactions">
-            <button class="reaction-btn ${reacted.like ? 'reacted' : ''}" onclick="react(${p.id},'likes',this)">
-              👍 <span>${p.likes || 0}</span>
-            </button>
-            <button class="reaction-btn ${reacted.fire ? 'reacted' : ''}" onclick="react(${p.id},'fire',this)">
-              🔥 <span>${p.fire || 0}</span>
-            </button>
-            <button class="reaction-btn ${reacted.clap ? 'reacted' : ''}" onclick="react(${p.id},'clap',this)">
-              👏 <span>${p.clap || 0}</span>
-            </button>
-          </div>
+    <div class="reactions">
+  <button class="reaction-btn rx-like ${reacted.like ? 'reacted' : ''}" onclick="react(${p.id},'likes',this)">
+    <i class="fa-solid fa-thumbs-up"></i> <span>${p.likes || 0}</span>
+  </button>
+  <button class="reaction-btn rx-fire ${reacted.fire ? 'reacted' : ''}" onclick="react(${p.id},'fire',this)">
+    <i class="fa-solid fa-fire"></i> <span>${p.fire || 0}</span>
+  </button>
+  <button class="reaction-btn rx-clap ${reacted.clap ? 'reacted' : ''}" onclick="react(${p.id},'clap',this)">
+    <i class="fa-solid fa-hands-clapping"></i> <span>${p.clap || 0}</span>
+  </button>
+</div>
           <div class="card-actions">
             <a class="wa-btn" href="${waLink}" target="_blank" onclick="event.stopPropagation()">
               <i class="fa-brands fa-whatsapp"></i> Chat
@@ -1281,13 +1308,13 @@
 
         // NOTIFICATION
         if (project.user_id && project.user_id !== currentUserId) {
-          const emoji = field === 'likes' ? '👍' : field === 'fire' ? '🔥' : '👏';
-          await _supabase.from('notifications').insert({
-            user_id: project.user_id,
-            type: 'reaction',
-            message: `Someone reacted ${emoji} to <strong>${project.project_name}</strong>`,
-            is_read: false
-          });
+   const reactionLabel = field === 'likes' ? 'liked' : field === 'fire' ? 'reacted 🔥 to' : 'clapped for';
+await _supabase.from('notifications').insert({
+  user_id: project.user_id,
+  type: 'reaction',
+  message: `Someone ${reactionLabel} <strong>${project.project_name}</strong>`,
+  is_read: false
+});
         }
       }
 
