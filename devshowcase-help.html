@@ -154,18 +154,19 @@
       padding: 20px 0 10px;
     }
 
-    .welcome-avatar {
-      width: 56px;
-      height: 56px;
-      border-radius: 50%;
-      background: linear-gradient(135deg, var(--a1), var(--a2));
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.4rem;
-      margin: 0 auto 12px;
-      box-shadow: 0 8px 24px rgba(124, 110, 250, 0.3);
-    }
+.welcome-avatar {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--a1), var(--a2));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.3rem;
+  color: #fff;
+  margin: 0 auto 12px;
+  box-shadow: 0 8px 24px rgba(124, 110, 250, 0.3);
+}
 
     .welcome h2 {
       font-size: 1.1rem;
@@ -446,7 +447,7 @@
 
   <div class="chat-wrap" id="chatWrap">
     <div class="welcome">
-      <div class="welcome-avatar">🤖</div>
+   <div class="welcome-avatar"><i class="fa-solid fa-robot"></i></div>
       <h2>DevAssist</h2>
       <p>Ask me anything about the platform</p>
       <div class="ai-badge">
@@ -523,10 +524,27 @@
       if (el) el.remove();
     }
 
-    function linkify(text) {
-      return text.replace(/wa\.me\/255618811359/g,
-        '<a href="https://wa.me/255618811359" target="_blank" style="color:var(--a2);text-decoration:underline;">wa.me/255618811359</a>');
-    }
+ function linkify(text) {
+  var escaped = text
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
+
+  // **bold** -> <b>
+  escaped = escaped.replace(/\*\*(.+?)\*\*/g, '<b>$1</b>');
+
+  // wa.me links -> clickable
+  escaped = escaped.replace(/(https?:\/\/)?wa\.me\/(\d+)/g,
+    '<a href="https://wa.me/$2" target="_blank" style="color:var(--a2);text-decoration:underline;">wa.me/$2</a>');
+
+  // bare phone numbers (e.g. +255 618 811 359) -> tel: link
+  escaped = escaped.replace(/(\+?\d[\d\s-]{7,}\d)/g, function (m) {
+    var digits = m.replace(/[\s-]/g, '');
+    return '<a href="tel:' + digits + '" style="color:var(--a2);text-decoration:underline;">' + m + '</a>';
+  });
+
+  return escaped;
+}
 
     // ── AI call → /api/chat (Vercel serverless) ──────────────────────────────
 
