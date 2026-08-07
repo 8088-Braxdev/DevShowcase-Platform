@@ -16,8 +16,11 @@
 <meta name="twitter:title" content="DevShowcase — Project Gallery" />
 <meta name="twitter:description" content="Explore real developer projects across the World." />
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<link
+    href="https://api.fontshare.com/v2/css?f[]=clash-display@400,500,600,700&f[]=satoshi@300,400,500,600&display=swap"
+    rel="stylesheet">
   <link
-    href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;700&display=swap"
+    href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap"
     rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
   <link rel="shortcut icon" href="favicon.png" type="image/x-icon">
@@ -34,9 +37,9 @@
       --border2: rgba(255, 255, 255, 0.13);
       --border3: rgba(255, 255, 255, 0.2);
       --accent: #06D6A0;
-      --accent2: #7C6EFA;
+      --accent2: #D97757;
       --accent3: #FF6B6B;
-      --a1: #7C6EFA;
+      --a1: #D97757;
       --a2: #06D6A0;
       --a3: #FF6B6B;
       --a4: #FFD166;
@@ -187,7 +190,7 @@
     }
 
     .hero h1 {
-      font-family: 'JetBrains Mono', sans-serif;
+      font-family: 'Satoshi', sans-serif;
       font-size: clamp(3rem, 10vw, 7rem);
       letter-spacing: 1.5px;
       line-height: 0.95;
@@ -221,7 +224,7 @@
     }
 
     .stat-num {
-      font-family: 'JetBrains Mono', sans-serif;
+      font-family: 'Satoshi', sans-serif;
       font-size: 2rem;
       letter-spacing: 2px;
       color: var(--a1);
@@ -390,7 +393,7 @@
       font-size: 0.65rem;
       font-weight: 700;
       color: #000;
-      font-family: 'JetBrains Mono', monospace;
+      font-family: 'Satoshi', monospace;
       flex-shrink: 0;
     }
 
@@ -431,7 +434,7 @@
       border-radius: 100px;
       background: rgba(129, 140, 248, 0.1);
       border: 1px solid rgba(129, 140, 248, 0.2);
-      font-family: 'JetBrains Mono', monospace;
+      font-family: 'Satoshi', monospace;
       font-size: 0.65rem;
       color: var(--accent2);
       letter-spacing: 0.5px;
@@ -696,7 +699,7 @@
     }
 
     .modal-section-label {
-      font-family: 'JetBrains Mono', monospace;
+      font-family: 'Satoshi', monospace;
       font-size: 0.7rem;
       color: var(--muted);
       letter-spacing: 2px;
@@ -722,7 +725,7 @@
       cursor: pointer;
       transition: all 0.2s;
       text-decoration: none;
-      font-family: 'DM Sans', sans-serif;
+      font-family: 'Satoshi', sans-serif;
       border: none;
     }
 
@@ -789,7 +792,7 @@
       font-weight: 700;
       color: #fff;
       flex-shrink: 0;
-      font-family: 'JetBrains Mono', monospace;
+      font-family: 'Satoshi', monospace;
     }
 
     .comment-content {}
@@ -814,7 +817,7 @@
       font-size: 0.7rem;
       color: var(--muted);
       margin-top: 4px;
-      font-family: 'JetBrains Mono', monospace;
+      font-family: 'Satoshi', monospace;
     }
 
     .comment-form {
@@ -1201,7 +1204,7 @@
         gallery.innerHTML = `
       <div class="empty-state">
         <i class="fa-solid fa-folder-open"></i>
-        <p>No projects yet.<br>Be the first to add yours! 🚀</p>
+        <p>No projects yet.<br>Be the first to add yours! <i class="fa-solid fa-rocket" style="color:var(--a1);"></i></p>
       </div>`;
         return;
       }
@@ -1480,7 +1483,7 @@ await _supabase.from('notifications').insert({
       document.getElementById('commentCount').textContent = `(${data.length})`;
 
       if (data.length === 0) {
-        list.innerHTML = '<div style="color:var(--muted);font-size:0.82rem;padding:8px 0;">No comments yet. Be first! 💬</div>';
+        list.innerHTML = '<div style="color:var(--muted);font-size:0.82rem;padding:8px 0;">No comments yet. Be first! <i class="fa-regular fa-comment-dots"></i></div>';
         return;
       }
 
@@ -1515,7 +1518,7 @@ await _supabase.from('notifications').insert({
       if (error) { showToast('Failed to post comment. Try again!', 'error'); return; }
 
       document.getElementById('commentText').value = '';
-      showToast('Comment posted! 💬');
+      showToast('<i class="fa-regular fa-comment-dots"></i> Comment posted!');
       loadComments(currentProjectId);
 
       // Notify project owner
