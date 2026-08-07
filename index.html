@@ -53,7 +53,7 @@
       --border: rgba(255, 255, 255, 0.07);
       --border2: rgba(255, 255, 255, 0.14);
       --border3: rgba(255, 255, 255, 0.22);
-      --a1: #7c6efa;
+      --a1: #D97757;
       /* purple */
       --a2: #06d6a0;
       /* mint */
@@ -108,28 +108,25 @@
     .orb1 {
       width: 600px;
       height: 600px;
-      background: radial-gradient(circle, #7c6efa, transparent 70%);
+      background: radial-gradient(circle, #D97757, transparent 70%);
       top: -200px;
       left: -100px;
       animation-delay: 0s;
+      opacity: 0.5;
     }
 
     .orb2 {
       width: 500px;
       height: 500px;
-      background: radial-gradient(circle, #06d6a0, transparent 70%);
+      background: radial-gradient(circle, #D97757, transparent 70%);
       top: 20%;
       right: -150px;
       animation-delay: -4s;
+      opacity: 0.15;
     }
 
     .orb3 {
-      width: 400px;
-      height: 400px;
-      background: radial-gradient(circle, #ff6b6b, transparent 70%);
-      bottom: 10%;
-      left: 30%;
-      animation-delay: -8s;
+      display: none;
     }
 
     @keyframes orbFloat {
@@ -281,7 +278,7 @@
       border: 1px solid rgba(124, 110, 250, 0.3);
       font-family: "JetBrains Mono", monospace;
 font-size: 0.72rem;
-      color: #9d93ff;
+      color: #E8A87C;
       letter-spacing: 1.5px;
       margin-bottom: 32px;
       animation: fadeDown 0.6s ease both;
@@ -318,16 +315,13 @@ font-size: 0.72rem;
       margin-bottom: 24px;
       animation: fadeUp 0.7s ease 0.1s both;
     }
-
-    .hero h1 .grad {
-      background: linear-gradient(135deg,
+.hero h1 .grad {
+      background: linear-gradient(100deg,
           var(--a1) 0%,
-          var(--a2) 50%,
-          var(--a4) 100%);
+          #f0d0b8 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-size: 200% 200%;
-      animation: gradShift 4s ease infinite;
     }
 
     @keyframes gradShift {
@@ -1085,7 +1079,9 @@ font-size: 0.72rem;
   color: var(--success);
   opacity: 1;
   visibility: visible;
-}.auth-alert {
+
+}
+.auth-alert {
   padding: 10px 14px;
   border-radius: 10px;
   font-size: 0.82rem;
@@ -1097,6 +1093,13 @@ font-size: 0.72rem;
   opacity: 0;
   visibility: hidden;
   transition: opacity 0.2s;
+}
+
+.auth-alert:empty {
+  min-height: 0;
+  margin-bottom: 0;
+  padding: 0;
+  border: none;
 }
 
     /* LOCATION BADGE */
@@ -1319,66 +1322,12 @@ font-size: 0.72rem;
                 margin-left: 8px;
               ">devshowcase.app</span>
         </div>
-        <div class="preview-grid">
-          <div class="preview-card">
-            <div class="pc-img" style="
-                  background: linear-gradient(135deg, #7c6efa22, #06d6a022);
-                ">
-              🍰
-            </div>
-            <div class="pc-body">
-              <div class="pc-title">Sarde Bakery</div>
-              <div class="pc-sub">by Braxton · Mwanza 🇹🇿</div>
-              <div class="pc-tags">
-                <span class="pc-tag">HTML</span>
-                <span class="pc-tag">Supabase</span>
-                <span class="pc-tag">AI</span>
-              </div>
-            </div>
-            <div class="pc-footer">
-              <span class="pc-reaction">👍 24</span>
-              <span class="pc-reaction">🔥 12</span>
-            </div>
-          </div>
-          <div class="preview-card">
-            <div class="pc-img" style="
-                  background: linear-gradient(135deg, #ff6b6b22, #ffd16622);
-                ">
-              📱
-            </div>
-            <div class="pc-body">
-              <div class="pc-title">HealthTrack</div>
-              <div class="pc-sub">by Amara · Lagos 🇳🇬</div>
-              <div class="pc-tags">
-                <span class="pc-tag">React</span>
-                <span class="pc-tag">Node</span>
-              </div>
-            </div>
-            <div class="pc-footer">
-              <span class="pc-reaction">👍 89</span>
-              <span class="pc-reaction">👏 34</span>
-            </div>
-          </div>
-          <div class="preview-card">
-            <div class="pc-img" style="
-                  background: linear-gradient(135deg, #06d6a022, #7c6efa22);
-                ">
-              🤖
-            </div>
-            <div class="pc-body">
-              <div class="pc-title">AI Portfolio</div>
-              <div class="pc-sub">by Dev · Nairobi 🇰🇪</div>
-              <div class="pc-tags">
-                <span class="pc-tag">Groq</span>
-                <span class="pc-tag">JS</span>
-              </div>
-            </div>
-            <div class="pc-footer">
-              <span class="pc-reaction">🔥 156</span>
-              <span class="pc-reaction">👏 67</span>
-            </div>
+       <div class="preview-grid" id="heroPreviewGrid">
+          <div class="preview-card" style="display:flex;align-items:center;justify-content:center;min-height:160px;">
+            <i class="fa-solid fa-spinner fa-spin" style="color:var(--muted);font-size:1.2rem;"></i>
           </div>
         </div>
+
       </div>
     </div>
   </section>
@@ -1516,7 +1465,7 @@ font-size: 0.72rem;
   <!-- FOOTER -->
   <footer>
     <div class="footer-left">
-      © 2026 <span>DevShowcase</span> — Built for developers, by developers 🌍
+   © 2026 <span>DevShowcase</span> — Built for developers, by developers <i class="fa-solid fa-earth-africa" style="color:var(--a2);"></i>
     </div>
     <div class="footer-left">
       Powered by <a href="https://braxcode.com" style="text-decoration: none; color:var(--a1)">BraxCode Digitals
@@ -1704,7 +1653,7 @@ font-size: 0.72rem;
   <div class="modal-overlay" id="resetModal">
     <div class="auth-modal">
       <div class="modal-logo">
-        <div class="modal-logo-icon">🔑</div>
+       <div class="modal-logo-icon"><i class="fa-solid fa-key"></i></div>
         <div class="modal-title">Set New Password</div>
         <div class="modal-sub">Choose a strong password</div>
       </div>
@@ -2327,7 +2276,56 @@ async function forgotPassword() {
         console.log('Location save failed:', e);
       }
    }
-document.querySelectorAll('.preview-card').forEach(c => c.addEventListener('click', () => openAuth('signup')));
+const categoryIcons = {
+  Web: 'fa-solid fa-globe',
+  Mobile: 'fa-solid fa-mobile-screen',
+  AI: 'fa-solid fa-robot',
+  Design: 'fa-solid fa-palette'
+};
+
+function buildHeroPreviewCard(p) {
+  const tech = (p.tech_stack || '').split(',').map(t => t.trim()).filter(Boolean).slice(0, 2);
+  const icon = categoryIcons[p.category] || 'fa-solid fa-code';
+  return `
+    <div class="preview-card" onclick="window.location.href='devshowcase-gallery.html'">
+      <div class="pc-img" style="background: linear-gradient(135deg, #7c6efa22, #06d6a022);">
+        <i class="${icon}" style="color:var(--a1);"></i>
+      </div>
+      <div class="pc-body">
+        <div class="pc-title">${p.project_name}</div>
+        <div class="pc-sub">by ${p.dev_name || 'Developer'}${p.dev_role ? ' · ' + p.dev_role : ''}</div>
+        <div class="pc-tags">
+          ${tech.map(t => `<span class="pc-tag">${t}</span>`).join('')}
+        </div>
+      </div>
+      <div class="pc-footer">
+        <span class="pc-reaction"><i class="fa-solid fa-thumbs-up"></i> ${p.likes || 0}</span>
+        <span class="pc-reaction"><i class="fa-solid fa-fire"></i> ${p.fire || 0}</span>
+      </div>
+    </div>`;
+}
+
+async function loadHeroPreview() {
+  const grid = document.getElementById('heroPreviewGrid');
+  const { data, error } = await _supabase
+    .from('showcase_projects')
+    .select('*')
+    .order('created_at', { ascending: false })
+    .limit(3);
+
+  if (error || !data || !data.length) {
+    grid.innerHTML = '<div class="preview-card" style="display:flex;align-items:center;justify-content:center;min-height:160px;color:var(--muted);font-size:0.8rem;">No projects yet</div>';
+    return;
+  }
+  grid.innerHTML = data.map(buildHeroPreviewCard).join('');
+}
+
+loadHeroPreview();
+
+_supabase
+  .channel('hero-preview-changes')
+  .on('postgres_changes', { event: '*', schema: 'public', table: 'showcase_projects' }, loadHeroPreview)
+  .subscribe();
 
   </script>
 </body>
