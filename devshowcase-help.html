@@ -503,14 +503,14 @@
     }
 
     function addMsgHTML(html, cls) {
-      var wrap = document.getElementById('chatWrap');
-      var div = document.createElement('div');
-      div.className = cls;
-      div.innerHTML = html;
-      wrap.appendChild(div);
-      wrap.scrollTop = wrap.scrollHeight;
-      return div;
-    }
+  var wrap = document.getElementById('chatWrap');
+  var div = document.createElement('div');
+  div.className = cls;
+  div.innerHTML = html;
+  wrap.appendChild(div);
+  div.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  return div;
+}
 
     function showTyping() {
       var wrap = document.getElementById('chatWrap');
