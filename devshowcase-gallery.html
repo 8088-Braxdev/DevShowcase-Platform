@@ -1594,7 +1594,14 @@ await _supabase.from('notifications').insert({
     }
 
 
-    loadProjects();
+    loadProjects().then(() => {
+      const params = new URLSearchParams(window.location.search);
+      const projectId = params.get('project');
+      if (projectId) {
+        openProject(Number(projectId));
+      }
+    });
+  
   </script>
 </body>
 
