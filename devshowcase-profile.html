@@ -19,32 +19,35 @@
   <meta name="twitter:description" id="twDesc" content="Check out this developer on DevShowcase." />
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <link
-    href="https://fonts.googleapis.com/css2?family=Satoshi:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap"
+ <link
+    href="https://api.fontshare.com/v2/css?f[]=clash-display@400,500,600,700&f[]=satoshi@300,400,500,600&display=swap"
+    rel="stylesheet" />
+<link
+    href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap"
     rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" />
   <link rel="shortcut icon" href="favicon.png" type="image/x-icon" />
 
   <style>
-    :root {
-      --bg: #060811;
-      --bg2: #0b0e1a;
-      --bg3: #111527;
-      --bg4: #181c2e;
-      --glass: rgba(255, 255, 255, 0.04);
-      --glass2: rgba(255, 255, 255, 0.07);
-      --glass3: rgba(255, 255, 255, 0.11);
-      --border: rgba(255, 255, 255, 0.07);
-      --border2: rgba(255, 255, 255, 0.13);
-      --border3: rgba(255, 255, 255, 0.2);
-      --a1: #7c6efa;
-      --a2: #06d6a0;
-      --a3: #ff6b6b;
-      --a4: #ffd166;
-      --text: #f0f2ff;
-      --muted: #6b7280;
-      --muted2: #9ca3af;
-    }
+:root {
+  --bg: #0A0A0C;
+  --bg2: #131316;
+  --bg3: #1B1B1F;
+  --bg4: #232328;
+  --glass: rgba(255, 255, 255, 0.04);
+  --glass2: rgba(255, 255, 255, 0.07);
+  --glass3: rgba(255, 255, 255, 0.12);
+  --border: rgba(255, 255, 255, 0.08);
+  --border2: rgba(255, 255, 255, 0.14);
+  --border3: rgba(255, 255, 255, 0.2);
+  --a1: #D97757;
+  --a2: #06d6a0;
+  --a3: #ff6b6b;
+  --a4: #ffd166;
+  --text: #F5F3EF;
+  --muted: #8B8680;
+  --muted2: #A8A29A;
+}
 
     * {
       box-sizing: border-box;
@@ -134,7 +137,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      font-family: "JetBrains Mono", monospace;
+      font-family: "Satoshi", monospace;
       font-size: 0.78rem;
       font-weight: 700;
       color: #fff;
@@ -184,7 +187,7 @@
     .btn-primary {
       background: linear-gradient(135deg, var(--a1), #5b52d6);
       color: #fff;
-      box-shadow: 0 4px 16px rgba(124, 110, 250, 0.3);
+      box-shadow: 0 4px 16px rgba(217, 119, 87, 0.3);
     }
 
     .btn-primary:hover {
@@ -199,7 +202,7 @@
       display: flex;
       align-items: center;
       gap: 8px;
-      font-family: "JetBrains Mono", monospace;
+      font-family: "Satoshi", monospace;
       font-size: 0.72rem;
       color: var(--muted);
     }
@@ -238,7 +241,7 @@
     .banner-bg {
       height: 140px;
       background: linear-gradient(135deg,
-          rgba(124, 110, 250, 0.25),
+          rgba(217, 119, 87, 0.25),
           rgba(6, 214, 160, 0.15),
           rgba(255, 107, 107, 0.1));
       position: relative;
@@ -276,10 +279,10 @@
       font-size: 2rem;
       font-weight: 700;
       color: #fff;
-      font-family: "JetBrains Mono", monospace;
+      font-family: "Satoshi", monospace;
       border: 4px solid var(--bg2);
       flex-shrink: 0;
-      box-shadow: 0 8px 32px rgba(124, 110, 250, 0.3);
+      box-shadow: 0 8px 32px rgba(217, 119, 87, 0.3);
       overflow-y: hidden;
       z-index: 2;
       position: relative;
@@ -320,7 +323,7 @@
       gap: 5px;
       font-size: 0.78rem;
       color: var(--muted2);
-      font-family: "JetBrains Mono", monospace;
+      font-family: "Satoshi", monospace;
     }
 
     .profile-meta-item i {
@@ -348,15 +351,15 @@
       border-radius: 100px;
       background: var(--glass2);
       border: 1px solid var(--border2);
-      font-family: "JetBrains Mono", monospace;
+      font-family: "Satoshi", monospace;
       font-size: 0.68rem;
       color: var(--muted2);
       transition: all 0.2s;
     }
 
     .skill-pill:hover {
-      background: rgba(124, 110, 250, 0.1);
-      border-color: rgba(124, 110, 250, 0.25);
+      background: rgba(217, 119, 87, 0.1);
+      border-color: rgba(217, 119, 87, 0.25);
       color: var(--a1);
     }
 
@@ -387,7 +390,7 @@
     }
 
     .pstat-num {
-      font-family: "JetBrains Mono", monospace;
+      font-family: "Satoshi", monospace;
       font-size: 1.6rem;
       font-weight: 700;
       background: linear-gradient(135deg, var(--a1), var(--a2));
@@ -433,9 +436,9 @@
     .section-count {
       padding: 2px 8px;
       border-radius: 100px;
-      background: rgba(124, 110, 250, 0.1);
-      border: 1px solid rgba(124, 110, 250, 0.2);
-      font-family: "JetBrains Mono", monospace;
+      background: rgba(217, 119, 87, 0.1);
+      border: 1px solid rgba(217, 119, 87, 0.2);
+      font-family: "Satoshi", monospace;
       font-size: 0.62rem;
       color: var(--a1);
     }
@@ -468,8 +471,8 @@
     }
 
     .filter-tab.active {
-      background: rgba(124, 110, 250, 0.1);
-      border-color: rgba(124, 110, 250, 0.25);
+      background: rgba(217, 119, 87, 0.1);
+      border-color: rgba(217, 119, 87, 0.25);
       color: var(--a1);
     }
 
@@ -505,7 +508,7 @@
     }
 
     .proj-card:hover {
-      border-color: rgba(124, 110, 250, 0.2);
+      border-color: rgba(217, 119, 87, 0.2);
       background: var(--bg3);
       transform: translateY(-3px);
       box-shadow: 0 16px 40px rgba(0, 0, 0, 0.3);
@@ -535,7 +538,7 @@
     }
 
     .proj-card-cat {
-      font-family: "JetBrains Mono", monospace;
+      font-family: "Satoshi", monospace;
       font-size: 0.62rem;
       color: var(--muted);
       text-transform: uppercase;
@@ -585,7 +588,7 @@
       border-radius: 100px;
       background: var(--glass2);
       border: 1px solid var(--border);
-      font-family: "JetBrains Mono", monospace;
+      font-family: "Satoshi", monospace;
       font-size: 0.58rem;
       color: var(--muted2);
     }
@@ -622,7 +625,7 @@
     }
 
     .card-title {
-      font-family: "JetBrains Mono", monospace;
+      font-family: "Satoshi", monospace;
       font-size: 0.62rem;
       color: var(--muted);
       letter-spacing: 2px;
@@ -733,13 +736,13 @@
       justify-content: center;
       gap: 8px;
       text-decoration: none;
-      box-shadow: 0 4px 16px rgba(124, 110, 250, 0.3);
+      box-shadow: 0 4px 16px rgba(217, 119, 87, 0.3);
       margin-bottom: 10px;
     }
 
     .hire-btn:hover {
       transform: translateY(-1px);
-      box-shadow: 0 6px 24px rgba(124, 110, 250, 0.45);
+      box-shadow: 0 6px 24px rgba(217, 119, 87, 0.45);
     }
 
     /* SHARE CARD */
