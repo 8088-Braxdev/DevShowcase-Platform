@@ -1346,7 +1346,7 @@
             .map((t) => t.trim())
             .filter(Boolean);
           return `
-      <a class="proj-card" href="devshowcase-gallery.html?id=${p.id}" style="animation-delay:${i * 0.05}s">
+      <a class="proj-card" href="devshowcase-gallery.html?project=${p.id}" style="animation-delay:${i * 0.05}s">
         ${p.image_url
               ? `<img class="proj-card-img" src="${p.image_url}" alt="${p.project_name}" loading="lazy">`
               : `<div class="proj-card-img-placeholder"><i class="fa-solid fa-code"></i></div>`
