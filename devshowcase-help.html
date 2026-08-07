@@ -567,52 +567,51 @@ function addMsgHTML(html, cls) {
     }
 
     // ── Main send ─────────────────────────────────────────────────────────────
+async function send() {
+  if (isBusy) return;
 
-    async function send() {
-      if (isBusy) return;
+  var inp = document.getElementById('inp');
+  var text = inp.value.trim();
+  if (!text) return;
 
-      var inp = document.getElementById('inp');
-      var text = inp.value.trim();
-      if (!text) return;
+  isBusy = true;
+  inp.value = '';
+  inp.style.height = 'auto';
+  document.getElementById('sendBtn').disabled = true;
 
-      isBusy = true;
-      inp.value = '';
-      inp.style.height = 'auto';
-      document.getElementById('sendBtn').disabled = true;
+  addMsg(text, 'msg user');
 
-      addMsg(text, 'msg user');
+  chatHistory.push({ role: 'user', content: text });
+  if (chatHistory.length > 14) chatHistory = chatHistory.slice(-14);
 
-      chatHistory.push({ role: 'user', content: text });
-      if (chatHistory.length > 14) chatHistory = chatHistory.slice(-14);
+  showTyping();
 
-      showTyping();
+  var reply = '';
 
-      var reply = '';
+  try {
+    reply = await callAI(text);
+  } catch (err) {
+    hideTyping();
+    addMsg(
+      '⚠️ Sorry, internet connection problem. Try again or Contact us: wa.me/255618811359',
+      'msg error'
+    );
+    isBusy = false;
+    document.getElementById('sendBtn').disabled = false;
+    // inp.focus() imeondolewa hapa — keyboard isijifungue baada ya error
+    return;
+  }
 
-      try {
-        reply = await callAI(text);
-      } catch (err) {
-        hideTyping();
-        addMsg(
-          '⚠️ Sorry, internet connection problem. Try again or Contact us: wa.me/255618811359',
-          'msg error'
-        );
-        isBusy = false;
-        document.getElementById('sendBtn').disabled = false;
-        inp.focus();
-        return;
-      }
+  hideTyping();
 
-      hideTyping();
+  chatHistory.push({ role: 'assistant', content: reply });
 
-      chatHistory.push({ role: 'assistant', content: reply });
+  addMsgHTML(linkify(reply), 'msg bot');
 
-      addMsgHTML(linkify(reply), 'msg bot');
-
-      isBusy = false;
-      document.getElementById('sendBtn').disabled = false;
-      inp.focus();
-    }
+  isBusy = false;
+  document.getElementById('sendBtn').disabled = false;
+  // inp.focus() imeondolewa hapa — keyboard isijifungue baada ya AI kujibu
+}
 
     function ask(q) {
       if (isBusy) return;
