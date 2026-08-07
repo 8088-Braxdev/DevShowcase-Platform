@@ -12,26 +12,29 @@
 <meta property="og:description" content="Ask DevAssist anything about using DevShowcase." />
 <meta property="og:url" content="https://devshowcase.braxcode.com/devshowcase-help.html" />
 <meta property="og:type" content="website" />
-  <link
-    href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+<link
+    href="https://api.fontshare.com/v2/css?f[]=clash-display@400,500,600,700&f[]=satoshi@300,400,500,600&display=swap"
+    rel="stylesheet" />
+<link
+    href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap"
     rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" />
   <link rel="shortcut icon" href="favicon.png" type="image/x-icon">
 
   <style>
-    :root {
-      --bg: #060811;
-      --bg2: #0b0e1a;
-      --glass: rgba(255, 255, 255, 0.04);
-      --glass2: rgba(255, 255, 255, 0.07);
-      --border: rgba(255, 255, 255, 0.07);
-      --border2: rgba(255, 255, 255, 0.13);
-      --a1: #7c6efa;
-      --a2: #06d6a0;
-      --text: #f0f2ff;
-      --muted: #6b7280;
-      --muted2: #9ca3af;
-    }
+  :root {
+  --bg: #0A0A0C;
+  --bg2: #131316;
+  --glass: rgba(255, 255, 255, 0.04);
+  --glass2: rgba(255, 255, 255, 0.07);
+  --border: rgba(255, 255, 255, 0.08);
+  --border2: rgba(255, 255, 255, 0.14);
+  --a1: #D97757;
+  --a2: #06d6a0;
+  --text: #F5F3EF;
+  --muted: #8B8680;
+  --muted2: #A8A29A;
+}
 
     * {
       box-sizing: border-box;
@@ -47,7 +50,7 @@
     body {
       background: var(--bg);
       color: var(--text);
-      font-family: "Syne", sans-serif;
+      font-family: "Satoshi", sans-serif;
       display: flex;
       flex-direction: column;
       height: 100dvh;
@@ -59,7 +62,7 @@
       position: fixed;
       inset: 0;
       background:
-        radial-gradient(ellipse 60% 50% at 10% 10%, rgba(124, 110, 250, 0.1), transparent 60%),
+        radial-gradient(ellipse 60% 50% at 10% 10%, rgba(217, 119, 87, 0.1), transparent 60%),
         radial-gradient(ellipse 50% 40% at 90% 90%, rgba(6, 214, 160, 0.07), transparent 60%);
       pointer-events: none;
       z-index: 0;
@@ -94,14 +97,14 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      font-family: "JetBrains Mono", monospace;
+      font-family: "Satoshi", monospace;
       font-size: 0.75rem;
       font-weight: 700;
       color: #fff;
     }
 
     .logo-text {
-      font-family: "JetBrains Mono", monospace;
+      font-family: "Satoshi", monospace;
       font-size: 0.85rem;
       font-weight: 700;
       background: linear-gradient(135deg, #fff 40%, var(--a1));
@@ -165,7 +168,7 @@
   font-size: 1.3rem;
   color: #fff;
   margin: 0 auto 12px;
-  box-shadow: 0 8px 24px rgba(124, 110, 250, 0.3);
+  box-shadow: 0 8px 24px rgba(217, 119, 87, 0.3);
 }
 
     .welcome h2 {
@@ -192,7 +195,7 @@
       border: 1px solid rgba(6, 214, 160, 0.2);
       color: var(--a2);
       font-size: 0.68rem;
-      font-family: "JetBrains Mono", monospace;
+      font-family: "Satoshi", monospace;
       margin-bottom: 14px;
       letter-spacing: 0.5px;
     }
@@ -228,19 +231,19 @@
     .q-btn {
       padding: 7px 13px;
       border-radius: 100px;
-      background: rgba(124, 110, 250, 0.08);
-      border: 1px solid rgba(124, 110, 250, 0.2);
-      color: #9b8fff;
+      background: rgba(217, 119, 87, 0.08);
+      border: 1px solid rgba(217, 119, 87, 0.2);
+      color: #E8A87C;
       font-size: 0.75rem;
       cursor: pointer;
       transition: all 0.2s;
-      font-family: "Syne", sans-serif;
+      font-family: "Satoshi", sans-serif;
       font-weight: 500;
     }
 
     .q-btn:hover {
-      background: rgba(124, 110, 250, 0.16);
-      border-color: rgba(124, 110, 250, 0.35);
+      background: rgba(217, 119, 87, 0.16);
+      border-color: rgba(217, 119, 87, 0.35);
     }
 
     .msg {
@@ -277,7 +280,7 @@
       content: "✦ AI";
       display: block;
       font-size: 0.6rem;
-      font-family: "JetBrains Mono", monospace;
+      font-family: "Satoshi", monospace;
       color: rgba(6, 214, 160, 0.4);
       margin-top: 6px;
       text-align: right;
@@ -285,8 +288,8 @@
     }
 
     .msg.user {
-      background: rgba(124, 110, 250, 0.12);
-      border: 1px solid rgba(124, 110, 250, 0.2);
+      background: rgba(217, 119, 87, 0.12);
+      border: 1px solid rgba(217, 119, 87, 0.2);
       border-bottom-right-radius: 3px;
       align-self: flex-end;
       color: var(--text);
@@ -378,7 +381,7 @@
       border: 1px solid var(--border2);
       border-radius: 12px;
       color: var(--text);
-      font-family: "Syne", sans-serif;
+      font-family: "Satoshi", sans-serif;
       font-size: 0.88rem;
       outline: none;
       resize: none;
@@ -389,7 +392,7 @@
     }
 
     textarea:focus {
-      border-color: rgba(124, 110, 250, 0.4);
+      border-color: rgba(217, 119, 87, 0.4);
     }
 
     textarea::placeholder {
@@ -410,7 +413,7 @@
       justify-content: center;
       flex-shrink: 0;
       transition: all 0.2s;
-      box-shadow: 0 4px 14px rgba(124, 110, 250, 0.35);
+      box-shadow: 0 4px 14px rgba(217, 119, 87, 0.35);
     }
 
     .send-btn:hover {
@@ -425,7 +428,7 @@
 
     .input-hint {
       text-align: center;
-      font-family: "JetBrains Mono", monospace;
+      font-family: "Satoshi", monospace;
       font-size: 0.62rem;
       color: var(--muted);
       margin-top: 7px;
