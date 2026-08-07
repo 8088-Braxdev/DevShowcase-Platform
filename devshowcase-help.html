@@ -502,13 +502,13 @@
       return div;
     }
 
-    function addMsgHTML(html, cls) {
+function addMsgHTML(html, cls) {
   var wrap = document.getElementById('chatWrap');
   var div = document.createElement('div');
   div.className = cls;
   div.innerHTML = html;
   wrap.appendChild(div);
-  div.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  wrap.scrollTo({ top: div.offsetTop - 12, behavior: 'smooth' });
   return div;
 }
 
