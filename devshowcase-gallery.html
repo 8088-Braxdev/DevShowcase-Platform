@@ -26,28 +26,28 @@
   <link rel="shortcut icon" href="favicon.png" type="image/x-icon">
 
   <style>
-    :root {
-      --bg: #060811;
-      --bg2: #0B0E1A;
-      --bg3: #111527;
-      --bg4: #181C2E;
+
+:root {
+      --bg: #0A0A0C;
+      --bg2: #131316;
+      --bg3: #1B1B1F;
+      --bg4: #232328;
       --glass: rgba(255, 255, 255, 0.04);
       --glass2: rgba(255, 255, 255, 0.07);
-      --border: rgba(255, 255, 255, 0.07);
-      --border2: rgba(255, 255, 255, 0.13);
+      --border: rgba(255, 255, 255, 0.08);
+      --border2: rgba(255, 255, 255, 0.14);
       --border3: rgba(255, 255, 255, 0.2);
       --accent: #06D6A0;
       --accent2: #D97757;
-      --accent3: #FF6B6B;
+      --accent3: #E89A7D;
       --a1: #D97757;
       --a2: #06D6A0;
       --a3: #FF6B6B;
       --a4: #FFD166;
-      --text: #F0F2FF;
-      --muted: #6B7280;
-      --muted2: #9CA3AF;
+      --text: #F5F3EF;
+      --muted: #8B8680;
+      --muted2: #A8A29A;
     }
-
     * {
       box-sizing: border-box;
       margin: 0;
@@ -67,16 +67,16 @@
     }
 
     /* ANIMATED BG */
-    body::before {
+
+body::before {
       content: '';
       position: fixed;
       inset: 0;
-      background: radial-gradient(ellipse 80% 50% at 50% -20%, rgba(124, 110, 250, 0.08) 0%, transparent 60%),
-        radial-gradient(ellipse 60% 40% at 80% 80%, rgba(6, 214, 160, 0.06) 0%, transparent 50%);
+      background: radial-gradient(ellipse 80% 50% at 50% -20%, rgba(217, 119, 87, 0.08) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 40% at 80% 80%, rgba(6, 214, 160, 0.04) 0%, transparent 50%);
       pointer-events: none;
       z-index: 0;
     }
-
     /* NAV */
     nav {
       position: sticky;
@@ -100,7 +100,7 @@
     }
 
     .nav-logo-text {
-      font-family: 'JetBrains Mono', monospace;
+      font-family: 'Satoshi', monospace;
       font-size: 0.9rem;
       font-weight: 700;
       letter-spacing: 1px;
@@ -136,16 +136,16 @@
       color: var(--a1);
     }
 
-    .btn-accent {
-      background: linear-gradient(135deg, var(--a1), #5B52D6);
+  .btn-accent {
+      background: linear-gradient(135deg, var(--a1), #B85C3E);
       border: none;
-      color: #000;
+      color: #fff;
       font-weight: 600;
     }
 
     .btn-accent:hover {
       transform: translateY(-1px);
-      box-shadow: 0 6px 20px rgba(124, 110, 250, 0.4);
+      box-shadow: 0 6px 20px rgba(217, 119, 87, 0.4);
     }
 
     /* HERO */
@@ -162,8 +162,8 @@
       gap: 6px;
       padding: 6px 14px;
       border-radius: 100px;
-      background: rgba(124, 110, 250, 0.08);
-      border: 1px solid rgba(124, 110, 250, 0.2);
+ background: rgba(217, 119, 87, 0.08);
+      border: 1px solid rgba(217, 119, 87, 0.2);
       font-family: 'JetBrains Mono', monospace;
       font-size: 0.72rem;
       color: var(--a1);
@@ -297,10 +297,28 @@
       white-space: nowrap;
     }
 
-    .filter-btn:hover,
+.filter-btn:hover,
     .filter-btn.active {
-      background: rgba(124, 110, 250, 0.08);
-      border-color: rgba(124, 110, 250, 0.3);
+      background: rgba(217, 119, 87, 0.08);
+      border-color: rgba(217, 119, 87, 0.3);
+      color: var(--a1);
+    }
+
+    .sort-select {
+      padding: 10px 14px;
+      border-radius: 10px;
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      color: var(--muted2);
+      font-size: 0.82rem;
+      cursor: pointer;
+      font-family: 'Satoshi', sans-serif;
+      outline: none;
+    }
+
+    .sort-select:hover,
+    .sort-select:focus {
+      border-color: rgba(217, 119, 87, 0.3);
       color: var(--a1);
     }
 
@@ -344,10 +362,10 @@
       box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(110, 231, 183, 0.05);
     }
 
-    .card-img {
+.card-img {
       width: 100%;
       height: 200px;
-      object-fit: cover;
+      object-fit: contain;
       display: block;
       background: var(--bg3);
       position: relative;
@@ -429,11 +447,11 @@
       margin-bottom: 16px;
     }
 
-    .tech-tag {
+.tech-tag {
       padding: 3px 10px;
       border-radius: 100px;
-      background: rgba(129, 140, 248, 0.1);
-      border: 1px solid rgba(129, 140, 248, 0.2);
+      background: rgba(217, 119, 87, 0.1);
+      border: 1px solid rgba(217, 119, 87, 0.2);
       font-family: 'Satoshi', monospace;
       font-size: 0.65rem;
       color: var(--accent2);
@@ -465,7 +483,7 @@
       font-size: 0.75rem;
       cursor: pointer;
       transition: all 0.2s;
-      font-family: 'DM Sans', sans-serif;
+      font-family: 'Satoshi', sans-serif;
     }
 
     .reaction-btn:hover {
@@ -652,7 +670,8 @@
     .modal-img {
       width: 100%;
       height: 280px;
-      object-fit: cover;
+      object-fit: contain;
+      background: var(--bg3);
       margin: 20px 0 0;
       display: block;
     }
@@ -1059,7 +1078,12 @@
     <button class="filter-btn" onclick="setFilter('Web', this)">Web</button>
     <button class="filter-btn" onclick="setFilter('Mobile', this)">Mobile</button>
     <button class="filter-btn" onclick="setFilter('AI', this)">AI</button>
-    <button class="filter-btn" onclick="setFilter('Design', this)">Design</button>
+<button class="filter-btn" onclick="setFilter('Design', this)">Design</button>
+    <select class="sort-select" onchange="setSort(this.value)">
+      <option value="newest">Newest</option>
+      <option value="oldest">Oldest</option>
+      <option value="most-liked">Most Reactions</option>
+    </select>
   </div>
 
   <!-- GALLERY -->
@@ -1117,9 +1141,9 @@
 
     // ================================================
     // STATE
-    // ================================================
     let allProjects = [];
     let currentFilter = 'all';
+    let currentSort = 'newest';
     let currentProjectId = null;
     let userReactions = {}; // Tutaload live kutoka Supabase sasa hivi!
     let currentUserId = 'anonymous_user'; // Default kama hajalogin
@@ -1181,7 +1205,8 @@
       }
 
       updateStats();
-      renderProjects(allProjects);
+      renderProjects(sortProjects(allProjects));
+    
     }
 
 
@@ -1337,6 +1362,25 @@ await _supabase.from('notifications').insert({
       filterProjects();
     }
 
+ function setSort(val) {
+      currentSort = val;
+      filterProjects();
+    }
+
+    function sortProjects(list) {
+      const sorted = [...list];
+      if (currentSort === 'newest') {
+        sorted.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+      } else if (currentSort === 'oldest') {
+        sorted.sort((a, b) => new Date(a.created_at) - new Date(b.created_at));
+      } else if (currentSort === 'most-liked') {
+        sorted.sort((a, b) =>
+          ((b.likes || 0) + (b.fire || 0) + (b.clap || 0)) -
+          ((a.likes || 0) + (a.fire || 0) + (a.clap || 0)));
+      }
+      return sorted;
+    }
+
     function filterProjects() {
       const search = document.getElementById('searchInput').value.toLowerCase().trim();
       let filtered = allProjects;
@@ -1354,7 +1398,7 @@ await _supabase.from('notifications').insert({
         );
       }
 
-      renderProjects(filtered);
+      renderProjects(sortProjects(filtered));
     }
 
     // ================================================
