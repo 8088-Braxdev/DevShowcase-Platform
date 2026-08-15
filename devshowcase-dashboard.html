@@ -91,7 +91,7 @@
     .sidebar {
       width: 240px;
       min-width: 240px;
-      height: 100vh;
+      height: 100dvh;
       position: sticky;
       top: 0;
       background: var(--bg2);
@@ -1319,11 +1319,13 @@
     <button class="nav-item" id="nav-explore" onclick="window.location.href='devshowcase-gallery.html'">
       <i class="fa-solid fa-compass"></i> Explore
     </button>
-
-    <div class="nav-section-label">Account</div>
-    <button class="nav-item" onclick="signOut()">
-      <i class="fa-solid fa-arrow-right-from-bracket"></i> Sign Out
-    </button>
+<div class="nav-section-label">Account</div>
+<button class="nav-item" onclick="signOut()">
+  <i class="fa-solid fa-arrow-right-from-bracket"></i> Sign Out
+</button>
+<button class="nav-item" style="color:var(--a3);" onclick="requestDeleteAccount()">
+  <i class="fa-solid fa-user-slash"></i> Delete Account
+</button>
 
     <div class="sidebar-bottom">
       <div class="profile-mini" onclick="showPanel('profile',document.getElementById('nav-profile'))">
@@ -1492,6 +1494,12 @@
                 <i class="fa-solid fa-check"></i> Save Changes
               </button>
             </div>
+<div class="form-group full" style="border-top:1px solid var(--border);padding-top:16px;margin-top:8px;">
+  <label class="form-label" style="color:var(--a3);">Danger Zone</label>
+  <button class="btn-delete" style="width:fit-content;padding:9px 18px;" onclick="requestDeleteAccount()">
+    <i class="fa-solid fa-user-slash"></i> Delete My Account
+  </button>
+</div>
           </div>
         </div>
       </div>
@@ -2245,6 +2253,24 @@ showToast('Image too large — max 2MB', 'warning'); return;
       window.location.href = 'index.html';
     }
 
+async function requestDeleteAccount() {
+  if (!confirm('This permanently deletes your account and data within 30 days. Continue?')) return;
+
+  const { data: { session } } = await _supabase.auth.getSession();
+  const res = await fetch(`${SUPABASE_URL}/functions/v1/delete-account`, {
+    method: 'POST',
+    headers: {
+      'Authorization': `Bearer ${session.access_token}`,
+      'Content-Type': 'application/json'
+    }
+  });
+
+  if (!res.ok) { showToast('Failed to delete account', 'error'); return; }
+
+  showToast('Account deleted', 'delete');
+  await _supabase.auth.signOut();
+  window.location.href = 'index.html';
+}
     // ================================================
     // SIDEBAR TOGGLE
     // ================================================
