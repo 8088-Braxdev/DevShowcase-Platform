@@ -1326,13 +1326,13 @@
 
 
     <div class="sidebar-bottom">
-<div class="profile-mini" onclick="showPanel('profile',document.getElementById('nav-profile')); document.getElementById('profileForm').style.display='block';">
-        <div class="p-avatar" id="sidebarAvatar">?</div>
-        <div>
-          <div class="p-name" id="sidebarName">Loading...</div>
-          <div class="p-role" id="sidebarRole">Developer</div>
-        </div>
-      </div>
+<div class="profile-mini" style="border-color:rgba(255,107,107,0.3);" onclick="requestDeleteAccount()">
+  <div class="p-avatar" id="sidebarAvatar" style="background:rgba(255,107,107,0.15);">?</div>
+  <div>
+    <div class="p-name" id="sidebarName" style="color:var(--a3);">Loading...</div>
+    <div class="p-role" style="color:var(--a3);">Delete Account</div>
+  </div>
+</div>
     </div>
   </aside>
 
@@ -1492,12 +1492,7 @@
                 <i class="fa-solid fa-check"></i> Save Changes
               </button>
             </div>
-<div class="form-group full" style="border-top:1px solid var(--border);padding-top:16px;margin-top:8px;">
-  <label class="form-label" style="color:var(--a3);">Danger Zone</label>
-  <button class="btn-delete" style="width:fit-content;padding:9px 18px;" onclick="requestDeleteAccount()">
-    <i class="fa-solid fa-user-slash"></i> Delete My Account
-  </button>
-</div>
+
           </div>
         </div>
       </div>
@@ -1660,7 +1655,9 @@
         document.getElementById('profileAvatar').textContent = initials;
       }
       document.getElementById('sidebarName').textContent = name;
-      document.getElementById('sidebarRole').textContent = role;
+      
+const roleEl = document.getElementById('sidebarRole');
+if (roleEl) roleEl.textContent = role;
       document.getElementById('profileName').textContent = name;
       document.getElementById('profileRole').textContent = role;
       document.getElementById('profileLocation').textContent = location;
