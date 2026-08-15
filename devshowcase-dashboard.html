@@ -2055,7 +2055,8 @@ showToast('Image too large — max 2MB', 'warning'); return;
       document.getElementById('profileName').textContent = fullName;
       document.getElementById('profileRole').textContent = role;
       document.getElementById('sidebarName').textContent = fullName;
-      document.getElementById('sidebarRole').textContent = role;
+      const sbRole = document.getElementById('sidebarRole');
+if (sbRole) sbRole.textContent = role;
 
       if (navigator.vibrate) navigator.vibrate([40, 20, 40]);
       showToast('Profile saved!', 'success');
@@ -2270,10 +2271,13 @@ async function requestDeleteAccount() {
     // ================================================
     // SIDEBAR TOGGLE
     // ================================================
-    function toggleSidebar() {
-      document.getElementById('sidebar').classList.toggle('open');
-      document.getElementById('sidebarOverlay').classList.toggle('open');
-    }
+ function toggleSidebar() {
+  const sidebar = document.getElementById('sidebar');
+  const overlay = document.getElementById('sidebarOverlay');
+  sidebar.classList.toggle('open');
+  overlay.classList.toggle('open');
+  document.body.style.overflow = sidebar.classList.contains('open') ? 'hidden' : '';
+}
 
     // ================================================
     // TOAST
