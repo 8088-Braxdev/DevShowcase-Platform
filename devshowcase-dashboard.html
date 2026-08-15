@@ -1323,12 +1323,10 @@
 <button class="nav-item" onclick="signOut()">
   <i class="fa-solid fa-arrow-right-from-bracket"></i> Sign Out
 </button>
-<button class="nav-item" style="color:var(--a3);" onclick="requestDeleteAccount()">
-  <i class="fa-solid fa-user-slash"></i> Delete Account
-</button>
+
 
     <div class="sidebar-bottom">
-      <div class="profile-mini" onclick="showPanel('profile',document.getElementById('nav-profile'))">
+<div class="profile-mini" onclick="showPanel('profile',document.getElementById('nav-profile')); document.getElementById('profileForm').style.display='block';">
         <div class="p-avatar" id="sidebarAvatar">?</div>
         <div>
           <div class="p-name" id="sidebarName">Loading...</div>
