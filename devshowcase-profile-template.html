@@ -960,9 +960,7 @@
 
   <!-- BREADCRUMB -->
   <div class="breadcrumb">
-    <a href="devshowcase-gallery.html">Explore</a>
-    <i class="fa-solid fa-chevron-right"></i>
-    <a href="devshowcase-gallery.html">Developers</a>
+    <a href="devshowcase-gallery.html"><i class="fa-solid fa-arrow-left"></i> Back</a>
     <i class="fa-solid fa-chevron-right"></i>
     <span id="breadName" style="color: var(--muted2)">Loading...</span>
   </div>
@@ -1379,16 +1377,30 @@
     // SHARE
     async function copyProfileLink() {
       const url = window.location.href;
+      const shareData = {
+        title: `${devData?.name} — DevShowcase`,
+        text: `Check out ${devData?.name}'s developer profile on DevShowcase! 🚀`,
+        url: url
+      };
 
-      // 1) Jaribu clipboard MOJA KWA MOJA — hii ndiyo wakati sahihi wa user-gesture
+      // SIMU (ina share sheet) — fungua moja kwa moja, kama apps kubwa
+      if (navigator.share) {
+        try {
+          await navigator.share(shareData);
+        } catch (e) {
+          // Mtu ame-cancel share sheet — sio error, hatufanyi kitu
+        }
+        return;
+      }
+
+      // KOMPYUTA (hakuna share sheet) — copy + toast nzuri
       try {
         await navigator.clipboard.writeText(url);
-        showToast('🔗 Profile link copied!');
+        showToast('<i class="fa-solid fa-circle-check" style="color:var(--a2);"></i> Link copied to clipboard');
         if (navigator.vibrate) navigator.vibrate(40);
         return;
       } catch (e) { /* endelea kwenye fallback */ }
 
-      // 2) Fallback ya zamani — sasa tunaangalia kama IMEFANIKIWA kweli
       try {
         const el = document.createElement('input');
         el.value = url;
@@ -1399,25 +1411,12 @@
         const ok = document.execCommand('copy');
         document.body.removeChild(el);
         if (ok) {
-          showToast('🔗 Link copied!');
+          showToast('<i class="fa-solid fa-circle-check" style="color:var(--a2);"></i> Link copied to clipboard');
           if (navigator.vibrate) navigator.vibrate(40);
           return;
         }
       } catch (e) { /* endelea */ }
 
-      // 3) Native share kama last resort (simu)
-      if (navigator.share) {
-        try {
-          await navigator.share({
-            title: `${devData?.name} — DevShowcase`,
-            text: `Check out ${devData?.name}'s developer profile on DevShowcase! 🚀`,
-            url: url
-          });
-          return;
-        } catch (e) { /* mtu ame-cancel share, si error */ }
-      }
-
-      // 4) Zote zimeshindwa — mpe link moja kwa moja aweze copy mwenyewe
       prompt('Copy this link:', url);
     }
 
