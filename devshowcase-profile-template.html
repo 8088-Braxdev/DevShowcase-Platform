@@ -1380,7 +1380,32 @@
     async function copyProfileLink() {
       const url = window.location.href;
 
-      // Native share (mobile) — inaonyesha WhatsApp, Telegram, nk
+      // 1) Jaribu clipboard MOJA KWA MOJA — hii ndiyo wakati sahihi wa user-gesture
+      try {
+        await navigator.clipboard.writeText(url);
+        showToast('🔗 Profile link copied!');
+        if (navigator.vibrate) navigator.vibrate(40);
+        return;
+      } catch (e) { /* endelea kwenye fallback */ }
+
+      // 2) Fallback ya zamani — sasa tunaangalia kama IMEFANIKIWA kweli
+      try {
+        const el = document.createElement('input');
+        el.value = url;
+        el.style.position = 'fixed';
+        el.style.opacity = '0';
+        document.body.appendChild(el);
+        el.select();
+        const ok = document.execCommand('copy');
+        document.body.removeChild(el);
+        if (ok) {
+          showToast('🔗 Link copied!');
+          if (navigator.vibrate) navigator.vibrate(40);
+          return;
+        }
+      } catch (e) { /* endelea */ }
+
+      // 3) Native share kama last resort (simu)
       if (navigator.share) {
         try {
           await navigator.share({
@@ -1389,26 +1414,11 @@
             url: url
           });
           return;
-        } catch (e) {
-          // Mtu akigonga cancel — copy link tu
-        }
+        } catch (e) { /* mtu ame-cancel share, si error */ }
       }
 
-      // Fallback — copy clipboard
-      try {
-        await navigator.clipboard.writeText(url);
-        showToast('🔗 Profile link copied!');
-      } catch (e) {
-        // Fallback ya mwisho
-        const el = document.createElement('input');
-        el.value = url;
-        document.body.appendChild(el);
-        el.select();
-        document.execCommand('copy');
-        document.body.removeChild(el);
-        showToast('🔗 Link copied!');
-      }
-      if (navigator.vibrate) navigator.vibrate(40);
+      // 4) Zote zimeshindwa — mpe link moja kwa moja aweze copy mwenyewe
+      prompt('Copy this link:', url);
     }
 
     function shareOnTwitter() {
