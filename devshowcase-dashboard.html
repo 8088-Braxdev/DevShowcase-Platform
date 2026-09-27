@@ -1592,7 +1592,9 @@ height: auto;
     const SUPABASE_URL = 'https://embhkmxkuprdjkspsdii.supabase.co';
     const SUPABASE_KEY = 'sb_publishable_B9vhC35VSzJ3VskrtSETYw_ueSS6p1e';
     const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-
+function pingSitemap() {
+  fetch('https://www.google.com/ping?sitemap=https://devshowcase.braxcode.com/sitemap.xml', { mode: 'no-cors' }).catch(() => {});
+}
     // ================================================
     // STATE
     // ================================================
@@ -1665,6 +1667,12 @@ if (roleEl) roleEl.textContent = role;
 
       document.getElementById('pFullName').value = name;
       document.getElementById('pRole').value = role;
+            document.getElementById('pWhatsapp').value = meta.whatsapp || '';
+      document.getElementById('pGithub').value = meta.github || '';
+      document.getElementById('pLinkedin').value = meta.linkedin || '';
+      document.getElementById('pWebsite').value = meta.website || '';
+      document.getElementById('pBio').value = meta.bio || '';
+      document.getElementById('pSkills').value = meta.skills || '';
 
       await loadProjects();
       await loadNotifications()
@@ -1955,12 +1963,15 @@ showToast('Image too large — max 2MB', 'warning'); return;
         ? '<i class="fa-solid fa-check"></i> Save Changes'
         : '<i class="fa-solid fa-rocket"></i> Publish Project';
 
-      if (error) {
+            if (error) {
        showToast(error.message || 'Failed!', 'error');
         return;
       }
 
+      if (!editTargetId) pingSitemap();   // ← line mpya tu
+
      showToast(editTargetId ? 'Project updated!' : 'Project published!', 'success');
+
       if (navigator.vibrate) navigator.vibrate([40, 20, 40]);
       closeAddProject();
 
