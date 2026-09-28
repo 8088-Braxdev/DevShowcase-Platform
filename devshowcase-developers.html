@@ -1,0 +1,289 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Developers — DevShowcase</title>
+  <meta name="description" content="Meet the developers on DevShowcase. Browse profiles by role, country and skills, and contact them directly on WhatsApp." />
+  <link rel="canonical" href="https://devshowcase.braxcode.com/devshowcase-developers.html" />
+  <meta property="og:title" content="Developers — DevShowcase" />
+  <meta property="og:description" content="Browse developers by role, country and skills. Hire directly on WhatsApp." />
+  <meta property="og:url" content="https://devshowcase.braxcode.com/devshowcase-developers.html" />
+  <meta property="og:type" content="website" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <link href="https://api.fontshare.com/v2/css?f[]=satoshi@300,400,500,600,700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" />
+  <link rel="shortcut icon" href="favicon.png" type="image/x-icon" />
+  <style>
+    :root {
+      --bg: #0A0A0C; --bg2: #131316; --bg3: #1B1B1F; --bg4: #232328;
+      --glass: rgba(255,255,255,.04); --border: rgba(255,255,255,.08); --border2: rgba(255,255,255,.14);
+      --a1: #D97757; --a2: #06D6A0; --text: #F5F3EF; --muted: #8B8680; --muted2: #A8A29A;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: var(--bg); color: var(--text); font-family: "Satoshi", sans-serif; min-height: 100vh; overflow-x: hidden; }
+    body::before { content: ""; position: fixed; inset: 0; pointer-events: none; z-index: 0;
+      background: radial-gradient(ellipse 80% 50% at 50% -20%, rgba(217,119,87,.08), transparent 60%),
+                  radial-gradient(ellipse 60% 40% at 80% 80%, rgba(6,214,160,.04), transparent 50%); }
+    a { color: inherit; }
+    :focus-visible { outline: 2px solid var(--a2); outline-offset: 2px; }
+
+    nav { position: sticky; top: 0; z-index: 100; height: 64px; padding: 0 5%; display: flex; align-items: center;
+      justify-content: space-between; background: rgba(7,8,12,.85); backdrop-filter: blur(24px); border-bottom: 1px solid var(--border); }
+    .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .logo img { width: 34px; height: 34px; border-radius: 9px; object-fit: contain; }
+    .logo-text { font-size: .9rem; font-weight: 700; letter-spacing: 1px; background: linear-gradient(135deg,#fff 40%,var(--a1));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .nav-right { display: flex; align-items: center; gap: 6px; }
+    .nav-link { padding: 8px 14px; border-radius: 8px; font-size: .82rem; font-weight: 500; color: var(--muted2); text-decoration: none; }
+    .nav-link:hover { color: var(--text); }
+    .nav-link.active { color: var(--a1); background: rgba(217,119,87,.08); }
+    .btn { display: inline-flex; align-items: center; gap: 7px; padding: 8px 16px; border-radius: 8px; font: 600 .82rem "Satoshi", sans-serif;
+      text-decoration: none; cursor: pointer; border: none; transition: transform .2s, border-color .2s, color .2s; }
+    .btn-accent { background: linear-gradient(135deg, var(--a1), #B85C3E); color: #fff; }
+    .btn-accent:hover { transform: translateY(-1px); }
+
+    header.page { position: relative; z-index: 1; padding: 48px 5% 24px; }
+    header.page h1 { font-size: clamp(1.9rem, 5vw, 2.8rem); font-weight: 700; letter-spacing: -1px; margin-bottom: 8px; }
+    header.page p { color: var(--muted2); font-weight: 300; }
+
+    .controls { position: relative; z-index: 1; padding: 8px 5% 28px; display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+    .search-box { flex: 1; min-width: 220px; display: flex; align-items: center; gap: 10px; background: var(--bg2);
+      border: 1px solid var(--border); border-radius: 10px; padding: 10px 16px; }
+    .search-box:focus-within { border-color: var(--border2); }
+    .search-box i { color: var(--muted); font-size: .85rem; }
+    .search-box input { flex: 1; background: transparent; border: none; outline: none; color: var(--text); font: .9rem "Satoshi", sans-serif; }
+    .search-box input::placeholder { color: var(--muted); }
+    select { padding: 10px 14px; border-radius: 10px; background: var(--bg2); border: 1px solid var(--border); color: var(--muted2);
+      font: .82rem "Satoshi", sans-serif; cursor: pointer; max-width: 180px; }
+    select:hover, select:focus { border-color: rgba(217,119,87,.3); color: var(--a1); }
+    select option { background: var(--bg2); color: var(--text); }
+
+    .grid { position: relative; z-index: 1; padding: 0 5% 40px; display: grid; gap: 20px; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); }
+    .card { background: var(--bg2); border: 1px solid var(--border); border-radius: 16px; overflow: hidden; display: flex; flex-direction: column;
+      transition: border-color .25s, background .25s, transform .25s; }
+    .card:hover { border-color: rgba(217,119,87,.25); background: var(--bg3); transform: translateY(-3px); }
+    .thumb { width: 100%; height: 140px; object-fit: cover; display: block; background: var(--bg3); }
+    .thumb-ph { height: 140px; display: flex; align-items: center; justify-content: center; font-size: 2.2rem; color: var(--border2);
+      background: linear-gradient(135deg, var(--bg3), var(--bg4)); }
+    .body { padding: 0 18px 18px; display: flex; flex-direction: column; flex: 1; }
+    .who { display: flex; align-items: flex-end; gap: 12px; margin-top: -24px; margin-bottom: 12px; }
+    .av { width: 52px; height: 52px; border-radius: 50%; object-fit: cover; border: 3px solid var(--bg2); flex-shrink: 0; background: var(--bg3); }
+    .av-ph { display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: .95rem; color: #fff;
+      background: linear-gradient(135deg, var(--a1), var(--a2)); }
+    .name { font-size: 1.02rem; font-weight: 600; line-height: 1.25; }
+    .role { font-size: .78rem; color: var(--muted2); margin-top: 2px; }
+    .place { font-size: .74rem; color: var(--muted); margin-bottom: 12px; min-height: 1em; }
+    .tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 14px; min-height: 24px; }
+    .tag { padding: 3px 10px; border-radius: 100px; background: rgba(217,119,87,.1); border: 1px solid rgba(217,119,87,.2); font-size: .68rem; color: #E8A87C; }
+    .stats { display: flex; gap: 16px; padding-top: 12px; margin-top: auto; border-top: 1px solid var(--border); font-size: .76rem; color: var(--muted2); }
+    .stats i { color: var(--muted); margin-right: 5px; }
+    .actions { display: flex; gap: 8px; margin-top: 14px; }
+    .act { flex: 1; display: inline-flex; align-items: center; justify-content: center; gap: 7px; padding: 9px 10px; border-radius: 9px;
+      font: 500 .8rem "Satoshi", sans-serif; text-decoration: none; transition: background .2s, border-color .2s; }
+    .act-profile { background: var(--glass); border: 1px solid var(--border2); color: var(--text); }
+    .act-profile:hover { border-color: var(--a1); color: var(--a1); }
+    .act-wa { background: rgba(37,211,102,.1); border: 1px solid rgba(37,211,102,.22); color: #25D366; }
+    .act-wa:hover { background: rgba(37,211,102,.2); }
+
+    .state { grid-column: 1 / -1; text-align: center; padding: 70px 20px; color: var(--muted); line-height: 1.7; }
+    .state i { display: block; font-size: 2.6rem; margin-bottom: 14px; color: var(--border2); }
+    .spinner { width: 34px; height: 34px; border-radius: 50%; border: 2px solid var(--border2); border-top-color: var(--a2); animation: spin .8s linear infinite; margin: 0 auto 14px; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .more-wrap { position: relative; z-index: 1; text-align: center; padding: 0 5% 80px; }
+    .btn-ghost { background: var(--glass); border: 1px solid var(--border2); color: var(--muted2); padding: 10px 24px; }
+    .btn-ghost:hover { border-color: var(--a1); color: var(--a1); }
+
+    @media (max-width: 520px) { .logo-text { display: none; } .grid { grid-template-columns: 1fr; } select { max-width: none; flex: 1; } }
+    @media (prefers-reduced-motion: reduce) { * { transition: none !important; animation-duration: 0s !important; } }
+  </style>
+</head>
+<body>
+  <nav>
+    <a href="index.html" class="logo"><img src="favicon.png" alt="" /><span class="logo-text">DevShowcase</span></a>
+    <div class="nav-right">
+      <a href="devshowcase-gallery.html" class="nav-link">Projects</a>
+      <a href="devshowcase-developers.html" class="nav-link active" aria-current="page">Developers</a>
+      <a href="index.html" class="btn btn-accent" id="navJoinBtn">Join free</a>
+      <a href="devshowcase-dashboard.html" class="btn btn-accent" id="navDashBtn" style="display:none">Dashboard</a>
+    </div>
+  </nav>
+
+  <header class="page">
+    <h1>Developers</h1>
+    <p id="summary">Loading developers...</p>
+  </header>
+
+  <div class="controls">
+    <div class="search-box">
+      <i class="fa-solid fa-magnifying-glass"></i>
+      <input type="text" id="q" placeholder="Search by name, skill, role or country..." aria-label="Search developers" />
+    </div>
+    <select id="role" aria-label="Filter by role"><option value="">All roles</option></select>
+    <select id="country" aria-label="Filter by country"><option value="">All countries</option></select>
+    <select id="sort" aria-label="Sort developers">
+      <option value="featured">Featured mix</option>
+      <option value="reactions">Most reactions</option>
+      <option value="projects">Most projects</option>
+      <option value="newest">Newest members</option>
+      <option value="active">Recently active</option>
+    </select>
+  </div>
+
+  <div class="grid" id="grid"><div class="state"><div class="spinner"></div>Loading developers...</div></div>
+  <div class="more-wrap" id="moreWrap" style="display:none"><button class="btn btn-ghost" id="moreBtn">Show more</button></div>
+
+  <script>
+    const _supabase = supabase.createClient(
+      "https://embhkmxkuprdjkspsdii.supabase.co",
+      "sb_publishable_B9vhC35VSzJ3VskrtSETYw_ueSS6p1e"
+    );
+    const PAGE = 24;
+    let devs = [], view = [], visible = PAGE;
+    const $ = (id) => document.getElementById(id);
+
+    const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) =>
+      ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+    const safeUrl = (u) => (/^https?:\/\//i.test(u || "") ? esc(u) : "");
+    const flag = (cc) => (/^[a-z]{2}$/i.test(cc || "")
+      ? String.fromCodePoint(...[...cc.toUpperCase()].map((c) => 127397 + c.charCodeAt(0))) : "");
+
+    // Same shuffle as the landing page: the order changes every 6 hours, not on every reload
+    function seededShuffle(arr, seed) {
+      const a = [...arr]; let s = seed;
+      const rand = () => { s = (s * 9301 + 49297) % 233280; return s / 233280; };
+      for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(rand() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; }
+      return a;
+    }
+
+    // Projects arrive newest first, so the first project seen for a developer is the latest one
+    function buildDevs(projects) {
+      const map = new Map();
+      for (const p of projects) {
+        if (!p.user_id) continue;
+        const rx = (p.likes || 0) + (p.fire || 0) + (p.clap || 0);
+        const created = new Date(p.created_at).getTime();
+        const touched = new Date(p.updated_at || p.created_at).getTime();
+        let d = map.get(p.user_id);
+        if (!d) {
+          d = { id: p.user_id, name: p.dev_name || "Developer", role: p.dev_role || "", avatar: p.dev_avatar_url || "",
+                wa: p.dev_whatsapp || "", country: p.country || "", cc: p.country_code || "",
+                projects: 0, reactions: 0, skills: new Map(), img: "", imgRx: -1, first: created, last: touched };
+          map.set(p.user_id, d);
+        }
+        d.projects++; d.reactions += rx;
+        d.first = Math.min(d.first, created); d.last = Math.max(d.last, touched);
+        if (!d.avatar && p.dev_avatar_url) d.avatar = p.dev_avatar_url;
+        if (!d.wa && p.dev_whatsapp) d.wa = p.dev_whatsapp;
+        if (!d.role && p.dev_role) d.role = p.dev_role;
+        if (!d.country && p.country) { d.country = p.country; d.cc = p.country_code || ""; }
+        if (p.image_url && rx > d.imgRx) { d.img = p.image_url; d.imgRx = rx; }
+        (p.tech_stack || "").split(",").map((t) => t.trim()).filter(Boolean).forEach((t) => {
+          const k = t.toLowerCase(); const e = d.skills.get(k);
+          e ? e.n++ : d.skills.set(k, { label: t, n: 1 });
+        });
+      }
+      return [...map.values()].map((d) => {
+        const all = [...d.skills.values()].sort((a, b) => b.n - a.n);
+        d.top = all.slice(0, 3).map((s) => s.label);
+        d.hay = [d.name, d.role, d.country, ...all.map((s) => s.label)].join(" ").toLowerCase();
+        return d;
+      });
+    }
+
+    const sorters = {
+      reactions: (a, b) => b.reactions - a.reactions || b.projects - a.projects,
+      projects: (a, b) => b.projects - a.projects || b.reactions - a.reactions,
+      newest: (a, b) => b.first - a.first,
+      active: (a, b) => b.last - a.last,
+    };
+
+    function apply() {
+      const q = $("q").value.toLowerCase().trim();
+      const role = $("role").value, country = $("country").value, sort = $("sort").value;
+      let list = devs.filter((d) => (!role || d.role === role) && (!country || d.country === country) && (!q || d.hay.includes(q)));
+      list = sort === "featured" ? seededShuffle(list, Math.floor(Date.now() / 21600000)) : [...list].sort(sorters[sort]);
+      view = list; visible = PAGE; render();
+    }
+
+    function card(d) {
+      const initials = esc(d.name.split(" ").map((w) => w[0]).join("").toUpperCase().slice(0, 2) || "D");
+      const thumb = safeUrl(d.img)
+        ? `<img class="thumb" src="${safeUrl(d.img)}" alt="" loading="lazy" onerror="this.outerHTML='<div class=&quot;thumb-ph&quot;><i class=&quot;fa-solid fa-code&quot;></i></div>'">`
+        : `<div class="thumb-ph"><i class="fa-solid fa-code"></i></div>`;
+      const av = safeUrl(d.avatar)
+        ? `<img class="av" src="${safeUrl(d.avatar)}" alt="" loading="lazy">`
+        : `<div class="av av-ph">${initials}</div>`;
+      const place = d.country ? `${flag(d.cc)} ${esc(d.country)}`.trim() : "";
+      const digits = (d.wa || "").replace(/[^0-9]/g, "");
+      const msg = encodeURIComponent(`Hi ${d.name}, I found your profile on DevShowcase and I'm interested in working with you!`);
+      const wa = digits.length >= 6
+        ? `<a class="act act-wa" href="https://wa.me/${digits}?text=${msg}" target="_blank" rel="noopener"><i class="fa-brands fa-whatsapp"></i> WhatsApp</a>` : "";
+      return `<article class="card">
+        ${thumb}
+        <div class="body">
+          <div class="who">${av}<div><div class="name">${esc(d.name)}</div><div class="role">${esc(d.role || "Developer")}</div></div></div>
+          <div class="place">${place}</div>
+          <div class="tags">${d.top.map((t) => `<span class="tag">${esc(t)}</span>`).join("")}</div>
+          <div class="stats">
+            <span><i class="fa-solid fa-folder-open"></i>${d.projects} ${d.projects === 1 ? "project" : "projects"}</span>
+            <span><i class="fa-solid fa-fire"></i>${d.reactions} ${d.reactions === 1 ? "reaction" : "reactions"}</span>
+          </div>
+          <div class="actions">
+            <a class="act act-profile" href="devshowcase-profile.html?dev=${encodeURIComponent(d.id)}"><i class="fa-regular fa-user"></i> View profile</a>
+            ${wa}
+          </div>
+        </div>
+      </article>`;
+    }
+
+    function render() {
+      const grid = $("grid");
+      const countries = new Set(view.map((d) => d.country).filter(Boolean)).size;
+      $("summary").textContent = view.length
+        ? `${view.length} ${view.length === 1 ? "developer" : "developers"}${countries ? ` from ${countries} ${countries === 1 ? "country" : "countries"}` : ""}`
+        : "No developers found";
+      if (!view.length) {
+        grid.innerHTML = `<div class="state"><i class="fa-solid fa-user-slash"></i>No developers match your search.<br>Try a different skill or clear the filters.</div>`;
+        $("moreWrap").style.display = "none"; return;
+      }
+      grid.innerHTML = view.slice(0, visible).map(card).join("");
+      $("moreWrap").style.display = view.length > visible ? "block" : "none";
+    }
+
+    function fillSelect(id, values) {
+      const sel = $(id);
+      [...new Set(values.filter(Boolean))].sort((a, b) => a.localeCompare(b))
+        .forEach((v) => { const o = document.createElement("option"); o.value = v; o.textContent = v; sel.appendChild(o); });
+    }
+
+    async function load() {
+      const { data, error } = await _supabase.from("showcase_projects")
+        .select("user_id,dev_name,dev_role,dev_whatsapp,dev_avatar_url,country,country_code,image_url,tech_stack,likes,fire,clap,created_at,updated_at")
+        .order("created_at", { ascending: false });
+      if (error) {
+        $("summary").textContent = "Could not load developers";
+        $("grid").innerHTML = `<div class="state"><i class="fa-solid fa-triangle-exclamation"></i>Failed to load developers.<br>Check your internet connection and try again.</div>`;
+        return;
+      }
+      devs = buildDevs(data || []);
+      fillSelect("role", devs.map((d) => d.role));
+      fillSelect("country", devs.map((d) => d.country));
+      apply();
+    }
+
+    let t; $("q").addEventListener("input", () => { clearTimeout(t); t = setTimeout(apply, 150); });
+    ["role", "country", "sort"].forEach((id) => $(id).addEventListener("change", apply));
+    $("moreBtn").addEventListener("click", () => { visible += PAGE; render(); });
+
+    (async () => {
+      try {
+        const { data } = await _supabase.auth.getSession();
+        if (data?.session) { $("navJoinBtn").style.display = "none"; $("navDashBtn").style.display = "inline-flex"; }
+      } catch (e) {}
+    })();
+    load();
+  </script>
+</body>
+</html>
