@@ -1204,7 +1204,7 @@ font-size: 0.72rem;
         grid-template-columns: 1fr;
       }
     }
-
+@media (max-width: 520px) { .nav-btn .lbl { display: none; } }
     @media (max-width: 480px) {
       .stats-strip {
         grid-template-columns: repeat(2, 1fr);
@@ -1276,7 +1276,7 @@ font-size: 0.72rem;
       <button class="btn btn-primary" onclick="openAuth('signup')">
         <i class="fa-solid fa-rocket"></i> Get Started
       </button>
-      <a href="devshowcase-developers.html" class="btn btn-ghost">Developers</a>
+     <a href="devshowcase-developers.html" class="nav-btn btn-ghost" style="text-decoration:none;"><i class="fa-solid fa-users"></i> <span class="lbl">Developers</span></a>
     </div>
   </nav>
 
