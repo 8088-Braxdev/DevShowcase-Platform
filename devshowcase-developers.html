@@ -56,7 +56,7 @@
     .search-box input { flex: 1; background: transparent; border: none; outline: none; color: var(--text); font: .9rem "Satoshi", sans-serif; }
     .search-box input::placeholder { color: var(--muted); }
     select { padding: 10px 14px; border-radius: 10px; background: var(--bg2); border: 1px solid var(--border); color: var(--muted2);
-      font: .82rem "Satoshi", sans-serif; cursor: pointer; max-width: 180px; }
+      font: .82rem "Satoshi", sans-serif; cursor: pointer; flex: 0 1 170px; min-width: 0; text-overflow: ellipsis; }
     select:hover, select:focus { border-color: rgba(217,119,87,.3); color: var(--a1); }
     select option { background: var(--bg2); color: var(--text); }
 
@@ -95,7 +95,15 @@
     .btn-ghost { background: var(--glass); border: 1px solid var(--border2); color: var(--muted2); padding: 10px 24px; }
     .btn-ghost:hover { border-color: var(--a1); color: var(--a1); }
 
-    @media (max-width: 520px) { .logo-text { display: none; } .grid { grid-template-columns: 1fr; } select { max-width: none; flex: 1; } }
+    .divider { grid-column: 1 / -1; display: flex; align-items: center; gap: 14px; color: var(--muted); font-size: .8rem; }
+    .divider::before, .divider::after { content: ""; flex: 1; height: 1px; background: var(--border); }
+    @media (max-width: 520px) {
+      .logo-text { display: none; }
+      .grid { grid-template-columns: 1fr; }
+      .search-box { flex: 1 1 100%; }
+      .controls select { flex: 1 1 calc(50% - 5px); }
+      #sort { flex-basis: 100%; }
+    }
     @media (prefers-reduced-motion: reduce) { * { transition: none !important; animation-duration: 0s !important; } }
   </style>
 </head>
@@ -104,7 +112,7 @@
     <a href="index.html" class="logo"><img src="favicon.png" alt="" /><span class="logo-text">DevShowcase</span></a>
     <div class="nav-right">
       <a href="devshowcase-gallery.html" class="nav-link">Projects</a>
-     
+
       <a href="index.html" class="btn btn-accent" id="navJoinBtn">Join free</a>
       <a href="devshowcase-dashboard.html" class="btn btn-accent" id="navDashBtn" style="display:none">Dashboard</a>
     </div>
@@ -140,7 +148,8 @@
       "sb_publishable_B9vhC35VSzJ3VskrtSETYw_ueSS6p1e"
     );
     const PAGE = 24;
-    let devs = [], view = [], visible = PAGE;
+    const TOP_N = 6; // size of the ranked Top group on the "Most reactions" and "Most projects" sorts
+    let devs = [], view = [], visible = PAGE, topCount = 0;
     const $ = (id) => document.getElementById(id);
 
     const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) =>
@@ -148,6 +157,15 @@
     const safeUrl = (u) => (/^https?:\/\//i.test(u || "") ? esc(u) : "");
     const flag = (cc) => (/^[a-z]{2}$/i.test(cc || "")
       ? String.fromCodePoint(...[...cc.toUpperCase()].map((c) => 127397 + c.charCodeAt(0))) : "");
+    // Country name -> code, used when a project has no country_code saved
+    const nameToCode = new Map();
+    try {
+      const names = new Intl.DisplayNames(["en"], { type: "region" });
+      for (let a = 65; a <= 90; a++) for (let b = 65; b <= 90; b++) {
+        const code = String.fromCharCode(a, b);
+        try { const n = names.of(code); if (n && n !== code) nameToCode.set(n.toLowerCase(), code); } catch (e) {}
+      }
+    } catch (e) {}
 
     // Same shuffle as the landing page: the order changes every 6 hours, not on every reload
     function seededShuffle(arr, seed) {
@@ -203,7 +221,15 @@
       const q = $("q").value.toLowerCase().trim();
       const role = $("role").value, country = $("country").value, sort = $("sort").value;
       let list = devs.filter((d) => (!role || d.role === role) && (!country || d.country === country) && (!q || d.hay.includes(q)));
-      list = sort === "featured" ? seededShuffle(list, Math.floor(Date.now() / 21600000)) : [...list].sort(sorters[sort]);
+      const seed = Math.floor(Date.now() / 21600000);
+      topCount = 0;
+      if (sort === "featured") list = seededShuffle(list, seed);
+      else if (sort === "reactions" || sort === "projects") {
+        // Capped Top group first, then everyone else in the rotating mix so newer developers stay visible
+        const ranked = [...list].sort(sorters[sort]);
+        topCount = Math.min(TOP_N, ranked.length);
+        list = [...ranked.slice(0, topCount), ...seededShuffle(ranked.slice(topCount), seed)];
+      } else list = [...list].sort(sorters[sort]);
       view = list; visible = PAGE; render();
     }
 
@@ -215,7 +241,7 @@
       const av = safeUrl(d.avatar)
         ? `<img class="av" src="${safeUrl(d.avatar)}" alt="" loading="lazy">`
         : `<div class="av av-ph">${initials}</div>`;
-      const place = d.country ? `${flag(d.cc)} ${esc(d.country)}`.trim() : "";
+      const place = d.country ? `${flag(d.cc || nameToCode.get(d.country.toLowerCase()))} ${esc(d.country)}`.trim() : "";
       const digits = (d.wa || "").replace(/[^0-9]/g, "");
       const msg = encodeURIComponent(`Hi ${d.name}, I found your profile on DevShowcase and I'm interested in working with you!`);
       const wa = digits.length >= 6
@@ -248,7 +274,10 @@
         grid.innerHTML = `<div class="state"><i class="fa-solid fa-user-slash"></i>No developers match your search.<br>Try a different skill or clear the filters.</div>`;
         $("moreWrap").style.display = "none"; return;
       }
-      grid.innerHTML = view.slice(0, visible).map(card).join("");
+      const cards = view.slice(0, visible).map(card);
+      if (topCount && view.length > topCount && visible > topCount)
+        cards.splice(topCount, 0, `<div class="divider">More developers</div>`);
+      grid.innerHTML = cards.join("");
       $("moreWrap").style.display = view.length > visible ? "block" : "none";
     }
 
