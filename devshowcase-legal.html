@@ -464,12 +464,11 @@
               <strong>Profile Information</strong> — Your role, bio, skills,
               WhatsApp number, GitHub, LinkedIn, and website links
             </li>
-            <li><strong>Location Data</strong> — Your approximate location (city and country), and the coordinates it
-              was derived from, detected via GPS (with your permission) or IP address. Coordinates are stored privately
-              and are never shown publicly</li>
-            <li>
-              <strong>Project Data</strong> — Project names, descriptions,
-              screenshots, tech stack, and live links you upload
+            <li><strong>Location Data</strong> — Your approximate location (city and country) and approximate
+              coordinates (rounded to about 1 km), detected via GPS only with your permission. Coordinates are stored
+              privately and are never shown publicly</li>
+            <strong>Project Data</strong> — Project names, descriptions,
+            screenshots, tech stack, and live links you upload
             </li>
             <li>
               <strong>Usage Data</strong> — Reactions, comments, and
@@ -545,10 +544,7 @@
               care assistant. Only your chat messages are processed — we do
               not share personal data.
             </li>
-            <li>
-              <span class="highlight">ipapi.co</span> — Used for IP-based
-              location detection when GPS is not available.
-            </li>
+
             <li><span class="highlight">Google &amp; GitHub</span> — If you choose to sign in with them, they share your
               name, email and profile picture with us.</li>
             <li><span class="highlight">Vercel</span> — Hosts the website and our server functions, so they process your
@@ -572,13 +568,12 @@
           <p>DevShowcase uses your location to help clients find developers in their region.</p>
           <ul>
             <li>We request GPS permission from your browser when you create an account, or when you sign in with Google
-              or GitHub and have no saved location — you can
-              <strong>deny</strong> it and the platform still works
+              or GitHub and have no saved location. We ask once per device, and you can <strong>deny</strong> it and the
+              platform still works</li>
+            <li>Your coordinates are rounded to about 1 km and converted into a city and country using OpenStreetMap
             </li>
-            <li>Your coordinates are converted into a city and country using OpenStreetMap</li>
-            <li>If you sign in with Google or GitHub and deny GPS, we may estimate your location from your IP address
-            </li>
-            <li>Your exact coordinates are never shown publicly — only your country appears on your public profile</li>
+            <li>If you deny permission, we do not estimate or store your location</li>
+            <li>Your coordinates are never shown publicly. Only your country appears on your public profile</li>
             <li>To change or remove your saved location, contact us</li>
           </ul>
         </div>
@@ -657,6 +652,8 @@
               reactions as a guest are linked to your browser. Your AI chat lasts only while the page is open</li>
             <li><strong>Supabase session</strong> — Stored in your browser to keep you signed in to your developer
               account</li>
+            <li><strong>Location prompt marker</strong> — A small item in localStorage that remembers we already asked
+              for location permission on this device, so we don't ask again</li>
           </ul>
           <p style="margin-top: 12px">
             We do not use advertising cookies or tracking pixels.

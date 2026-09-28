@@ -1362,6 +1362,14 @@
     .auth-legal a:hover {
       color: var(--a1);
     }
+
+    #navAuth {
+      visibility: hidden;
+    }
+
+    #navAuth.ready {
+      visibility: visible;
+    }
   </style>
 </head>
 
@@ -1881,24 +1889,7 @@
       );
     }
 
-    // Mbadala wa IP kama Geocoding ya juu ikishindwa
-    async function fallbackToIP() {
-      try {
-        const res = await fetch("https://ipapi.co/json/");
-        const data = await res.json();
-        userLocation = {
-          country: data.country_name,
-          city: data.city,
-          latitude: data.latitude,
-          longitude: data.longitude,
-        };
-        document.getElementById("locationText").textContent =
-          `${data.city}, ${data.country_name}`;
-        document.getElementById("locationBadge").style.display = "flex";
-      } catch (e) {
-        console.log("All location methods failed.");
-      }
-    }
+
 
     // ================================================
     // AUTH MODAL
@@ -2175,12 +2166,9 @@
     // ================================================
     async function checkSession() {
       const { data } = await _supabase.auth.getSession();
-      if (!data?.session) return;
+      if (!data?.session) { document.getElementById('navAuth').classList.add('ready'); return; }
 
-      // Fetch fresh user data
-      const { data: userData } = await _supabase.auth.getUser();
-      const user = userData?.user;
-      if (!user) return;
+      const user = data.session.user;
 
       const meta = user.user_metadata || {};
       const provider = user.app_metadata?.provider;
@@ -2208,12 +2196,19 @@
         <a class="btn btn-primary nav-account" href="devshowcase-dashboard.html">
           ${avatarHTML}<span>Dashboard</span>
         </a>`;
-
+      navRight.classList.add('ready');
       document.querySelectorAll('[onclick="openAuth(\'signup\')"]').forEach(btn => {
         btn.removeAttribute('onclick');
         btn.innerHTML = '<i class="fa-solid fa-table-columns"></i> Go to Dashboard';
         btn.addEventListener('click', () => window.location.href = 'devshowcase-dashboard.html');
       });
+      const cta = document.querySelector('.cta-box');
+      if (cta) cta.innerHTML = `
+  <h2>Welcome back 👋</h2>
+  <p>Your dashboard is ready. Add a new project or update your profile.</p>
+  <a class="btn btn-primary btn-hero" href="devshowcase-dashboard.html" style="margin:0 auto">
+    <i class="fa-solid fa-table-columns"></i> Go to Dashboard
+  </a>`;
     }
 
     // ================================================
@@ -2342,59 +2337,55 @@
       hint.style.color = colors[score - 1];
       hint.textContent = labels[score - 1];
     }
-    //Detect location when user enters via Github
-    async function detectAndSaveLocation(userId) {
+    // ================================================
+    // LOCATION DETECTION (signup)
+    // GPS tu, kwa ruhusa. Ikikataliwa au ikishindwa, hatuhifadhi chochote.
+    // ================================================
+    async function detectLocation() {
+      const badge = document.getElementById("locationBadge");
+      const text = document.getElementById("locationText");
+
+      // Tayari tumepata, usiombe tena mtu akirudi step 2
+      if (userLocation) return;
+
+      userLocation = null;
+      badge.style.display = "none";
+
+      if (!navigator.geolocation) return;
+
       try {
-        // Jaribu GPS kwanza
-        if (navigator.geolocation) {
-          navigator.geolocation.getCurrentPosition(
-            async (position) => {
-              const { latitude, longitude } = position.coords;
-              const res = await fetch(
-                `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`
-              );
-              const data = await res.json();
-              const city = data.address.city || data.address.town || data.address.village || '';
-              const country = data.address.country || '';
+        const position = await new Promise((resolve, reject) =>
+          navigator.geolocation.getCurrentPosition(resolve, reject, {
+            enableHighAccuracy: false,
+            timeout: 15000,
+            maximumAge: 600000,
+          })
+        );
 
-              await _supabase.auth.updateUser({
-                data: {
-                  location: `${city}, ${country}`,
-                  country,
-                  latitude,
-                  longitude
-                }
-              });
+        // Tarakimu 2 = takriban kilomita 1, inatosha kwa mji
+        const latitude = Number(position.coords.latitude.toFixed(2));
+        const longitude = Number(position.coords.longitude.toFixed(2));
 
-              // Pia update profiles table kama unatumia
-              await _supabase.from('profiles').update({
-                location: `${city}, ${country}`,
-                country,
-              }).eq('id', userId);
-            },
-            async () => {
-              // GPS ilikataliwa — fallback kwa IP
-              const res = await fetch('https://ipapi.co/json/');
-              const data = await res.json();
+        const res = await fetch(
+          `https://nominatim.openstreetmap.org/reverse?format=jsonv2&zoom=10&accept-language=en&lat=${latitude}&lon=${longitude}`
+        );
+        if (!res.ok) throw new Error("reverse geocoding failed");
 
-              await _supabase.auth.updateUser({
-                data: {
-                  location: `${data.city}, ${data.country_name}`,
-                  country: data.country_name,
-                  latitude: data.latitude,
-                  longitude: data.longitude
-                }
-              });
+        const { address = {} } = await res.json();
+        const city = address.city || address.town || address.village || "";
+        const country = address.country || "";
+        if (!country) return;
 
-              await _supabase.from('profiles').update({
-                location: `${data.city}, ${data.country_name}`,
-                country: data.country_name,
-              }).eq('id', userId);
-            }
-          );
-        }
-      } catch (e) {
-        console.log('Location save failed:', e);
+        userLocation = { city, country, latitude, longitude };
+
+        text.textContent = city ? `${city}, ${country}` : country;
+        badge.style.display = "flex";
+      } catch (err) {
+        // Ruhusa imekataliwa, muda umeisha, au mtandao umekwama:
+        // hatuhifadhi chochote na signup inaendelea bila location.
+        userLocation = null;
+        badge.style.display = "none";
+        console.info("Location skipped:", err?.message || err);
       }
     }
     const categoryIcons = {
