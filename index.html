@@ -1204,7 +1204,7 @@ font-size: 0.72rem;
         grid-template-columns: 1fr;
       }
     }
-@media (max-width: 520px) { .nav-btn .lbl { display: none; } }
+
     @media (max-width: 480px) {
       .stats-strip {
         grid-template-columns: repeat(2, 1fr);
@@ -1236,20 +1236,19 @@ font-size: 0.72rem;
         padding-right: 4%;
       }
 
-      .nav-right span {
-        display: none;
-      }
-
-      .nav-user-pill {
-        background: transparent !important;
-        border: none !important;
-        padding: 0 !important;
-        gap: 0 !important;
-      }
-
-      .nav-user-name {
-        display: none;
-      }
+.nav-right { display: flex; align-items: center; gap: 8px; }
+.nav-dev { padding: 9px 14px; }
+.nav-account { padding: 5px 16px 5px 5px; gap: 9px; border-radius: 100px; }
+.nav-account .av {
+  width: 28px; height: 28px; border-radius: 50%; object-fit: cover; flex-shrink: 0;
+  background: rgba(255,255,255,.22); display: flex; align-items: center; justify-content: center;
+  font-size: .78rem; font-weight: 700; color: #fff;
+}
+@media (max-width: 520px) {
+  .nav-dev .lbl { display: none; }
+  .nav-dev { padding: 9px 12px; }
+  .nav-account { padding: 4px 12px 4px 4px; }
+}
     }
   </style>
 </head>
@@ -1272,12 +1271,14 @@ font-size: 0.72rem;
            <div class="logo-icon"><img src="favicon.png" style="width:100%;height:100%;object-fit:contain;border-radius:9px;"></div>
       <span class="logo-text">DevShowcase</span>
     </a>
-    <div class="nav-right" id="navAuthSection">
-      <button class="btn btn-primary" onclick="openAuth('signup')">
-        <i class="fa-solid fa-rocket"></i> Get Started
-      </button>
-     <a href="devshowcase-developers.html" class="nav-btn btn-ghost" style="text-decoration:none;"><i class="fa-solid fa-users"></i> <span class="lbl">Developers</span></a>
-    </div>
+<div class="nav-right">
+  <a href="devshowcase-developers.html" class="btn btn-ghost nav-dev"><i class="fa-solid fa-users"></i> <span class="lbl">Developers</span></a>
+  <div id="navAuth">
+    <button class="btn btn-primary" onclick="openAuth('signup')">
+      <i class="fa-solid fa-rocket"></i> Get Started
+    </button>
+  </div>
+</div>
   </nav>
 
   <!-- HERO -->
@@ -2066,7 +2067,7 @@ async function forgotPassword() {
 
       const meta = user.user_metadata || {};
       const provider = user.app_metadata?.provider;
-      const navRight = document.querySelector('.nav-right');
+   const navRight = document.getElementById('navAuth');
 
       let shortName = '';
       if ((provider === 'github' || provider === 'google') && !meta.location) {
@@ -2079,20 +2080,17 @@ async function forgotPassword() {
         shortName = meta.full_name?.split(' ')[0] || user.email?.split('@')[0] || 'Developer';
       }
 
-      const avatarUrl = meta.avatar_url;
+          const avatarUrl = /^https?:\/\//i.test(meta.avatar_url || '') ? meta.avatar_url : '';
+      const first = Array.from(shortName)[0] || 'D';
+      const initial = /[<>&"']/.test(first) ? 'D' : first.toUpperCase();
       const avatarHTML = avatarUrl
-        ? `<img src="${avatarUrl}" style="width:32px;height:32px;border-radius:50%;object-fit:cover;">`
-        : `<div style="width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,var(--a1),var(--a2));display:flex;align-items:center;justify-content:center;font-size:0.8rem;font-weight:700;color:#fff;">${shortName[0].toUpperCase()}</div>`;
+        ? `<img class="av" src="${avatarUrl.replace(/"/g, '&quot;')}" alt="">`
+        : `<div class="av">${initial}</div>`;
 
       navRight.innerHTML = `
-          <div class="nav-user-pill" style="display:flex;align-items:center;gap:8px;padding:4px 12px 4px 4px;background:var(--glass);border:1px solid var(--border2);border-radius:100px;">
-        ${avatarHTML}
-      <span class="nav-user-name" style="font-size:0.82rem;color:var(--text);font-weight:500;">${shortName}</span>
-    </div>
-    <button class="btn btn-primary" onclick="window.location.href='devshowcase-dashboard.html'">
-      <i class="fa-solid fa-table-columns"></i> Dashboard
-    </button>
-  `;
+        <a class="btn btn-primary nav-account" href="devshowcase-dashboard.html">
+          ${avatarHTML}<span>Dashboard</span>
+        </a>`;
 
       document.querySelectorAll('[onclick="openAuth(\'signup\')"]').forEach(btn => {
         btn.removeAttribute('onclick');
