@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /api/
+Disallow: /devshowcase-dashboard.html
+
+Sitemap: https://devshowcase.braxcode.com/sitemap.xml
