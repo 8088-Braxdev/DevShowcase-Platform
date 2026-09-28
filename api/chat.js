@@ -1,15 +1,75 @@
 // api/chat.js — Vercel Serverless Function
+const LIMITS = { perMinute: 10, perHour: 60 }; // kwa kila IP
+const MAX_MESSAGE_CHARS = 1000;
+const MAX_HISTORY_ITEMS = 6;
+const MAX_HISTORY_CHARS = 1000;
 
+// In-memory: ni ya instance moja, na huisha inapo-restart
+const hits = globalThis.__chatHits || (globalThis.__chatHits = new Map());
+
+function getIP(req) {
+  return (
+    req.headers["x-real-ip"] ||
+    (req.headers["x-forwarded-for"] || "").split(",")[0].trim() ||
+    "unknown"
+  );
+}
+
+function rateLimit(ip) {
+  const now = Date.now();
+  const minuteAgo = now - 60 * 1000;
+  const hourAgo = now - 60 * 60 * 1000;
+
+  // safisha kumbukumbu isikue bila mwisho
+  if (hits.size > 5000) {
+    for (const [k, v] of hits) {
+      if (v[v.length - 1] < hourAgo) hits.delete(k);
+    }
+  }
+
+  const arr = (hits.get(ip) || []).filter((t) => t > hourAgo);
+  const inMinute = arr.filter((t) => t > minuteAgo);
+
+  if (inMinute.length >= LIMITS.perMinute || arr.length >= LIMITS.perHour) {
+    const resetAt =
+      inMinute.length >= LIMITS.perMinute ? inMinute[0] + 60 * 1000 : arr[0] + 60 * 60 * 1000;
+    hits.set(ip, arr);
+    return { ok: false, retryAfter: Math.max(1, Math.ceil((resetAt - now) / 1000)) };
+  }
+
+  arr.push(now);
+  hits.set(ip, arr);
+  return { ok: true };
+}
 export default async function handler(req, res) {
   if (req.method !== "POST") {
     return res.status(405).json({ error: "Method not allowed" });
   }
 
-  const { message, history = [] } = req.body;
+  const limit = rateLimit(getIP(req));
+  if (!limit.ok) {
+    res.setHeader("Retry-After", String(limit.retryAfter));
+    return res.status(429).json({
+      error: `Too many messages. Please wait ${limit.retryAfter}s and try again.`,
+      retryAfter: limit.retryAfter,
+    });
+  }
+
+  const body = req.body || {};
+  const message = typeof body.message === "string" ? body.message.trim() : "";
 
   if (!message) {
     return res.status(400).json({ error: "No message provided" });
   }
+  if (message.length > MAX_MESSAGE_CHARS) {
+    return res.status(400).json({ error: `Message too long (max ${MAX_MESSAGE_CHARS} characters)` });
+  }
+
+  // history: ruhusu user/assistant tu, maandishi tu, kwa urefu uliopunguzwa
+  const history = (Array.isArray(body.history) ? body.history : [])
+    .filter((m) => m && (m.role === "user" || m.role === "assistant") && typeof m.content === "string")
+    .slice(-MAX_HISTORY_ITEMS)
+    .map((m) => ({ role: m.role, content: m.content.slice(0, MAX_HISTORY_CHARS) }));
 
   const keys = [
     process.env.GROQ_KEY_1,
@@ -118,35 +178,27 @@ BOUNDARIES
   }
 
   try {
-    let groqRes = await callGroq(apiKey, "openai/gpt-oss-120b");
+    const groqRes = await callGroq(apiKey, "openai/gpt-oss-120b");
 
     if (!groqRes.ok) {
       const errData = await groqRes.json().catch(() => ({}));
+      console.error("Groq primary failed:", groqRes.status, errData.error?.message);
 
       if (keys.length > 1) {
         const fallbackKey = keys[(keyIndex + 1) % keys.length];
         const retryRes = await callGroq(fallbackKey, "llama-3.3-70b-versatile");
-
         if (retryRes.ok) {
           const retryData = await retryRes.json();
-          return res.status(200).json({
-            reply: retryData.choices[0].message.content,
-            key_used: "fallback",
-          });
+          return res.status(200).json({ reply: retryData.choices?.[0]?.message?.content || "" });
         }
+        console.error("Groq fallback failed:", retryRes.status);
       }
 
-      return res.status(groqRes.status).json({
-        error: errData.error?.message || "Groq API error",
-      });
+      return res.status(503).json({ error: "DevAssist is busy right now. Please try again in a moment." });
     }
 
     const data = await groqRes.json();
-    return res.status(200).json({
-      reply: data.choices[0].message.content,
-      key_used: keyIndex,
-    });
-
+    return res.status(200).json({ reply: data.choices?.[0]?.message?.content || "" });
   } catch (err) {
     console.error("DevAssist API error:", err);
     return res.status(500).json({ error: "Internal server error" });
