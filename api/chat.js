@@ -2,7 +2,7 @@
 const LIMITS = { perMinute: 10, perHour: 60 }; // kwa kila IP
 const MAX_MESSAGE_CHARS = 1000;
 const MAX_HISTORY_ITEMS = 6;
-const MAX_HISTORY_CHARS = 1000;
+const MAX_HISTORY_CHARS = 2000;
 
 // In-memory: ni ya instance moja, na huisha inapo-restart
 const hits = globalThis.__chatHits || (globalThis.__chatHits = new Map());
