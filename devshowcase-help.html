@@ -473,7 +473,7 @@
 
   <div class="input-area">
     <div class="input-row">
-      <textarea id="inp" placeholder="Ask anything..." rows="1" onkeydown="handleKey(event)"
+      <textarea id="inp" maxlength="1000" placeholder="Ask anything..." rows="1" onkeydown="handleKey(event)"
         oninput="resize(this)"></textarea>
       <button class="send-btn" id="sendBtn" onclick="send()">
         <i class="fa-solid fa-paper-plane"></i>
@@ -482,7 +482,7 @@
     <div class="input-hint">
       Powered by <a href="https://braxcode.com" style="color:var(--a1);text-decoration:none;">BraxCode Digitals
         Foundation</a>
-      <i class="fa solid fa-bolt"></i>
+      <i class="fa-solid fa-bolt"></i>
     </div>
   </div>
 
@@ -555,16 +555,21 @@ function addMsgHTML(html, cls) {
 }
     // ── AI call → /api/chat (Vercel serverless) ──────────────────────────────
 
-    async function callAI(message) {
-      var res = await fetch('/api/chat', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ message: message, history: chatHistory })
-      });
-      if (!res.ok) throw new Error('API ' + res.status);
-      var data = await res.json();
-      return data.reply;
-    }
+async function callAI(message) {
+  var res = await fetch('/api/chat', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    // history bila ujumbe wa sasa, server unauongeza wenyewe
+    body: JSON.stringify({ message: message, history: chatHistory.slice(0, -1) })
+  });
+  var data = await res.json().catch(function () { return {}; });
+  if (!res.ok) {
+    var err = new Error(data.error || ('API ' + res.status));
+    err.status = res.status;
+    throw err;
+  }
+  return data.reply || 'Sorry, I could not come up with an answer. Please try again.';
+}
 
     // ── Main send ─────────────────────────────────────────────────────────────
 async function send() {
@@ -592,13 +597,13 @@ async function send() {
     reply = await callAI(text);
   } catch (err) {
     hideTyping();
-    addMsg(
-      '⚠️ Sorry, internet connection problem. Try again or Contact us: wa.me/255618811359',
-      'msg error'
-    );
+    chatHistory.pop(); // ondoa ujumbe uliofeli
+    var friendly = (err.status === 429 || err.status === 400 || err.status === 503)
+      ? '⚠️ ' + err.message
+      : '⚠️ Sorry, internet connection problem. Try again or Contact us: wa.me/255618811359';
+    addMsg(friendly, 'msg error');
     isBusy = false;
     document.getElementById('sendBtn').disabled = false;
-    // inp.focus() imeondolewa hapa — keyboard isijifungue baada ya error
     return;
   }
 
