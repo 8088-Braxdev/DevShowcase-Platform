@@ -963,7 +963,7 @@ body::before {
         transform: rotate(360deg);
       }
     }
-
+@media (max-width: 520px) { .nav-btn .lbl { display: none; } }
     /* MOBILE */
     @media(max-width:768px) {
       .gallery {
@@ -1045,7 +1045,7 @@ body::before {
       <a href="devshowcase-dashboard.html" class="nav-btn btn-accent" id="navDashBtn" style="display:none;">
         <i class="fa-solid fa-grid-2"></i> Dashboard
       </a>
-      <a href="devshowcase-developers.html" class="btn btn-ghost">Developers</a>
+   <a href="devshowcase-developers.html" class="nav-btn btn-ghost" style="text-decoration:none;"><i class="fa-solid fa-users"></i> <span class="lbl">Developers</span></a>
     </div>
   </nav>
 
