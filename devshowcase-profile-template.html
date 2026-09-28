@@ -1143,6 +1143,7 @@
         joined: first.created_at,
         avatar_url: first.dev_avatar_url || "",
         user_id: first.user_id,
+        bio: (projects.find((p) => p.dev_bio) || {}).dev_bio || "",
       };
 
       renderProfile();
@@ -1217,6 +1218,7 @@
           month: "long",
           year: "numeric",
         });
+      document.getElementById("profileBio").textContent = d.bio;
 
       // WhatsApp
       const waNum = (d.whatsapp || "").replace(/[^0-9]/g, "");
