@@ -1300,57 +1300,59 @@ body::before {
     // ================================================
     // REACTIONS
     // ================================================
-    async function react(projectId, field, btn) {
-      const reactionKey = field === 'likes' ? 'like' : field; // 'like', 'fire', 'clap'
-      const project = allProjects.find(p => p.id === projectId);
-      if (!project) return;
+function esc(s) {
+  return String(s ?? '').replace(/[&<>"']/g, c =>
+    ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+}
 
-      const hasReacted = userReactions[projectId] && userReactions[projectId][reactionKey];
-      const span = btn.querySelector('span');
-      let newVal;
+async function react(projectId, field, btn) {
+  const reactionKey = field === 'likes' ? 'like' : field; // 'like', 'fire', 'clap'
+  const project = allProjects.find(p => p.id === projectId);
+  if (!project) return;
 
-      if (hasReacted) {
-        // --- 1. UN-LIKE (TIKTOK STYLE) ---
-        newVal = Math.max(0, (project[field] || 0) - 1);
+  const hasReacted = userReactions[projectId] && userReactions[projectId][reactionKey];
+  const span = btn.querySelector('span');
+  let newVal;
 
-        // Punguza count kwenye mradi
-        await _supabase.from('showcase_projects').update({ [field]: newVal }).eq('id', projectId);
-        // Futa rekodi kule project_reactions table
-        await _supabase.from('project_reactions').delete().eq('project_id', projectId).eq('user_id', currentUserId).eq('reaction_type', reactionKey);
+  if (hasReacted) {
+    // UN-LIKE
+    newVal = Math.max(0, (project[field] || 0) - 1);
+    await _supabase.rpc('react_to_project', { p_id: projectId, p_type: field, p_delta: -1 });
+    await _supabase.from('project_reactions').delete()
+      .eq('project_id', projectId).eq('user_id', currentUserId).eq('reaction_type', reactionKey);
 
-        project[field] = newVal;
-        userReactions[projectId][reactionKey] = false;
-        btn.classList.remove('reacted');
-      } else {
-        // --- 2. LIKE MPYA ---
-        newVal = (project[field] || 0) + 1;
+    project[field] = newVal;
+    userReactions[projectId][reactionKey] = false;
+    btn.classList.remove('reacted');
+  } else {
+    // LIKE MPYA
+    newVal = (project[field] || 0) + 1;
+    await _supabase.rpc('react_to_project', { p_id: projectId, p_type: field, p_delta: 1 });
+    await _supabase.from('project_reactions').insert({
+      project_id: projectId, user_id: currentUserId, reaction_type: reactionKey
+    });
 
-        // Ongeza count kwenye mradi
-        await _supabase.from('showcase_projects').update({ [field]: newVal }).eq('id', projectId);
-        // Weka rekodi mpya ya ushindi
-        await _supabase.from('project_reactions').insert({ project_id: projectId, user_id: currentUserId, reaction_type: reactionKey });
+    project[field] = newVal;
+    if (!userReactions[projectId]) userReactions[projectId] = {};
+    userReactions[projectId][reactionKey] = true;
+    btn.classList.add('reacted');
 
-        project[field] = newVal;
-        if (!userReactions[projectId]) userReactions[projectId] = {};
-        userReactions[projectId][reactionKey] = true;
-        btn.classList.add('reacted');
-
-        // NOTIFICATION
-        if (project.user_id && project.user_id !== currentUserId) {
-   const reactionLabel = field === 'likes' ? 'liked' : field === 'fire' ? 'reacted 🔥 to' : 'clapped for';
-await _supabase.from('notifications').insert({
-  user_id: project.user_id,
-  type: 'reaction',
-  message: `Someone ${reactionLabel} <strong>${project.project_name}</strong>`,
-  is_read: false
-});
-        }
-      }
-
-      if (span) span.textContent = newVal;
-      if (navigator.vibrate) navigator.vibrate(30);
-      updateStats();
+    // NOTIFICATION
+    if (project.user_id && project.user_id !== currentUserId) {
+      const reactionLabel = field === 'likes' ? 'liked' : field === 'fire' ? 'reacted 🔥 to' : 'clapped for';
+      await _supabase.from('notifications').insert({
+        user_id: project.user_id,
+        type: 'reaction',
+        message: `Someone ${reactionLabel} <strong>${esc(project.project_name)}</strong>`,
+        is_read: false
+      });
     }
+  }
+
+  if (span) span.textContent = newVal;
+  if (navigator.vibrate) navigator.vibrate(30);
+  updateStats();
+}
 
 
     // ================================================
@@ -1472,8 +1474,8 @@ await _supabase.from('notifications').insert({
             return `<div class="comment-item">
           <div class="comment-av">${ini}</div>
           <div class="comment-content">
-            <div class="comment-name">${c.commenter_name || 'Anonymous'} <span style="color:var(--muted);font-size:0.7rem;">${c.commenter_role || ''}</span></div>
-            <div class="comment-text">${c.comment_text}</div>
+            <div class="comment-name">${esc(c.commenter_name) || 'Anonymous'}<span style="color:var(--muted);font-size:0.7rem;">${esc(c.commenter_role) || ''}</span></div>
+            <div class="comment-text">${esc(c.comment_text)}</div>
             <div class="comment-time">${date}</div>
           </div>
         </div>`;
@@ -1539,8 +1541,8 @@ await _supabase.from('notifications').insert({
       <div class="comment-item">
         <div class="comment-av">${initials}</div>
         <div class="comment-content">
-          <div class="comment-name">${c.commenter_name || 'Anonymous'} <span style="color:var(--muted);font-weight:300;font-size:0.72rem;">${c.commenter_role || ''}</span></div>
-          <div class="comment-text">${c.comment_text}</div>
+          <div class="comment-name">${esc(c.commenter_name) || 'Anonymous'} <span style="color:var(--muted);font-weight:300;font-size:0.72rem;">${esc(c.commenter_role) || ''}</span></div>
+          <div class="comment-text">${esc(c.comment_text)}</div>
           <div class="comment-time">${date}</div>
         </div>
       </div>
@@ -1572,8 +1574,7 @@ await _supabase.from('notifications').insert({
         await _supabase.from('notifications').insert({
           user_id: project.user_id,
           type: 'comment',
-          message: `<strong>${name}</strong> commented on your project <strong>${project.project_name}</strong>: "${text.slice(0, 60)}${text.length > 60 ? '...' : ''}"`,
-          is_read: false
+          message: `<strong>${esc(name)}</strong> commented on your project <strong>${esc(project.project_name)}</strong>: "${esc(text.slice(0, 60))}${text.length > 60 ? '...' : ''}"`,
         });
       }
     }
