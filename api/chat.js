@@ -32,9 +32,14 @@ function rateLimit(ip) {
 
   if (inMinute.length >= LIMITS.perMinute || arr.length >= LIMITS.perHour) {
     const resetAt =
-      inMinute.length >= LIMITS.perMinute ? inMinute[0] + 60 * 1000 : arr[0] + 60 * 60 * 1000;
+      inMinute.length >= LIMITS.perMinute
+        ? inMinute[0] + 60 * 1000
+        : arr[0] + 60 * 60 * 1000;
     hits.set(ip, arr);
-    return { ok: false, retryAfter: Math.max(1, Math.ceil((resetAt - now) / 1000)) };
+    return {
+      ok: false,
+      retryAfter: Math.max(1, Math.ceil((resetAt - now) / 1000)),
+    };
   }
 
   arr.push(now);
@@ -62,19 +67,28 @@ export default async function handler(req, res) {
     return res.status(400).json({ error: "No message provided" });
   }
   if (message.length > MAX_MESSAGE_CHARS) {
-    return res.status(400).json({ error: `Message too long (max ${MAX_MESSAGE_CHARS} characters)` });
+    return res
+      .status(400)
+      .json({
+        error: `Message too long (max ${MAX_MESSAGE_CHARS} characters)`,
+      });
   }
 
   // history: ruhusu user/assistant tu, maandishi tu, kwa urefu uliopunguzwa
   const history = (Array.isArray(body.history) ? body.history : [])
-    .filter((m) => m && (m.role === "user" || m.role === "assistant") && typeof m.content === "string")
+    .filter(
+      (m) =>
+        m &&
+        (m.role === "user" || m.role === "assistant") &&
+        typeof m.content === "string",
+    )
     .slice(-MAX_HISTORY_ITEMS)
-    .map((m) => ({ role: m.role, content: m.content.slice(0, MAX_HISTORY_CHARS) }));
+    .map((m) => ({
+      role: m.role,
+      content: m.content.slice(0, MAX_HISTORY_CHARS),
+    }));
 
-  const keys = [
-    process.env.GROQ_KEY_1,
-    process.env.GROQ_KEY_2,
-  ].filter(Boolean);
+  const keys = [process.env.GROQ_KEY_1, process.env.GROQ_KEY_2].filter(Boolean);
 
   if (keys.length === 0) {
     return res.status(500).json({ error: "No API keys configured" });
@@ -128,7 +142,7 @@ PLATFORM FEATURES
 - **Gallery** — browse, search by name or tech stack, filter by category (Web, Mobile, AI, Design)
 - **Dashboard** — add, edit, delete projects, manage your profile, view notifications via the bell icon
 - **Developer Profile** — name, role, bio, skills, WhatsApp, GitHub, LinkedIn, personal website, avatar
-- **Reactions** — 👍 Like, 🔥 Fire, 👏 Clap (more reactions = higher gallery visibility)
+- **Reactions** — 👍 Like, 🔥 Fire, 👏 Clap (more reactions = higher rank when sorted by Most Reactions)
 - **Comments** — open to all visitors directly on the project view
 - **Image uploads** — JPG, PNG, or WebP, max 2MB, recommended 1280×720px or higher
 - **Tech stack tags** — comma-separated during upload, e.g. "React, Node.js, Supabase"
@@ -155,25 +169,28 @@ BOUNDARIES
 - Never discuss competitors or go off-topic from DevShowcase.
 - Never admit to being ChatGPT, Claude, or any other AI — you're DevAssist, built by BraxCode Digitals Foundation.`;
 
-  const messages = [
-    ...history.slice(-6),
-    { role: "user", content: message },
-  ];
+  const messages = [...history.slice(-6), { role: "user", content: message }];
 
   async function callGroq(key, model) {
-    const groqRes = await fetch("https://api.groq.com/openai/v1/chat/completions", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${key}`,
+    const groqRes = await fetch(
+      "https://api.groq.com/openai/v1/chat/completions",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${key}`,
+        },
+        body: JSON.stringify({
+          model,
+          messages: [{ role: "system", content: SYSTEM_PROMPT }, ...messages],
+          max_tokens: 900,
+          temperature: 0.6,
+          ...(model.startsWith("openai/gpt-oss")
+            ? { reasoning_effort: "low" }
+            : {}),
+        }),
       },
-      body: JSON.stringify({
-        model,
-        messages: [{ role: "system", content: SYSTEM_PROMPT }, ...messages],
-        max_tokens: 500,
-        temperature: 0.6,
-      }),
-    });
+    );
     return groqRes;
   }
 
@@ -182,23 +199,35 @@ BOUNDARIES
 
     if (!groqRes.ok) {
       const errData = await groqRes.json().catch(() => ({}));
-      console.error("Groq primary failed:", groqRes.status, errData.error?.message);
+      console.error(
+        "Groq primary failed:",
+        groqRes.status,
+        errData.error?.message,
+      );
 
       if (keys.length > 1) {
         const fallbackKey = keys[(keyIndex + 1) % keys.length];
         const retryRes = await callGroq(fallbackKey, "llama-3.3-70b-versatile");
         if (retryRes.ok) {
           const retryData = await retryRes.json();
-          return res.status(200).json({ reply: retryData.choices?.[0]?.message?.content || "" });
+          return res
+            .status(200)
+            .json({ reply: retryData.choices?.[0]?.message?.content || "" });
         }
         console.error("Groq fallback failed:", retryRes.status);
       }
 
-      return res.status(503).json({ error: "DevAssist is busy right now. Please try again in a moment." });
+      return res
+        .status(503)
+        .json({
+          error: "DevAssist is busy right now. Please try again in a moment.",
+        });
     }
 
     const data = await groqRes.json();
-    return res.status(200).json({ reply: data.choices?.[0]?.message?.content || "" });
+    return res
+      .status(200)
+      .json({ reply: data.choices?.[0]?.message?.content || "" });
   } catch (err) {
     console.error("DevAssist API error:", err);
     return res.status(500).json({ error: "Internal server error" });

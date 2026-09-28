@@ -5,29 +5,29 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>DevShowcase — Project Gallery</title>
-<meta name="description" content="Explore real projects built by developers across the World. Browse web, mobile, AI and design work, react to projects, and connect directly via WhatsApp." />
-<meta name="keywords" content="devshowcase gallery, developer projects, portfolio showcase, hire developers, east africa developers, devshowcase, devshowacase braxcode, braxcode digitals, braxcode, AI" />
-<link rel="canonical" href="https://devshowcase.braxcode.com/devshowcase-gallery.html" />
-<meta property="og:title" content="DevShowcase — Project Gallery" />
-<meta property="og:description" content="Explore real projects built by developers across the World. Browse, react, and connect directly via WhatsApp." />
-<meta property="og:url" content="https://devshowcase.braxcode.com/devshowcase-gallery.html" />
-<meta property="og:type" content="website" />
-<meta name="twitter:card" content="summary_large_image" />
-<meta name="twitter:title" content="DevShowcase — Project Gallery" />
-<meta name="twitter:description" content="Explore real developer projects across the World." />
+  <meta name="description"
+    content="Explore real projects built by developers across the World. Browse web, mobile, AI and design work, react to projects, and connect directly via WhatsApp." />
+  <meta name="keywords"
+    content="devshowcase gallery, developer projects, portfolio showcase, hire developers, east africa developers, devshowcase, devshowacase braxcode, braxcode digitals, braxcode, AI" />
+  <link rel="canonical" href="https://devshowcase.braxcode.com/devshowcase-gallery.html" />
+  <meta property="og:title" content="DevShowcase — Project Gallery" />
+  <meta property="og:description"
+    content="Explore real projects built by developers across the World. Browse, react, and connect directly via WhatsApp." />
+  <meta property="og:url" content="https://devshowcase.braxcode.com/devshowcase-gallery.html" />
+  <meta property="og:type" content="website" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="DevShowcase — Project Gallery" />
+  <meta name="twitter:description" content="Explore real developer projects across the World." />
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<link
-    href="https://api.fontshare.com/v2/css?f[]=clash-display@400,500,600,700&f[]=satoshi@300,400,500,600&display=swap"
-    rel="stylesheet">
   <link
-    href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap"
+    href="https://api.fontshare.com/v2/css?f[]=clash-display@400,500,600,700&f[]=satoshi@300,400,500,600,700,800&display=swap"
     rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
   <link rel="shortcut icon" href="favicon.png" type="image/x-icon">
 
   <style>
-
-:root {
+    :root {
       --bg: #0A0A0C;
       --bg2: #131316;
       --bg3: #1B1B1F;
@@ -48,6 +48,7 @@
       --muted: #8B8680;
       --muted2: #A8A29A;
     }
+
     * {
       box-sizing: border-box;
       margin: 0;
@@ -68,7 +69,7 @@
 
     /* ANIMATED BG */
 
-body::before {
+    body::before {
       content: '';
       position: fixed;
       inset: 0;
@@ -77,6 +78,7 @@ body::before {
       pointer-events: none;
       z-index: 0;
     }
+
     /* NAV */
     nav {
       position: sticky;
@@ -100,7 +102,7 @@ body::before {
     }
 
     .nav-logo-text {
-      font-family: 'Satoshi', monospace;
+      font-family: 'Satoshi', sans-serif;
       font-size: 0.9rem;
       font-weight: 700;
       letter-spacing: 1px;
@@ -136,7 +138,7 @@ body::before {
       color: var(--a1);
     }
 
-  .btn-accent {
+    .btn-accent {
       background: linear-gradient(135deg, var(--a1), #B85C3E);
       border: none;
       color: #fff;
@@ -162,9 +164,9 @@ body::before {
       gap: 6px;
       padding: 6px 14px;
       border-radius: 100px;
- background: rgba(217, 119, 87, 0.08);
+      background: rgba(217, 119, 87, 0.08);
       border: 1px solid rgba(217, 119, 87, 0.2);
-      font-family: 'JetBrains Mono', monospace;
+      font-family: 'JetBrains Mono', sans-serif;
       font-size: 0.72rem;
       color: var(--a1);
       letter-spacing: 1px;
@@ -297,7 +299,7 @@ body::before {
       white-space: nowrap;
     }
 
-.filter-btn:hover,
+    .filter-btn:hover,
     .filter-btn.active {
       background: rgba(217, 119, 87, 0.08);
       border-color: rgba(217, 119, 87, 0.3);
@@ -355,14 +357,14 @@ body::before {
       }
     }
 
-.project-card:hover {
+    .project-card:hover {
       border-color: rgba(217, 119, 87, 0.2);
       background: var(--bg3);
       transform: translateY(-4px);
       box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(217, 119, 87, 0.05);
     }
 
-.card-img {
+    .card-img {
       width: 100%;
       height: 200px;
       object-fit: contain;
@@ -411,7 +413,7 @@ body::before {
       font-size: 0.65rem;
       font-weight: 700;
       color: #000;
-      font-family: 'Satoshi', monospace;
+      font-family: 'Satoshi', sans-serif;
       flex-shrink: 0;
     }
 
@@ -447,12 +449,12 @@ body::before {
       margin-bottom: 16px;
     }
 
-.tech-tag {
+    .tech-tag {
       padding: 3px 10px;
       border-radius: 100px;
       background: rgba(217, 119, 87, 0.1);
       border: 1px solid rgba(217, 119, 87, 0.2);
-      font-family: 'Satoshi', monospace;
+      font-family: 'Satoshi', sans-serif;
       font-size: 0.65rem;
       color: var(--accent2);
       letter-spacing: 0.5px;
@@ -497,32 +499,33 @@ body::before {
       color: var(--accent);
     }
 
-.reaction-btn i {
-  font-size: 0.8rem;
-  transition: transform 0.2s ease;
-}
+    .reaction-btn i {
+      font-size: 0.8rem;
+      transition: transform 0.2s ease;
+    }
 
-.reaction-btn:active i {
-  transform: scale(1.3);
-}
+    .reaction-btn:active i {
+      transform: scale(1.3);
+    }
 
-.reaction-btn.rx-like.reacted {
-  background: rgba(77, 148, 255, 0.1);
-  border-color: rgba(77, 148, 255, 0.35);
-  color: #4D94FF;
-}
+    .reaction-btn.rx-like.reacted {
+      background: rgba(77, 148, 255, 0.1);
+      border-color: rgba(77, 148, 255, 0.35);
+      color: #4D94FF;
+    }
 
-.reaction-btn.rx-fire.reacted {
-  background: rgba(255, 107, 53, 0.1);
-  border-color: rgba(255, 107, 53, 0.35);
-  color: #FF6B35;
-}
+    .reaction-btn.rx-fire.reacted {
+      background: rgba(255, 107, 53, 0.1);
+      border-color: rgba(255, 107, 53, 0.35);
+      color: #FF6B35;
+    }
 
-.reaction-btn.rx-clap.reacted {
-  background: rgba(255, 209, 102, 0.1);
-  border-color: rgba(255, 209, 102, 0.35);
-  color: #FFD166;
-}
+    .reaction-btn.rx-clap.reacted {
+      background: rgba(255, 209, 102, 0.1);
+      border-color: rgba(255, 209, 102, 0.35);
+      color: #FFD166;
+    }
+
     .card-actions {
       display: flex;
       gap: 8px;
@@ -718,7 +721,7 @@ body::before {
     }
 
     .modal-section-label {
-      font-family: 'Satoshi', monospace;
+      font-family: 'Satoshi', sans-serif;
       font-size: 0.7rem;
       color: var(--muted);
       letter-spacing: 2px;
@@ -748,7 +751,7 @@ body::before {
       border: none;
     }
 
-.btn-live {
+    .btn-live {
       background: var(--a1);
       color: #fff;
     }
@@ -811,7 +814,7 @@ body::before {
       font-weight: 700;
       color: #fff;
       flex-shrink: 0;
-      font-family: 'Satoshi', monospace;
+      font-family: 'Satoshi', sans-serif;
     }
 
     .comment-content {}
@@ -836,7 +839,7 @@ body::before {
       font-size: 0.7rem;
       color: var(--muted);
       margin-top: 4px;
-      font-family: 'Satoshi', monospace;
+      font-family: 'Satoshi', sans-serif;
     }
 
     .comment-form {
@@ -895,7 +898,7 @@ body::before {
       color: var(--muted);
     }
 
-.comment-submit {
+    .comment-submit {
       align-self: flex-end;
       padding: 9px 20px;
       border-radius: 8px;
@@ -963,7 +966,13 @@ body::before {
         transform: rotate(360deg);
       }
     }
-@media (max-width: 520px) { .nav-btn .lbl { display: none; } }
+
+    @media (max-width: 520px) {
+      .nav-btn .lbl {
+        display: none;
+      }
+    }
+
     /* MOBILE */
     @media(max-width:768px) {
       .gallery {
@@ -1031,8 +1040,8 @@ body::before {
   <nav>
     <a href="index.html" class="nav-logo">
       <div
-        style="width:34px;height:34px;border-radius:9px;background:linear-gradient(135deg,var(--a1),var(--a2));display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-size:0.78rem;font-weight:700;color:#fff;flex-shrink:0;">
-       <img src="favicon.png" style="width:100%;height:100%;object-fit:contain;border-radius:9px;">
+        style="width:34px;height:34px;border-radius:9px;background:linear-gradient(135deg,var(--a1),var(--a2));display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',sans-serif;font-size:0.78rem;font-weight:700;color:#fff;flex-shrink:0;">
+        <img src="favicon.png" style="width:100%;height:100%;object-fit:contain;border-radius:9px;">
       </div>
       <span class="nav-logo-text">DevShowcase</span>
     </a>
@@ -1042,7 +1051,8 @@ body::before {
       <a href="index.html" class="nav-btn btn-ghost" id="navJoinBtn">
         <i class="fa-solid fa-rocket"></i> Join Free
       </a>
-         <a href="devshowcase-developers.html" class="nav-btn btn-ghost" style="text-decoration:none;"><i class="fa-solid fa-users"></i> <span class="lbl">Developers</span></a>
+      <a href="devshowcase-developers.html" class="nav-btn btn-ghost" style="text-decoration:none;"><i
+          class="fa-solid fa-users"></i> <span class="lbl">Developers</span></a>
       <a href="devshowcase-dashboard.html" class="nav-btn btn-accent" id="navDashBtn" style="display:none;">
         <i class="fa-solid fa-grid-2"></i> Dashboard
       </a>
@@ -1081,7 +1091,7 @@ body::before {
     <button class="filter-btn" onclick="setFilter('Web', this)">Web</button>
     <button class="filter-btn" onclick="setFilter('Mobile', this)">Mobile</button>
     <button class="filter-btn" onclick="setFilter('AI', this)">AI</button>
-<button class="filter-btn" onclick="setFilter('Design', this)">Design</button>
+    <button class="filter-btn" onclick="setFilter('Design', this)">Design</button>
     <select class="sort-select" onchange="setSort(this.value)">
       <option value="newest">Newest</option>
       <option value="oldest">Oldest</option>
@@ -1209,7 +1219,7 @@ body::before {
 
       updateStats();
       renderProjects(sortProjects(allProjects));
-    
+
     }
 
 
@@ -1243,17 +1253,19 @@ body::before {
     function buildCard(p, i) {
       const tech = (p.tech_stack || '').split(',').map(t => t.trim()).filter(Boolean);
       const initials = (p.dev_name || 'D').slice(0, 2).toUpperCase();
-      const avatarHTML = (p.dev_avatar_url && p.dev_avatar_url.startsWith('http'))
-        ? `<img src="${p.dev_avatar_url}" style="width:28px;height:28px;border-radius:50%;object-fit:cover;">`
-        : `<div class="dev-avatar">${initials}</div>`;
+      const avatarUrl = safeUrl(p.dev_avatar_url);
+      const imgUrl = safeUrl(p.image_url);
+      const avatarHTML = avatarUrl
+        ? `<img src="${esc(avatarUrl)}" alt="" style="width:28px;height:28px;border-radius:50%;object-fit:cover;">`
+        : `<div class="dev-avatar">${esc(initials)}</div>`;
       const reacted = userReactions[p.id] || {};
       const waMsg = encodeURIComponent(p.wa_message || `Hi ${p.dev_name}, I saw your project "${p.project_name}" on DevShowcase and I'm interested!`);
       const waLink = `https://wa.me/${(p.dev_whatsapp || '').replace(/[^0-9]/g, '')}?text=${waMsg}`;
 
       return `
     <div class="project-card" style="animation-delay:${i * 0.06}s" onclick="openProject(${p.id})">
-      ${p.image_url
-          ? `<img class="card-img" src="${p.image_url}" alt="${p.project_name}" onerror="this.style.display='none'">`
+      ${imgUrl
+          ? `<img class="card-img" src="${esc(imgUrl)}" alt="${esc(p.project_name)}" onerror="this.style.display='none'">`
           : `<div class="card-img-placeholder"><i class="fa-solid fa-code"></i></div>`
         }
       <div class="card-body">
@@ -1261,19 +1273,18 @@ body::before {
           <div class="dev-info">
             ${avatarHTML}
             <div>
-            <div class="dev-name" style="cursor:pointer;text-decoration:underline;text-underline-offset:3px;font-weight:700;" 
-            onclick="event.stopPropagation();window.location.href='devshowcase-profile.html?dev=${p.user_id}'">
-            ${p.dev_name || 'Developer'}
-          </div>
-              <div style="font-size:0.7rem;color:var(--muted);">${p.dev_role || ''}</div>
+            <div class="dev-name" data-dev="${esc(p.user_id || '')}" style="cursor:pointer;text-decoration:underline;text-underline-offset:3px;font-weight:700;">
+              ${esc(p.dev_name || 'Developer')}
+            </div>
+            <div style="font-size:0.7rem;color:var(--muted);">${esc(p.dev_role || '')}</div>
             </div>
           </div>
-          ${p.category ? `<span class="tech-tag" style="height:fit-content;">${p.category}</span>` : ''}
+          ${p.category ? `<span class="tech-tag" style="height:fit-content;">${esc(p.category)}</span>` : ''}
         </div>
-        <h3 class="card-title">${p.project_name}</h3>
-        <p class="card-desc">${p.description || ''}</p>
+        <h3 class="card-title">${esc(p.project_name)}</h3>
+      <p class="card-desc">${p.description || ''}</p 
         <div class="tech-tags">
-          ${tech.slice(0, 4).map(t => `<span class="tech-tag">${t}</span>`).join('')}
+   ${tech.slice(0, 4).map(t => <span class="tech-tag">${esc(t)}</span>).join('')}
           ${tech.length > 4 ? `<span class="tech-tag">+${tech.length - 4}</span>` : ''}
         </div>
         <div class="card-footer" onclick="event.stopPropagation()">
@@ -1302,59 +1313,68 @@ body::before {
     // ================================================
     // REACTIONS
     // ================================================
-function esc(s) {
-  return String(s ?? '').replace(/[&<>"']/g, c =>
-    ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
-}
-
-async function react(projectId, field, btn) {
-  const reactionKey = field === 'likes' ? 'like' : field; // 'like', 'fire', 'clap'
-  const project = allProjects.find(p => p.id === projectId);
-  if (!project) return;
-
-  const hasReacted = userReactions[projectId] && userReactions[projectId][reactionKey];
-  const span = btn.querySelector('span');
-  let newVal;
-
-  if (hasReacted) {
-    // UN-LIKE
-    newVal = Math.max(0, (project[field] || 0) - 1);
-    await _supabase.rpc('react_to_project', { p_id: projectId, p_type: field, p_delta: -1 });
-    await _supabase.from('project_reactions').delete()
-      .eq('project_id', projectId).eq('user_id', currentUserId).eq('reaction_type', reactionKey);
-
-    project[field] = newVal;
-    userReactions[projectId][reactionKey] = false;
-    btn.classList.remove('reacted');
-  } else {
-    // LIKE MPYA
-    newVal = (project[field] || 0) + 1;
-    await _supabase.rpc('react_to_project', { p_id: projectId, p_type: field, p_delta: 1 });
-    await _supabase.from('project_reactions').insert({
-      project_id: projectId, user_id: currentUserId, reaction_type: reactionKey
-    });
-
-    project[field] = newVal;
-    if (!userReactions[projectId]) userReactions[projectId] = {};
-    userReactions[projectId][reactionKey] = true;
-    btn.classList.add('reacted');
-
-    // NOTIFICATION
-    if (project.user_id && project.user_id !== currentUserId) {
-      const reactionLabel = field === 'likes' ? 'liked' : field === 'fire' ? 'reacted 🔥 to' : 'clapped for';
-      await _supabase.from('notifications').insert({
-        user_id: project.user_id,
-        type: 'reaction',
-        message: `Someone ${reactionLabel} <strong>${esc(project.project_name)}</strong>`,
-        is_read: false
-      });
+    function esc(s) {
+      return String(s ?? '').replace(/[&<>"']/g, c =>
+        ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
     }
-  }
 
-  if (span) span.textContent = newVal;
-  if (navigator.vibrate) navigator.vibrate(30);
-  updateStats();
-}
+    function safeUrl(u) {
+      try {
+        const x = new URL(u);
+        return (x.protocol === 'http:' || x.protocol === 'https:') ? x.href : '';
+      } catch (e) { return ''; }
+    }
+
+    async function react(projectId, field, btn) {
+      const reactionKey = field === 'likes' ? 'like' : field; // 'like', 'fire', 'clap'
+      const project = allProjects.find(p => p.id === projectId);
+      if (!project) return;
+
+      const hasReacted = userReactions[projectId] && userReactions[projectId][reactionKey];
+      const span = btn.querySelector('span');
+      let newVal;
+
+      if (hasReacted) {
+        // UN-LIKE
+        newVal = Math.max(0, (project[field] || 0) - 1);
+        const { error: delErr } = await _supabase.from('project_reactions').delete()
+          .eq('project_id', projectId).eq('user_id', currentUserId).eq('reaction_type', reactionKey);
+        if (delErr) { showToast('Failed. Try again!'); return; }
+        await _supabase.rpc('react_to_project', { p_id: projectId, p_type: field, p_delta: -1 });
+
+        project[field] = newVal;
+        userReactions[projectId][reactionKey] = false;
+        btn.classList.remove('reacted');
+      } else {
+        // LIKE MPYA
+        newVal = (project[field] || 0) + 1;
+        const { error: insErr } = await _supabase.from('project_reactions').insert({
+          project_id: projectId, user_id: currentUserId, reaction_type: reactionKey
+        });
+        if (insErr) { showToast('Reaction failed. Try again!'); return; }
+        await _supabase.rpc('react_to_project', { p_id: projectId, p_type: field, p_delta: 1 });
+
+        project[field] = newVal;
+        if (!userReactions[projectId]) userReactions[projectId] = {};
+        userReactions[projectId][reactionKey] = true;
+        btn.classList.add('reacted');
+
+        // NOTIFICATION
+        if (project.user_id && project.user_id !== currentUserId) {
+          const reactionLabel = field === 'likes' ? 'liked' : field === 'fire' ? 'reacted 🔥 to' : 'clapped for';
+          await _supabase.from('notifications').insert({
+            user_id: project.user_id,
+            type: 'reaction',
+            message: `Someone ${reactionLabel} <strong>${esc(project.project_name)}</strong>`,
+            is_read: false
+          });
+        }
+      }
+
+      if (span) span.textContent = newVal;
+      if (navigator.vibrate) navigator.vibrate(30);
+      updateStats();
+    }
 
 
     // ================================================
@@ -1367,7 +1387,7 @@ async function react(projectId, field, btn) {
       filterProjects();
     }
 
- function setSort(val) {
+    function setSort(val) {
       currentSort = val;
       filterProjects();
     }
@@ -1420,20 +1440,23 @@ async function react(projectId, field, btn) {
 
       document.getElementById('modalTitle').textContent = p.project_name;
       document.getElementById('modalDev').innerHTML = `
-    <div style="width:24px;height:24px;border-radius:50%;background:linear-gradient(135deg,var(--a1),var(--a2));display:flex;align-items:center;justify-content:center;font-size:0.6rem;font-weight:700;color:#fff;">${(p.dev_name || 'D').slice(0, 2).toUpperCase()}</div>
-    <span style="font-size:0.82rem;color:var(--muted2);">${p.dev_name} · ${p.dev_role || 'Developer'}</span>`;
+    <div style="width:24px;height:24px;border-radius:50%;background:linear-gradient(135deg,var(--a1),var(--a2));display:flex;align-items:center;justify-content:center;font-size:0.6rem;font-weight:700;color:#fff;">${esc((p.dev_name || 'D').slice(0, 2).toUpperCase())}</div>
+    <span style="font-size:0.82rem;color:var(--muted2);">${esc(p.dev_name)} · ${esc(p.dev_role || 'Developer')}</span>`;
 
-      document.getElementById('modalImgWrap').innerHTML = p.image_url
-        ? `<img class="modal-img" src="${p.image_url}" alt="${p.project_name}">`
+      const modalImg = safeUrl(p.image_url);
+      document.getElementById('modalImgWrap').innerHTML = modalImg
+        ? `<img class="modal-img" src="${esc(modalImg)}" alt="${esc(p.project_name)}">`
         : `<div class="modal-img-placeholder"><i class="fa-solid fa-code"></i></div>`;
 
       document.getElementById('modalDesc').textContent = p.description || '';
-      document.getElementById('modalTech').innerHTML = tech.map(t => `<span class="tech-tag">${t}</span>`).join('');
-
-      let actions = p.live_link ? `<a class="modal-btn btn-live" href="${p.live_link}" target="_blank"><i class="fa-solid fa-arrow-up-right-from-square"></i> View Live</a>` : '';
+      document.getElementById('modalTech').innerHTML = tech.map(t => `<span class="tech-tag">${esc(t)}</span>`).join('');
+      const liveUrl = safeUrl(p.live_link);
+      let actions = liveUrl ? `<a class="modal-btn btn-live" href="${esc(liveUrl)}" target="_blank" rel="noopener noreferrer">
+<i class="fa-solid fa-arrow-up-right-from-square"></i> View Live</a>` : '';
       actions += `<a class="modal-btn btn-wa" href="${waLink}" target="_blank"><i class="fa-brands fa-whatsapp"></i> WhatsApp Dev</a>`;
       document.getElementById('modalActions').innerHTML = actions;
 
+      currentProjectId = id;
       document.getElementById('commentCount').textContent = '';
       document.getElementById('commentsList').innerHTML = '<div style="color:var(--muted);font-size:0.82rem;">Loading...</div>';
       document.getElementById('projectModal').classList.add('open');
@@ -1452,7 +1475,7 @@ async function react(projectId, field, btn) {
           await _supabase.from('notifications').insert({
             user_id: p.user_id,
             type: 'view',
-            message: `Someone viewed your project <strong>${p.project_name}</strong>`,
+            message: `Someone viewed your project <strong>${esc(p.project_name)}</strong>`,
             is_read: false
           });
         }
@@ -1597,6 +1620,15 @@ async function react(projectId, field, btn) {
     }
 
 
+    document.getElementById('gallery').addEventListener('click', (e) => {
+      const el = e.target.closest('[data-dev]');
+      if (!el) return;
+      e.stopPropagation();
+      if (el.dataset.dev) {
+        window.location.href = 'devshowcase-profile.html?dev=' + encodeURIComponent(el.dataset.dev);
+      }
+    }, true);
+
     loadProjects().then(() => {
       const params = new URLSearchParams(window.location.search);
       const projectId = params.get('project');
@@ -1604,7 +1636,7 @@ async function react(projectId, field, btn) {
         openProject(Number(projectId));
       }
     });
-  
+
   </script>
 </body>
 

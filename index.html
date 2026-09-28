@@ -32,18 +32,17 @@
   <!-- SCRIPTS & FONTS -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <link
-    href="https://api.fontshare.com/v2/css?f[]=clash-display@400,500,600,700&f[]=satoshi@300,400,500,600,700&display=swap"
+    href="https://api.fontshare.com/v2/css?f[]=clash-display@400,500,600,700&f[]=satoshi@300,400,500,600,700,800&display=swap"
     rel="stylesheet" />
-  <link
-    href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap"
-    rel="stylesheet" />
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
 
   <!-- FAVICON -->
   <link rel="shortcut icon" href="./favicon.png" type="image/x-icon" />
 
   <style>
-:root {
+    :root {
       --bg: #0A0A0C;
       --bg2: #131316;
       --bg3: #1B1B1F;
@@ -188,15 +187,15 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      font-family: "JetBrains Mono", monospace;
+      font-family: "JetBrains Mono", sans-serif;
       font-size: 0.85rem;
       font-weight: 700;
       color: #fff;
     }
 
     .logo-text {
-    font-family: "Satoshi", sans-serif;
-font-size: 1rem;
+      font-family: "Satoshi", sans-serif;
+      font-size: 1rem;
       font-weight: 700;
       letter-spacing: 1px;
       background: linear-gradient(135deg, #fff 40%, var(--a1));
@@ -273,8 +272,8 @@ font-size: 1rem;
       border-radius: 100px;
       background: var(--glass2);
       border: 1px solid rgba(217, 119, 87, 0.3);
-      font-family: "JetBrains Mono", monospace;
-font-size: 0.72rem;
+      font-family: "JetBrains Mono", sans-serif;
+      font-size: 0.72rem;
       color: #E8A87C;
       letter-spacing: 1.5px;
       margin-bottom: 32px;
@@ -312,7 +311,8 @@ font-size: 0.72rem;
       margin-bottom: 24px;
       animation: fadeUp 0.7s ease 0.1s both;
     }
-.hero h1 .grad {
+
+    .hero h1 .grad {
       background: linear-gradient(100deg,
           var(--a1) 0%,
           #f0d0b8 100%);
@@ -401,14 +401,14 @@ font-size: 0.72rem;
       padding: 20px;
     }
 
-.preview-card {
-  background: var(--glass);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  overflow: hidden;
-  transition: all 0.3s;
-  cursor: pointer;
-}
+    .preview-card {
+      background: var(--glass);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      transition: all 0.3s;
+      cursor: pointer;
+    }
 
     .preview-card:hover {
       border-color: var(--border2);
@@ -448,7 +448,7 @@ font-size: 0.72rem;
     .pc-tag {
       padding: 2px 7px;
       border-radius: 100px;
-      font-family: "Satoshi", monospace;
+      font-family: "Satoshi", sans-serif;
       font-size: 0.58rem;
       background: var(--glass2);
       border: 1px solid var(--border);
@@ -489,7 +489,7 @@ font-size: 0.72rem;
     }
 
     .stat-num {
-      font-family: "JetBrains Mono", monospace;
+      font-family: "JetBrains Mono", sans-serif;
       font-size: 2.2rem;
       font-weight: 700;
       background: linear-gradient(135deg, var(--a1), var(--a2));
@@ -514,7 +514,7 @@ font-size: 0.72rem;
 
     .section-tag {
       display: inline-block;
-      font-family: "JetBrains Mono", monospace;
+      font-family: "JetBrains Mono", sans-serif;
       font-size: 0.7rem;
       color: var(--a1);
       letter-spacing: 3px;
@@ -578,7 +578,7 @@ font-size: 0.72rem;
     }
 
     .step-num {
-      font-family: "Satoshi", monospace;
+      font-family: "Satoshi", sans-serif;
       font-size: 0.65rem;
       color: var(--a1);
       letter-spacing: 2px;
@@ -712,7 +712,7 @@ font-size: 0.72rem;
     }
 
     .footer-left {
-      font-family: "Satoshi", monospace;
+      font-family: "Satoshi", sans-serif;
       font-size: 0.75rem;
       color: var(--muted);
     }
@@ -819,7 +819,7 @@ font-size: 0.72rem;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-family: "JetBrains Mono", monospace;
+      font-family: "JetBrains Mono", sans-serif;
       font-size: 1.1rem;
       font-weight: 700;
       color: #fff;
@@ -930,7 +930,7 @@ font-size: 0.72rem;
     .divider-text {
       font-size: 0.75rem;
       color: var(--muted);
-      font-family: "Satoshi", monospace;
+      font-family: "Satoshi", sans-serif;
       white-space: nowrap;
     }
 
@@ -1062,42 +1062,43 @@ font-size: 0.72rem;
     }
 
     /* ALERT */
-.auth-alert.error {
-  background: rgba(255, 107, 107, 0.1);
-  border: 1px solid rgba(255, 107, 107, 0.3);
-  color: var(--error);
-  opacity: 1;
-  visibility: visible;
-}
+    .auth-alert.error {
+      background: rgba(255, 107, 107, 0.1);
+      border: 1px solid rgba(255, 107, 107, 0.3);
+      color: var(--error);
+      opacity: 1;
+      visibility: visible;
+    }
 
-.auth-alert.success {
-  background: rgba(6, 214, 160, 0.1);
-  border: 1px solid rgba(6, 214, 160, 0.3);
-  color: var(--success);
-  opacity: 1;
-  visibility: visible;
+    .auth-alert.success {
+      background: rgba(6, 214, 160, 0.1);
+      border: 1px solid rgba(6, 214, 160, 0.3);
+      color: var(--success);
+      opacity: 1;
+      visibility: visible;
 
-}
-.auth-alert {
-  padding: 10px 14px;
-  border-radius: 10px;
-  font-size: 0.82rem;
-  margin-bottom: 14px;
-  min-height: 38px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  opacity: 0;
-  visibility: hidden;
-  transition: opacity 0.2s;
-}
+    }
 
-.auth-alert:empty {
-  min-height: 0;
-  margin-bottom: 0;
-  padding: 0;
-  border: none;
-}
+    .auth-alert {
+      padding: 10px 14px;
+      border-radius: 10px;
+      font-size: 0.82rem;
+      margin-bottom: 14px;
+      min-height: 38px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.2s;
+    }
+
+    .auth-alert:empty {
+      min-height: 0;
+      margin-bottom: 0;
+      padding: 0;
+      border: none;
+    }
 
     /* LOCATION BADGE */
     .location-detected {
@@ -1111,7 +1112,7 @@ font-size: 0.72rem;
       font-size: 0.75rem;
       color: var(--a2);
       margin-bottom: 14px;
-      font-family: "Satoshi", monospace;
+      font-family: "Satoshi", sans-serif;
     }
 
     /* TOAST */
@@ -1236,38 +1237,130 @@ font-size: 0.72rem;
         padding-right: 4%;
       }
     }
-    .nav-right { display: flex; align-items: center; gap: 8px; }
-.nav-dev { padding: 9px 14px; }
-.nav-account { padding: 5px 16px 5px 5px; gap: 9px; border-radius: 100px; }
-.nav-account .av {
-  width: 28px; height: 28px; border-radius: 50%; object-fit: cover; flex-shrink: 0;
-  background: rgba(255,255,255,.22); display: flex; align-items: center; justify-content: center;
-  font-size: .78rem; font-weight: 700; color: #fff;
-}
-@media (max-width: 520px) {
-  .nav-dev .lbl { display: none; }
-  .nav-dev { padding: 9px 12px; }
-  .nav-account { padding: 4px 12px 4px 4px; }
-}
+
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .nav-dev {
+      padding: 9px 14px;
+    }
+
+    .nav-account {
+      padding: 5px 16px 5px 5px;
+      gap: 9px;
+      border-radius: 100px;
+    }
+
+    .nav-account .av {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      object-fit: cover;
+      flex-shrink: 0;
+      background: rgba(255, 255, 255, .22);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: .78rem;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    @media (max-width: 520px) {
+      .nav-dev .lbl {
+        display: none;
+      }
+
+      .nav-dev {
+        padding: 9px 12px;
+      }
+
+      .nav-account {
+        padding: 4px 12px 4px 4px;
+      }
+    }
+
     /* AUTH MODAL — compact + scrollable */
-.modal-overlay { overflow-y: auto; align-items: flex-start; }
-.auth-modal { margin: auto; }
-.modal-logo { margin-bottom: 20px; }
-.modal-logo-icon { width: 44px; height: 44px; margin-bottom: 10px; }
-.modal-title { font-size: 1.2rem; }
-.auth-tabs { margin-bottom: 18px; }
-.social-btns { flex-direction: row; margin-bottom: 16px; }
-.social-btn { padding: 11px 8px; font-size: .86rem; }
-.divider { margin-bottom: 16px; }
-@media (max-width: 480px) {
-  .modal-overlay { padding: 12px; }
-  .auth-modal { padding: 22px 18px; border-radius: 20px; }
-  .modal-sub { display: none; }
-  .form-row { grid-template-columns: 1fr 1fr; gap: 10px; }
-}
-  .auth-legal { text-align: center; font-size: .72rem; color: var(--muted); line-height: 1.6; margin-top: 16px; }
-.auth-legal a { color: var(--muted2); text-decoration: underline; }
-.auth-legal a:hover { color: var(--a1); }  
+    .modal-overlay {
+      overflow-y: auto;
+      align-items: flex-start;
+    }
+
+    .auth-modal {
+      margin: auto;
+    }
+
+    .modal-logo {
+      margin-bottom: 20px;
+    }
+
+    .modal-logo-icon {
+      width: 44px;
+      height: 44px;
+      margin-bottom: 10px;
+    }
+
+    .modal-title {
+      font-size: 1.2rem;
+    }
+
+    .auth-tabs {
+      margin-bottom: 18px;
+    }
+
+    .social-btns {
+      flex-direction: row;
+      margin-bottom: 16px;
+    }
+
+    .social-btn {
+      padding: 11px 8px;
+      font-size: .86rem;
+    }
+
+    .divider {
+      margin-bottom: 16px;
+    }
+
+    @media (max-width: 480px) {
+      .modal-overlay {
+        padding: 12px;
+      }
+
+      .auth-modal {
+        padding: 22px 18px;
+        border-radius: 20px;
+      }
+
+      .modal-sub {
+        display: none;
+      }
+
+      .form-row {
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+      }
+    }
+
+    .auth-legal {
+      text-align: center;
+      font-size: .72rem;
+      color: var(--muted);
+      line-height: 1.6;
+      margin-top: 16px;
+    }
+
+    .auth-legal a {
+      color: var(--muted2);
+      text-decoration: underline;
+    }
+
+    .auth-legal a:hover {
+      color: var(--a1);
+    }
   </style>
 </head>
 
@@ -1286,17 +1379,19 @@ font-size: 0.72rem;
   <!-- NAV -->
   <nav>
     <a href="#" class="logo">
-           <div class="logo-icon"><img src="favicon.png" style="width:100%;height:100%;object-fit:contain;border-radius:9px;"></div>
+      <div class="logo-icon"><img src="favicon.png"
+          style="width:100%;height:100%;object-fit:contain;border-radius:9px;"></div>
       <span class="logo-text">DevShowcase</span>
     </a>
-<div class="nav-right">
-  <a href="devshowcase-developers.html" class="btn btn-ghost nav-dev"><i class="fa-solid fa-users"></i> <span class="lbl">Developers</span></a>
-  <div id="navAuth">
-    <button class="btn btn-primary" onclick="openAuth('signup')">
-      <i class="fa-solid fa-rocket"></i> Get Started
-    </button>
-  </div>
-</div>
+    <div class="nav-right">
+      <a href="devshowcase-developers.html" class="btn btn-ghost nav-dev"><i class="fa-solid fa-users"></i> <span
+          class="lbl">Developers</span></a>
+      <div id="navAuth">
+        <button class="btn btn-primary" onclick="openAuth('signup')">
+          <i class="fa-solid fa-rocket"></i> Get Started
+        </button>
+      </div>
+    </div>
   </nav>
 
   <!-- HERO -->
@@ -1320,7 +1415,8 @@ font-size: 0.72rem;
       <button class="btn btn-primary btn-hero" onclick="openAuth('signup')">
         <i class="fa-solid fa-rocket"></i> Start Showcasing — It's Free
       </button>
-      <button class="btn btn-ghost btn-hero" onclick="window.scrollTo({ top: document.getElementById('how-it-works').offsetTop - 68, behavior: 'smooth' })">
+      <button class="btn btn-ghost btn-hero"
+        onclick="window.scrollTo({ top: document.getElementById('how-it-works').offsetTop - 68, behavior: 'smooth' })">
         <i class="fa-solid fa-play"></i> See How It Works
       </button>
     </div>
@@ -1333,13 +1429,13 @@ font-size: 0.72rem;
           <div class="preview-dot" style="background: #ffd166"></div>
           <div class="preview-dot" style="background: #06d6a0"></div>
           <span style="
-                font-family: &quot;JetBrains Mono&quot;, monospace;
+                font-family: &quot;JetBrains Mono&quot;, sans-serif;
                 font-size: 0.65rem;
                 color: var(--muted);
                 margin-left: 8px;
-              ">devshowcase.app</span>
+              ">devshowcase.braxcode.com</span>
         </div>
-       <div class="preview-grid" id="heroPreviewGrid">
+        <div class="preview-grid" id="heroPreviewGrid">
           <div class="preview-card" style="display:flex;align-items:center;justify-content:center;min-height:160px;">
             <i class="fa-solid fa-spinner fa-spin" style="color:var(--muted);font-size:1.2rem;"></i>
           </div>
@@ -1348,7 +1444,7 @@ font-size: 0.72rem;
       </div>
     </div>
   </section>
-<!-- HOW IT WORKS -->
+  <!-- HOW IT WORKS -->
   <section class="section" id="how-it-works">
     <div class="section-tag">How it works</div>
     <h2 class="section-title">
@@ -1367,8 +1463,8 @@ font-size: 0.72rem;
         </div>
         <div class="step-title">Create Your Profile</div>
         <div class="step-desc">
-          Sign up in seconds. We auto-detect your location to show you
-          relevant developers and opportunities nearby.
+          Sign up in seconds. With your permission, we detect your location to show you relevant developers and
+          opportunities nearby.
         </div>
       </div>
       <div class="step-card">
@@ -1407,7 +1503,7 @@ font-size: 0.72rem;
     </div>
   </section>
 
-<!-- FEATURES -->
+  <!-- FEATURES -->
   <section class="section" style="padding-top: 0">
     <div class="section-tag">Features</div>
     <h2 class="section-title">Everything You Need<br />to Stand Out</h2>
@@ -1421,8 +1517,8 @@ font-size: 0.72rem;
         <div class="feature-icon"><i class="fa-solid fa-location-dot" style="color: var(--a1)"></i></div>
         <div class="feature-title">Location-Based Discovery</div>
         <div class="feature-desc">
-          We detect your location automatically. Clients in your region find
-          you first. Global reach with local relevance.
+          With your permission, we detect your location. Clients in your region find you first. Global reach with local
+          relevance.
         </div>
       </div>
       <div class="feature-card">
@@ -1453,13 +1549,13 @@ font-size: 0.72rem;
         <div class="feature-icon"><i class="fa-solid fa-chart-line" style="color: var(--a1)"></i></div>
         <div class="feature-title">Project View Notifications</div>
         <div class="feature-desc">
-            Get notified instantly when someone views your project. Know exactly who's interested in your work.
+          Get notified instantly when someone views your project. Know exactly who's interested in your work.
         </div>
       </div>
     </div>
   </section>
 
-   
+
   <!-- CTA -->
   <section class="cta-section">
     <div class="cta-box">
@@ -1471,7 +1567,8 @@ font-size: 0.72rem;
             ">Discovered?</span>
       </h2>
       <p>
-         Be among the first developers to showcase your work and get discovered by clients worldwide. Early joiners get exclusive perks — completely free to start.
+        Be among the first developers to showcase your work and get discovered by clients worldwide. Early joiners get
+        exclusive perks — completely free to start.
       </p>
       <button class="btn btn-primary btn-hero" onclick="openAuth('signup')" style="margin: 0 auto">
         <i class="fa-solid fa-rocket"></i> Create Your Free Profile
@@ -1482,7 +1579,8 @@ font-size: 0.72rem;
   <!-- FOOTER -->
   <footer>
     <div class="footer-left">
-   © 2026 <span>DevShowcase</span> — Built for developers, by developers <i class="fa-solid fa-earth-africa" style="color:var(--a2);"></i>
+      © 2026 <span>DevShowcase</span> — Built for developers, by developers <i class="fa-solid fa-earth-africa"
+        style="color:var(--a2);"></i>
     </div>
     <div class="footer-left">
       Powered by <a href="https://braxcode.com" style="text-decoration: none; color:var(--a1)">BraxCode Digitals
@@ -1491,7 +1589,7 @@ font-size: 0.72rem;
     <div class="footer-links">
       <a href="devshowcase-help.html">Help</a>
       <a href="devshowcase-legal.html">Privacy Policy & Terms</a>
-      <a href="https://wa.me/255618811359"target="_blank">Contact</a>
+      <a href="https://wa.me/255618811359" target="_blank">Contact</a>
     </div>
   </footer>
 
@@ -1503,7 +1601,8 @@ font-size: 0.72rem;
       </button>
 
       <div class="modal-logo">
-        <div class="modal-logo-icon"><img src="favicon.png" style="width:100%;height:100%;object-fit:contain;border-radius:9px;"></div>
+        <div class="modal-logo-icon"><img src="favicon.png"
+            style="width:100%;height:100%;object-fit:contain;border-radius:9px;"></div>
         <div class="modal-title" id="authTitle">Welcome back</div>
         <div class="modal-sub" id="authSub">Sign in to your account</div>
       </div>
@@ -1529,13 +1628,14 @@ font-size: 0.72rem;
 
       <!-- SOCIAL BUTTONS -->
       <!-- SOCIAL BUTTONS -->
-<div class="social-btns">
-  <button class="social-btn google" onclick="socialAuth('google')"><i class="fa-brands fa-google"></i> Google</button>
-  <button class="social-btn github" onclick="socialAuth('github')"><i class="fa-brands fa-github"></i> GitHub</button>
-</div>
-      <p style="text-align:center;font-size:0.7rem;color:var(--muted);margin-bottom:16px;">
-        <i class="fa-solid fa-circle-info"></i> Use the same email across sign-in methods to keep one account.
-      </p>
+      <div class="social-btns">
+        <button class="social-btn google" onclick="socialAuth('google')"><i class="fa-brands fa-google"></i>
+          Google</button>
+        <button class="social-btn github" onclick="socialAuth('github')"><i class="fa-brands fa-github"></i>
+          GitHub</button>
+      </div>
+
+
       <div class="divider">
         <div class="divider-line"></div>
         <div class="divider-text">or continue with email</div>
@@ -1644,7 +1744,7 @@ font-size: 0.72rem;
                 <div id="bar3"
                   style="flex:1;height:3px;border-radius:2px;background:var(--border2);transition:all 0.3s;"></div>
               </div>
-              <div id="pwHint" style="font-size:0.73rem;color:var(--muted);font-family:'JetBrains Mono',monospace;">
+              <div id="pwHint" style="font-size:0.73rem;color:var(--muted);font-family:'JetBrains Mono',sans-serif;">
               </div>
             </div>
           </div>
@@ -1659,10 +1759,10 @@ font-size: 0.72rem;
           </div>
         </div>
 
-            <div class="form-footer" style="margin-top:14px;">
+        <div class="form-footer" style="margin-top:14px;">
           Already have an account? <a href="#" onclick="switchTab('login')">Sign in</a>
         </div>
-      </div>   <!-- mwisho wa signupForm -->
+      </div> <!-- mwisho wa signupForm -->
 
       <!-- ↓↓ MPYA ↓↓ -->
       <p class="auth-legal">
@@ -1671,17 +1771,16 @@ font-size: 0.72rem;
         <a href="devshowcase-legal.html" target="_blank" rel="noopener">Privacy Policy</a>.
       </p>
 
-    </div>   <!-- mwisho wa auth-modal -->
-      </div>
-
-    </div>
+    </div> <!-- mwisho wa auth-modal -->
   </div>
-  
+
+
+
   <!-- RESET PASSWORD MODAL -->
   <div class="modal-overlay" id="resetModal">
     <div class="auth-modal">
       <div class="modal-logo">
-       <div class="modal-logo-icon"><i class="fa-solid fa-key"></i></div>
+        <div class="modal-logo-icon"><i class="fa-solid fa-key"></i></div>
         <div class="modal-title">Set New Password</div>
         <div class="modal-sub">Choose a strong password</div>
       </div>
@@ -1807,7 +1906,6 @@ font-size: 0.72rem;
       document.getElementById("authModal").classList.add("open");
       document.body.style.overflow = "hidden";
       switchTab(tab);
-      detectLocation();
       if (navigator.vibrate) navigator.vibrate(40);
     }
 
@@ -1817,21 +1915,21 @@ font-size: 0.72rem;
       clearAlert();
     }
 
-document
-  .getElementById("authModal")
-  .addEventListener("click", function (e) {
-    if (e.target === this) closeAuth();
-  });
+    document
+      .getElementById("authModal")
+      .addEventListener("click", function (e) {
+        if (e.target === this) closeAuth();
+      });
 
-document
-  .getElementById("resetModal")
-  .addEventListener("click", function (e) {
-    if (e.target === this) this.classList.remove("open");
-  });
+    document
+      .getElementById("resetModal")
+      .addEventListener("click", function (e) {
+        if (e.target === this) this.classList.remove("open");
+      });
 
-document.addEventListener("keydown", (e) => {
-  if (e.key === "Escape") closeAuth();
-});
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") closeAuth();
+    });
 
     function switchTab(tab) {
       currentTab = tab;
@@ -1924,8 +2022,8 @@ document.addEventListener("keydown", (e) => {
 
     // ================================================
     // EMAIL AUTH & FORGOT PASSWORD LOGIC
-    
-async function forgotPassword() {
+
+    async function forgotPassword() {
       clearAlert();
       const emailInput = document.getElementById("loginEmail");
       const email = emailInput.value.trim();
@@ -1944,7 +2042,11 @@ async function forgotPassword() {
         showAlert(e.message);
       }
     }
-
+    function goToSignIn(email) {
+      switchTab("login");
+      document.getElementById("loginEmail").value = email;
+      showAlert("You already have an account with this email. Sign in below, or use Google/GitHub if that's how you joined.");
+    }
     // ================================================
     // EMAIL AUTH
     // ================================================
@@ -1977,18 +2079,12 @@ async function forgotPassword() {
           password,
         });
 
-     if (error) {
-  btn.disabled = false;
-  btn.innerHTML = original;
-  if (error.message.toLowerCase().includes("already")) {
-    switchTab("login");
-    document.getElementById("loginEmail").value = email;
-    showAlert("You already have an account with this email. Sign in below, or use Google/GitHub if that's how you joined.");
-  } else {
-    showAlert(error.message);
-  }
-  return;
-}
+        if (error) {
+          showAlert(error.message.includes("Invalid") ? "Wrong email or password!" : error.message);
+          btn.disabled = false;
+          btn.innerHTML = original;
+          return;
+        }
 
         showAlert("Welcome back! Redirecting...", "success");
         if (navigator.vibrate) navigator.vibrate([40, 20, 40]);
@@ -2041,15 +2137,11 @@ async function forgotPassword() {
           },
         });
 
- if (error) {
-          showAlert(
-            error.message.includes("already")
-              ? "Email already registered! Sign in instead."
-              : error.message,
-          );
-          document.getElementById("authAlert").scrollIntoView({ behavior: "smooth", block: "center" });
+        if (error || data?.user?.identities?.length === 0) {
           btn.disabled = false;
           btn.innerHTML = original;
+          if (!error || error.message.toLowerCase().includes("already")) goToSignIn(email);
+          else showAlert(error.message);
           return;
         }
 
@@ -2091,7 +2183,7 @@ async function forgotPassword() {
 
       const meta = user.user_metadata || {};
       const provider = user.app_metadata?.provider;
-   const navRight = document.getElementById('navAuth');
+      const navRight = document.getElementById('navAuth');
 
       let shortName = '';
       if ((provider === 'github' || provider === 'google') && !meta.location) {
@@ -2104,7 +2196,7 @@ async function forgotPassword() {
         shortName = meta.full_name?.split(' ')[0] || user.email?.split('@')[0] || 'Developer';
       }
 
-          const avatarUrl = /^https?:\/\//i.test(meta.avatar_url || '') ? meta.avatar_url : '';
+      const avatarUrl = /^https?:\/\//i.test(meta.avatar_url || '') ? meta.avatar_url : '';
       const first = Array.from(shortName)[0] || 'D';
       const initial = /[<>&"']/.test(first) ? 'D' : first.toUpperCase();
       const avatarHTML = avatarUrl
@@ -2215,6 +2307,7 @@ async function forgotPassword() {
       document.getElementById('step1').style.display = 'none';
       document.getElementById('step2').style.display = 'block';
       document.getElementById('stepProgress').style.width = '100%';
+      detectLocation();
       document.getElementById('stepDot2').style.background = 'var(--a1)';
     }
 
@@ -2302,27 +2395,28 @@ async function forgotPassword() {
       } catch (e) {
         console.log('Location save failed:', e);
       }
-   }
-const categoryIcons = {
-  Web: 'fa-solid fa-globe',
-  Mobile: 'fa-solid fa-mobile-screen',
-  AI: 'fa-solid fa-robot',
-  Design: 'fa-solid fa-palette'
-};
-
-function buildHeroPreviewCard(p) {
-  const tech = (p.tech_stack || '').split(',').map(t => t.trim()).filter(Boolean).slice(0, 3);
-  const icon = categoryIcons[p.category] || 'fa-solid fa-code';
-  return `
+    }
+    const categoryIcons = {
+      Web: 'fa-solid fa-globe',
+      Mobile: 'fa-solid fa-mobile-screen',
+      AI: 'fa-solid fa-robot',
+      Design: 'fa-solid fa-palette'
+    };
+    const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) =>
+      ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+    function buildHeroPreviewCard(p) {
+      const tech = (p.tech_stack || '').split(',').map(t => t.trim()).filter(Boolean).slice(0, 3);
+      const icon = categoryIcons[p.category] || 'fa-solid fa-code';
+      return `
     <div class="preview-card" onclick="window.location.href='devshowcase-gallery.html?project=${p.id}'">
       <div class="pc-img" style="background: linear-gradient(135deg, #D9775722, #06d6a022);">
         <i class="${icon}" style="color:var(--a1);"></i>
       </div>
       <div class="pc-body">
-        <div class="pc-title">${p.project_name}</div>
-        <div class="pc-sub">by ${p.dev_name || 'Developer'}${p.dev_role ? ' · ' + p.dev_role : ''}</div>
+        <div class="pc-title">${esc(p.project_name)}</div>
+        <div class="pc-sub">by ${esc(p.dev_name || 'Developer')} : ${esc(p.dev_role || '')}</div>
         <div class="pc-tags">
-          ${tech.map(t => `<span class="pc-tag">${t}</span>`).join('')}
+          ${tech.map(t => `<span class="pc-tag">${esc(t)}</span>`).join('')}
         </div>
       </div>
       <div class="pc-footer">
@@ -2331,47 +2425,47 @@ function buildHeroPreviewCard(p) {
         <span class="pc-reaction"><i class="fa-solid fa-hands-clapping"></i> ${p.clap || 0}</span>
       </div>
     </div>`;
-}
+    }
 
-function seededShuffle(arr, seed) {
-  const a = [...arr];
-  let s = seed;
-  function rand() {
-    s = (s * 9301 + 49297) % 233280;
-    return s / 233280;
-  }
-  for (let i = a.length - 1; i > 0; i--) {
-    const j = Math.floor(rand() * (i + 1));
-    [a[i], a[j]] = [a[j], a[i]];
-  }
-  return a;
-}
+    function seededShuffle(arr, seed) {
+      const a = [...arr];
+      let s = seed;
+      function rand() {
+        s = (s * 9301 + 49297) % 233280;
+        return s / 233280;
+      }
+      for (let i = a.length - 1; i > 0; i--) {
+        const j = Math.floor(rand() * (i + 1));
+        [a[i], a[j]] = [a[j], a[i]];
+      }
+      return a;
+    }
 
-async function loadHeroPreview() {
-  const grid = document.getElementById('heroPreviewGrid');
-  const { data, error } = await _supabase
-    .from('showcase_projects')
-    .select('*')
-    .order('created_at', { ascending: false })
-    .limit(50);
+    async function loadHeroPreview() {
+      const grid = document.getElementById('heroPreviewGrid');
+      const { data, error } = await _supabase
+        .from('showcase_projects')
+        .select('*')
+        .order('created_at', { ascending: false })
+        .limit(50);
 
-  if (error || !data || !data.length) {
-    grid.innerHTML = '<div class="preview-card" style="display:flex;align-items:center;justify-content:center;min-height:160px;color:var(--muted);font-size:0.8rem;">No projects yet</div>';
-    return;
-  }
+      if (error || !data || !data.length) {
+        grid.innerHTML = '<div class="preview-card" style="display:flex;align-items:center;justify-content:center;min-height:160px;color:var(--muted);font-size:0.8rem;">No projects yet</div>';
+        return;
+      }
 
-  // Rotates kila masaa 6 — sio kila reload
-  const rotationSeed = Math.floor(Date.now() / (1000 * 60 * 60 * 6));
-  const picked = seededShuffle(data, rotationSeed).slice(0, 3);
-  grid.innerHTML = picked.map(buildHeroPreviewCard).join('');
-}
+      // Rotates kila masaa 6 — sio kila reload
+      const rotationSeed = Math.floor(Date.now() / (1000 * 60 * 60 * 6));
+      const picked = seededShuffle(data, rotationSeed).slice(0, 3);
+      grid.innerHTML = picked.map(buildHeroPreviewCard).join('');
+    }
 
-loadHeroPreview();
+    loadHeroPreview();
 
-_supabase
-  .channel('hero-preview-changes')
-  .on('postgres_changes', { event: '*', schema: 'public', table: 'showcase_projects' }, loadHeroPreview)
-  .subscribe();
+    _supabase
+      .channel('hero-preview-changes')
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'showcase_projects' }, loadHeroPreview)
+      .subscribe();
 
   </script>
 </body>
