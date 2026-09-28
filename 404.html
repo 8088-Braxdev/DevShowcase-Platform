@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Page not found — DevShowcase</title>
+  <meta name="robots" content="noindex" />
+  <link rel="shortcut icon" href="/favicon.png" type="image/x-icon" />
+  <link href="https://api.fontshare.com/v2/css?f[]=satoshi@300,400,500,600,700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" />
+  <style>
+    :root {
+      --bg: #0A0A0C;
+      --glass: rgba(255, 255, 255, 0.04);
+      --border2: rgba(255, 255, 255, 0.14);
+      --a1: #D97757;
+      --a2: #06d6a0;
+      --text: #F5F3EF;
+      --muted2: #A8A29A;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      min-height: 100dvh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      background:
+        radial-gradient(ellipse 70% 50% at 50% -10%, rgba(217, 119, 87, 0.12), transparent 60%),
+        var(--bg);
+      color: var(--text);
+      font-family: "Satoshi", sans-serif;
+      text-align: center;
+    }
+    main { max-width: 460px; }
+    .logo { width: 44px; height: 44px; border-radius: 12px; margin-bottom: 28px; }
+    .code {
+      font-size: clamp(5rem, 24vw, 9rem);
+      font-weight: 700;
+      line-height: 1;
+      letter-spacing: -2px;
+      color: transparent;
+      -webkit-text-stroke: 1.5px rgba(255, 255, 255, 0.22);
+      margin-bottom: 20px;
+    }
+    h1 { font-size: 1.35rem; font-weight: 600; margin-bottom: 10px; }
+    p { color: var(--muted2); font-weight: 300; line-height: 1.7; margin-bottom: 32px; }
+    .actions { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 11px 20px;
+      border-radius: 10px;
+      font-family: inherit;
+      font-size: 0.88rem;
+      font-weight: 500;
+      text-decoration: none;
+      transition: transform 0.2s, border-color 0.2s, color 0.2s;
+    }
+    .btn-primary { background: linear-gradient(135deg, var(--a1), #B85C3E); color: #fff; font-weight: 600; }
+    .btn-primary:hover { transform: translateY(-1px); }
+    .btn-ghost { background: var(--glass); border: 1px solid var(--border2); color: var(--muted2); }
+    .btn-ghost:hover { border-color: var(--a1); color: var(--a1); }
+    .btn:focus-visible { outline: 2px solid var(--a2); outline-offset: 3px; }
+    @media (prefers-reduced-motion: reduce) { .btn { transition: none; } }
+  </style>
+</head>
+<body>
+  <main>
+    <img class="logo" src="/favicon.png" alt="DevShowcase" />
+    <div class="code" aria-hidden="true">404</div>
+    <h1>We couldn't find that page</h1>
+    <p>The link may be old, or the address may have a typo. Head back home or browse the latest projects.</p>
+    <div class="actions">
+      <a class="btn btn-primary" href="/"><i class="fa-solid fa-house"></i> Go home</a>
+      <a class="btn btn-ghost" href="/devshowcase-gallery.html"><i class="fa-solid fa-compass"></i> Browse projects</a>
+    </div>
+  </main>
+</body>
+</html>
