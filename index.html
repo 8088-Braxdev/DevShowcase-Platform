@@ -1265,6 +1265,9 @@ font-size: 0.72rem;
   .modal-sub { display: none; }
   .form-row { grid-template-columns: 1fr 1fr; gap: 10px; }
 }
+  .auth-legal { text-align: center; font-size: .72rem; color: var(--muted); line-height: 1.6; margin-top: 16px; }
+.auth-legal a { color: var(--muted2); text-decoration: underline; }
+.auth-legal a:hover { color: var(--a1); }  
   </style>
 </head>
 
@@ -1656,14 +1659,24 @@ font-size: 0.72rem;
           </div>
         </div>
 
-        <div class="form-footer" style="margin-top:14px;">
+            <div class="form-footer" style="margin-top:14px;">
           Already have an account? <a href="#" onclick="switchTab('login')">Sign in</a>
         </div>
+      </div>   <!-- mwisho wa signupForm -->
+
+      <!-- ↓↓ MPYA ↓↓ -->
+      <p class="auth-legal">
+        By continuing, you agree to our
+        <a href="devshowcase-legal.html" target="_blank" rel="noopener">Terms</a> and
+        <a href="devshowcase-legal.html" target="_blank" rel="noopener">Privacy Policy</a>.
+      </p>
+
+    </div>   <!-- mwisho wa auth-modal -->
       </div>
 
     </div>
   </div>
-  </div>
+  
   <!-- RESET PASSWORD MODAL -->
   <div class="modal-overlay" id="resetModal">
     <div class="auth-modal">
