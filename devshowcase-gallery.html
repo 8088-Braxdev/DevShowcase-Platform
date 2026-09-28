@@ -1282,9 +1282,9 @@
           ${p.category ? `<span class="tech-tag" style="height:fit-content;">${esc(p.category)}</span>` : ''}
         </div>
         <h3 class="card-title">${esc(p.project_name)}</h3>
-      <p class="card-desc">${p.description || ''}</p 
+      <p class="card-desc">${esc(p.description || '')}</p>
         <div class="tech-tags">
-   ${tech.slice(0, 4).map(t => <span class="tech-tag">${esc(t)}</span>).join('')}
+          ${tech.slice(0, 4).map(t => `<span class="tech-tag">${esc(t)}</span>`).join('')}
           ${tech.length > 4 ? `<span class="tech-tag">+${tech.length - 4}</span>` : ''}
         </div>
         <div class="card-footer" onclick="event.stopPropagation()">
