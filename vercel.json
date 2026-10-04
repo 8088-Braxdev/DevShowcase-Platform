@@ -2,5 +2,11 @@
   "rewrites": [
     { "source": "/sitemap.xml", "destination": "/api/sitemap" },
     { "source": "/devshowcase-profile.html", "destination": "/api/profile-meta" }
+  ],
+  "headers": [
+    {
+      "source": "/devshowcase-profile-template.html",
+      "headers": [{ "key": "X-Robots-Tag", "value": "noindex" }]
+    }
   ]
 }
