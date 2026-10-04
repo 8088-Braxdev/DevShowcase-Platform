@@ -1273,9 +1273,11 @@
           <div class="dev-info">
             ${avatarHTML}
             <div>
-            <div class="dev-name" data-dev="${esc(p.user_id || '')}" style="cursor:pointer;text-decoration:underline;text-underline-offset:3px;font-weight:700;">
-              ${esc(p.dev_name || 'Developer')}
-            </div>
+            <a class="dev-name" data-dev="${esc(p.user_id || '')}"
+   href="devshowcase-profile.html?dev=${encodeURIComponent(p.user_id || '')}"
+   style="cursor:pointer;text-decoration:underline;text-underline-offset:3px;font-weight:700;color:inherit;display:block;">
+  ${esc(p.dev_name || 'Developer')}
+</a>
             <div style="font-size:0.7rem;color:var(--muted);">${esc(p.dev_role || '')}</div>
             </div>
           </div>
