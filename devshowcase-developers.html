@@ -670,9 +670,9 @@
       const thumb = safeUrl(d.img)
         ? `<img class="thumb" src="${safeUrl(d.img)}" alt="" loading="lazy" onerror="this.outerHTML='<div class=&quot;thumb-ph&quot;><i class=&quot;fa-solid fa-code&quot;></i></div>'">`
         : `<div class="thumb-ph"><i class="fa-solid fa-code"></i></div>`;
-      const av = safeUrl(d.avatar)
-        ? `<img class="av" src="${safeUrl(d.avatar)}" alt="" loading="lazy">`
-        : `<div class="av av-ph">${initials}</div>`;
+   const av = safeUrl(d.avatar)
+  ? `<img class="av" src="${safeUrl(d.avatar)}" alt="${esc(d.name)}" loading="lazy">`
+  : `<div class="av av-ph">${initials}</div>`;
       const place = d.country ? `${flag(d.cc || nameToCode.get(d.country.toLowerCase()))} ${esc(d.country)}`.trim() : "";
       const digits = (d.wa || "").replace(/[^0-9]/g, "");
       const msg = encodeURIComponent(`Hi ${d.name}, I found your profile on DevShowcase and I'm interested in working with you!`);
