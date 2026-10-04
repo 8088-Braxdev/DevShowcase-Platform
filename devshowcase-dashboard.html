@@ -1190,7 +1190,15 @@
       margin-top: 3px;
       font-family: 'Satoshi', sans-serif;
     }
-
+.loc-banner{display:none;align-items:center;gap:14px;flex-wrap:wrap;padding:16px 18px;margin-bottom:24px;background:rgba(6,214,160,.06);border:1px solid rgba(6,214,160,.2);border-radius:14px;}
+.loc-banner.show{display:flex;}
+.loc-text{flex:1;min-width:200px;font-size:.82rem;color:var(--muted2);line-height:1.6;}
+.loc-text strong{display:block;color:var(--text);font-size:.9rem;margin-bottom:2px;}
+.loc-actions{display:flex;gap:8px;flex-wrap:wrap;align-items:center;}
+.loc-btn{padding:9px 14px;border-radius:9px;background:var(--glass);border:1px solid var(--border2);color:var(--muted2);font:500 .8rem 'Satoshi',sans-serif;cursor:pointer;}
+.loc-btn.primary{background:linear-gradient(135deg,var(--a1),#B85C3E);border:none;color:#fff;font-weight:600;}
+.loc-btn:disabled{opacity:.6;cursor:not-allowed;}
+.loc-select{padding:9px 12px;border-radius:9px;background:var(--bg3);border:1px solid var(--border2);color:var(--muted2);font:.8rem 'Satoshi',sans-serif;max-width:190px;}
     /* RESPONSIVE */
     @media(max-width:900px) {
       .stats-row {
@@ -1378,7 +1386,22 @@
 
     <!-- CONTENT -->
     <div class="content">
-
+<div class="loc-banner" id="locBanner">
+  <i class="fa-solid fa-location-dot" style="color:var(--a2);font-size:1.2rem;"></i>
+  <div class="loc-text">
+    <strong>Add your country</strong>
+    Optional. It shows on your public profile so visitors can find developers by country. Your coordinates are never shown.
+  </div>
+  <div class="loc-actions">
+    <button class="loc-btn primary" id="locDetectBtn" onclick="detectMyLocation()">
+      <i class="fa-solid fa-crosshairs"></i> Use my location
+    </button>
+    <select class="loc-select" id="locSelect" onchange="saveManualCountry(this.value)">
+      <option value="">Or pick a country…</option>
+    </select>
+    <button class="loc-btn" onclick="hideLocBanner()">Not now</button>
+  </div>
+</div>
       <!-- OVERVIEW PANEL -->
       <div class="panel active" id="panel-overview">
 
@@ -1665,7 +1688,8 @@
       document.getElementById('profileName').textContent = name;
       document.getElementById('profileRole').textContent = role;
       document.getElementById('profileLocation').textContent = location;
-
+fillCountrySelect();
+updateLocBanner();
       document.getElementById('pFullName').value = name;
       document.getElementById('pRole').value = role;
       document.getElementById('pWhatsapp').value = meta.whatsapp || '';
@@ -2067,7 +2091,7 @@
       const { error } = await _supabase.auth.updateUser({ data: updates });
       if (error) { showToast('Failed to save', 'error'); return; }
 
-      document.getElementById('profileName').textContent = fullName;
+   currentUser.user_metadata = updates;   document.getElementById('profileName').textContent = fullName;
       document.getElementById('profileRole').textContent = role;
       document.getElementById('sidebarName').textContent = fullName;
       const sbRole = document.getElementById('sidebarRole');
@@ -2319,7 +2343,107 @@ const safeMsg = esc(n.message)
     }
 
     // ================================================
+// ================================================
+// LOCATION BANNER
+// ================================================
+const regionNames = (() => {
+  try { return new Intl.DisplayNames(['en'], { type: 'region' }); } catch (e) { return null; }
+})();
 
+function fillCountrySelect() {
+  if (!regionNames) return;
+  const sel = document.getElementById('locSelect');
+  const list = [];
+  for (let a = 65; a <= 90; a++) for (let b = 65; b <= 90; b++) {
+    const code = String.fromCharCode(a, b);
+    try { const n = regionNames.of(code); if (n && n !== code) list.push({ code, n }); } catch (e) { }
+  }
+  list.sort((x, y) => x.n.localeCompare(y.n));
+  list.forEach(({ code, n }) => {
+    const o = document.createElement('option');
+    o.value = code; o.textContent = n;
+    sel.appendChild(o);
+  });
+}
+
+function updateLocBanner() {
+  const meta = currentUser.user_metadata || {};
+  document.getElementById('locBanner').classList.toggle('show', !meta.country);
+}
+
+function hideLocBanner() {
+  document.getElementById('locBanner').classList.remove('show');
+}
+
+async function saveLocation(loc) {
+  const updates = {
+    ...(currentUser.user_metadata || {}),
+    location: [loc.city, loc.country].filter(Boolean).join(', '),
+    country: loc.country,
+    country_code: loc.countryCode,
+    latitude: loc.latitude ?? null,
+    longitude: loc.longitude ?? null
+  };
+
+  const { data, error } = await _supabase.auth.updateUser({ data: updates });
+  if (error) { showToast('Could not save location', 'error'); return false; }
+  currentUser = data.user; // keep fresh so saveProfile() can't erase it
+
+  // copy to all this dev's projects, so profile + Developers page show it
+  await _supabase.from('showcase_projects')
+    .update({ country: loc.country, country_code: loc.countryCode })
+    .eq('user_id', currentUser.id);
+
+  document.getElementById('profileLocation').textContent = updates.location;
+  hideLocBanner();
+  showToast('Location saved!', 'success');
+  return true;
+}
+
+async function detectMyLocation() {
+  const btn = document.getElementById('locDetectBtn');
+  if (!navigator.geolocation) {
+    showToast('Your browser cannot share location. Pick a country instead.', 'warning');
+    return;
+  }
+  const original = btn.innerHTML;
+  btn.disabled = true;
+  btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Detecting...';
+
+  try {
+    const pos = await new Promise((res, rej) =>
+      navigator.geolocation.getCurrentPosition(res, rej, {
+        enableHighAccuracy: false, timeout: 15000, maximumAge: 600000
+      }));
+    // 2 decimals = about 1 km
+    const latitude = Number(pos.coords.latitude.toFixed(2));
+    const longitude = Number(pos.coords.longitude.toFixed(2));
+
+    const r = await fetch(`https://nominatim.openstreetmap.org/reverse?format=jsonv2&zoom=10&accept-language=en&lat=${latitude}&lon=${longitude}`);
+    if (!r.ok) throw new Error('geocoding failed');
+    const { address = {} } = await r.json();
+
+    const code = (address.country_code || '').toUpperCase();
+    const country = (code && regionNames ? regionNames.of(code) : '') || address.country || '';
+    if (!country) throw new Error('no country');
+
+    await saveLocation({
+      city: address.city || address.town || address.village || '',
+      country, countryCode: code, latitude, longitude
+    });
+  } catch (err) {
+    showToast('Could not get your location. Pick your country from the list.', 'warning');
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = original;
+  }
+}
+
+async function saveManualCountry(code) {
+  if (!code) return;
+  const country = (regionNames && regionNames.of(code)) || code;
+  await saveLocation({ city: '', country, countryCode: code, latitude: null, longitude: null });
+}
     init();
   </script>
 
