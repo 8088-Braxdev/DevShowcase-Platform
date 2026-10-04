@@ -1303,6 +1303,41 @@
 
 
       // Show page
+// ---- SEO: canonical, og:image, og:url, schema ----
+const canonicalUrl = `https://devshowcase.braxcode.com/devshowcase-profile.html?dev=${encodeURIComponent(d.user_id)}`;
+
+let canon = document.querySelector('link[rel="canonical"]');
+if (!canon) {
+  canon = document.createElement('link');
+  canon.rel = 'canonical';
+  document.head.appendChild(canon);
+}
+canon.href = canonicalUrl;
+
+const ogUrl = document.createElement('meta');
+ogUrl.setAttribute('property', 'og:url');
+ogUrl.content = canonicalUrl;
+document.head.appendChild(ogUrl);
+
+if (/^https?:\/\//i.test(d.avatar_url || '')) {
+  document.getElementById('ogImage').setAttribute('content', d.avatar_url);
+}
+
+const ld = document.createElement('script');
+ld.type = 'application/ld+json';
+ld.textContent = JSON.stringify({
+  '@context': 'https://schema.org',
+  '@type': 'ProfilePage',
+  mainEntity: {
+    '@type': 'Person',
+    name: d.name,
+    jobTitle: d.role,
+    url: canonicalUrl,
+    image: d.avatar_url || undefined,
+    sameAs: [gh, web].filter(Boolean)
+  }
+});
+document.head.appendChild(ld);
       document.getElementById("pageLoading").style.display = "none";
       document.getElementById("profileContent").style.display = "block";
     }
@@ -1484,7 +1519,10 @@
     // NOT FOUND
     // ================================================
     function showNotFound() {
-      document.getElementById("pageLoading").style.display = "none";
+     const nr = document.createElement('meta');
+nr.name = 'robots';
+nr.content = 'noindex';
+document.head.appendChild(nr); document.getElementById("pageLoading").style.display = "none";
       document.getElementById("notFound").style.display = "flex";
     }
 
