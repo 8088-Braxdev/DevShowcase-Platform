@@ -5,6 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Dashboard — DevShowcase</title>
+<meta name="robots" content="noindex">
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <link
     href="https://api.fontshare.com/v2/css?f[]=clash-display@400,500,600,700&f[]=satoshi@300,400,500,600,700,800&display=swap"
@@ -1362,7 +1363,7 @@
                 style="font-size:0.72rem;color:var(--a1);background:none;border:none;cursor:pointer;font-family:'Satoshi',sans-serif;">Mark
                 all read</button>
               <button onclick="clearAllNotifications()"
-                style="font-size: 0.72rem; color:var(--a3); background: none; cursor: pointer;font-family:'Satoshi',sans-serif;">Clear
+                style="font-size: 0.72rem; color:var(--a3); background: none; cursor: pointer;font-family:'Satoshi',sans-serif; border: none;">Clear
                 all</button>
             </div>
             <div id="notifList" style="max-height:340px;overflow-y:auto;"></div>
@@ -2196,11 +2197,14 @@
       list.innerHTML = notifs.map(n => {
         const ic = icons[n.type] || icons.default;
         const time = timeAgo(n.created_at);
+const safeMsg = esc(n.message)
+  .replace(/&lt;strong&gt;/g, '<strong>')
+  .replace(/&lt;\/strong&gt;/g, '</strong>');
         return `
       <div class="notif-item ${n.is_read ? '' : 'unread'}" data-notif-id="${n.id}" onclick="markRead(${n.id})">
        <div class="notif-icon" style="background:${ic.bg};">${ic.icon}</div>
         <div style="flex:1;">
-                  <div class="notif-text">${esc(n.message)}</div>
+                  <div class="notif-text">${safeMsg}</div>
           <div class="notif-time">${time}</div>
         </div>
         ${!n.is_read ? '<div style="width:7px;height:7px;border-radius:50%;background:var(--a1);flex-shrink:0;margin-top:6px;"></div>' : ''}
