@@ -1472,8 +1472,7 @@
         </div>
         <div class="step-title">Create Your Profile</div>
         <div class="step-desc">
-          Sign up in seconds. With your permission, we detect your location to show you relevant developers and
-          opportunities nearby.
+Sign up in seconds. You can add your location if you want to. It's optional, and it lets people find developers by country.
         </div>
       </div>
       <div class="step-card">
@@ -1524,18 +1523,16 @@
     <div class="features-grid">
       <div class="feature-card">
         <div class="feature-icon"><i class="fa-solid fa-location-dot" style="color: var(--a1)"></i></div>
-        <div class="feature-title">Location-Based Discovery</div>
-        <div class="feature-desc">
-          With your permission, we detect your location. Clients in your region find you first. Global reach with local
-          relevance.
-        </div>
+        <div class="feature-title">Find Developers by Country</div>
+<div class="feature-desc">
+  Add your location if you want to, it's optional. Visitors can filter developers by country and find talent in their region.
+</div>
       </div>
       <div class="feature-card">
         <div class="feature-icon"><i class="fa-solid fa-comments" style="color: var(--a2)"></i></div>
         <div class="feature-title">Direct Client Contact</div>
         <div class="feature-desc">
-          Clients reach you via WhatsApp, email or direct message. No
-          middleman. No commission on your deals.
+          Clients reach you directly on WhatsApp. No middleman. No commission on your deals.
         </div>
       </div>
       <div class="feature-card">
@@ -1550,8 +1547,7 @@
         <div class="feature-icon"><i class="fa-solid fa-magnifying-glass" style="color: var(--a4)"></i></div>
         <div class="feature-title">Powerful Search</div>
         <div class="feature-desc">
-          Search by skill, tech stack, location, or category. Clients find
-          exactly what they need, fast.
+     Search by skill, tech stack, country, or category. Clients find exactly what they need, fast.
         </div>
       </div>
       <div class="feature-card">
@@ -1576,8 +1572,7 @@
             ">Discovered?</span>
       </h2>
       <p>
-        Be among the first developers to showcase your work and get discovered by clients worldwide. Early joiners get
-        exclusive perks — completely free to start.
+        Be among the first developers to showcase your work and get discovered by clients worldwide. 
       </p>
       <button class="btn btn-primary btn-hero" onclick="openAuth('signup')" style="margin: 0 auto">
         <i class="fa-solid fa-rocket"></i> Create Your Free Profile
@@ -1715,6 +1710,9 @@
           <button class="auth-submit" onclick="goStep2()">
             Continue <i class="fa-solid fa-arrow-right"></i>
           </button>
+<p style="font-size:.72rem;color:var(--muted);text-align:center;margin-top:10px;line-height:1.5;">
+  📍 Next, your browser may ask for your location. It's optional, and if you say no, signup still works.
+</p>
         </div>
 
         <!-- STEP 2 -->
@@ -1817,598 +1815,458 @@
       </button>
     </div>
   </div>
-  <script>
-    // ================================================
-    // SUPABASE
-    // ================================================
-    const SUPABASE_URL = "https://embhkmxkuprdjkspsdii.supabase.co";
-    const SUPABASE_KEY = "sb_publishable_B9vhC35VSzJ3VskrtSETYw_ueSS6p1e";
-    const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+<script>
+  // ================================================
+  // SUPABASE
+  // ================================================
+  const SUPABASE_URL = "https://embhkmxkuprdjkspsdii.supabase.co";
+  const SUPABASE_KEY = "sb_publishable_B9vhC35VSzJ3VskrtSETYw_ueSS6p1e";
+  const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-    // ================================================
-    // STATE
-    // ================================================
-    let currentTab = "login";
-    let userLocation = null;
+  // ================================================
+  // HELPERS + STATE
+  // ================================================
+  const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) =>
+    ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 
-    // ================================================
-    // LOCATION DETECTION
-    // ================================================
-    async function detectLocation() {
-      const badge = document.getElementById("locationBadge");
-      const text = document.getElementById("locationText");
+  const categoryIcons = {
+    Web: "fa-solid fa-globe",
+    Mobile: "fa-solid fa-mobile-screen",
+    AI: "fa-solid fa-robot",
+    Design: "fa-solid fa-palette",
+  };
 
-      if (!navigator.geolocation) {
-        console.log("Geolocation is not supported by your browser.");
-        return;
-      }
+  let currentTab = "login";
+  let userLocation = null; // only filled if the user allows it
 
-      // Tunajaribu kupata coordinates za kifaa (Hapa mteja ataombwa ruhusa)
-      navigator.geolocation.getCurrentPosition(
-        async (position) => {
-          const { latitude, longitude } = position.coords;
+  // ================================================
+  // ALERTS (text only, so error messages can never inject HTML)
+  // ================================================
+  function paintAlert(el, msg, type) {
+    el.className = `auth-alert ${type}`;
+    el.textContent = "";
+    const icon = document.createElement("i");
+    icon.className = `fa-solid fa-${type === "error" ? "circle-exclamation" : "circle-check"}`;
+    el.append(icon, " ", msg);
+  }
 
-          try {
-            // Tunatumia OpenStreetMap kubadilisha lat/lon kuwa jina la mji
-            const res = await fetch(
-              `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`,
-            );
-            const data = await res.json();
+  function showAlert(msg, type = "error") {
+    paintAlert(document.getElementById("authAlert"), msg, type);
+  }
 
-            const city =
-              data.address.city ||
-              data.address.town ||
-              data.address.village ||
-              "Unknown City";
-            const country = data.address.country || "Unknown";
+  function clearAlert() {
+    const el = document.getElementById("authAlert");
+    el.className = "auth-alert";
+    el.textContent = "";
+  }
 
-            userLocation = {
-              city: city,
-              country: country,
-              latitude: latitude,
-              longitude: longitude,
-            };
+  function showToast(msg) {
+    const t = document.getElementById("toast");
+    t.textContent = msg;
+    t.classList.add("show");
+    setTimeout(() => t.classList.remove("show"), 3000);
+  }
 
-            text.textContent = `${city}, ${country} (Verified 📍)`;
-            badge.style.display = "flex";
+  // ================================================
+  // AUTH MODAL
+  // ================================================
+  function openAuth(tab = "login") {
+    document.getElementById("authModal").classList.add("open");
+    document.body.style.overflow = "hidden";
+    switchTab(tab);
+    if (navigator.vibrate) navigator.vibrate(40);
+  }
 
-          } catch (e) {
-            console.log("Reverse geocoding failed, falling back to IP...");
-            fallbackToIP(); // Kama OSM ikizingua
-          }
-        },
-        (error) => {
-          // Kama mteja akikataa (Denied), hatulazimishi
-          if (error.code === error.PERMISSION_DENIED) {
-            console.log("User denied location access.");
-            text.textContent = "Location access denied.";
-            badge.style.display = "none"; // Hii itahakikisha location haisaviwi
-            userLocation = null;
-          }
-        },
-      );
-    }
+  function closeAuth() {
+    document.getElementById("authModal").classList.remove("open");
+    document.body.style.overflow = "";
+    clearAlert();
+  }
 
+  document.getElementById("authModal").addEventListener("click", function (e) {
+    if (e.target === this) closeAuth();
+  });
 
-
-    // ================================================
-    // AUTH MODAL
-    // ================================================
-    function openAuth(tab = "login") {
-      document.getElementById("authModal").classList.add("open");
-      document.body.style.overflow = "hidden";
-      switchTab(tab);
-      if (navigator.vibrate) navigator.vibrate(40);
-    }
-
-    function closeAuth() {
-      document.getElementById("authModal").classList.remove("open");
+  document.getElementById("resetModal").addEventListener("click", function (e) {
+    if (e.target === this) {
+      this.classList.remove("open");
       document.body.style.overflow = "";
-      clearAlert();
     }
+  });
 
-    document
-      .getElementById("authModal")
-      .addEventListener("click", function (e) {
-        if (e.target === this) closeAuth();
-      });
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") closeAuth();
+  });
 
-    document
-      .getElementById("resetModal")
-      .addEventListener("click", function (e) {
-        if (e.target === this) this.classList.remove("open");
-      });
+  function switchTab(tab) {
+    currentTab = tab;
+    const isLogin = tab === "login";
 
-    document.addEventListener("keydown", (e) => {
-      if (e.key === "Escape") closeAuth();
+    document.getElementById("tabLogin").classList.toggle("active", isLogin);
+    document.getElementById("tabSignup").classList.toggle("active", !isLogin);
+    document.getElementById("loginForm").style.display = isLogin ? "block" : "none";
+    document.getElementById("signupForm").style.display = isLogin ? "none" : "block";
+    document.getElementById("authTitle").textContent = isLogin ? "Welcome back" : "Join DevShowcase";
+    document.getElementById("authSub").textContent = isLogin
+      ? "Sign in to your account"
+      : "Create your free developer profile";
+
+    clearAlert();
+    if (!isLogin) goStep1();
+  }
+
+  function togglePassword(inputId, btn) {
+    const input = document.getElementById(inputId);
+    const icon = btn.querySelector("i");
+    if (input.type === "password") {
+      input.type = "text";
+      icon.className = "fa-regular fa-eye-slash";
+    } else {
+      input.type = "password";
+      icon.className = "fa-regular fa-eye";
+    }
+  }
+
+  // ================================================
+  // SIGNUP STEPS
+  // ================================================
+  function goStep1() {
+    clearAlert();
+    document.getElementById("step2").style.display = "none";
+    document.getElementById("step1").style.display = "block";
+    document.getElementById("stepProgress").style.width = "0%";
+    document.getElementById("stepDot2").style.background = "var(--border2)";
+  }
+
+  function goStep2() {
+    clearAlert();
+    const first = document.getElementById("signupFirst").value.trim();
+    const email = document.getElementById("signupEmail").value.trim();
+    if (!first) return showAlert("Please enter your first name!");
+    if (!email || !email.includes("@")) return showAlert("Please enter a valid email!");
+
+    document.getElementById("step1").style.display = "none";
+    document.getElementById("step2").style.display = "block";
+    document.getElementById("stepProgress").style.width = "100%";
+    document.getElementById("stepDot2").style.background = "var(--a1)";
+    detectLocation(); // runs right after the user taps Continue
+  }
+
+  function checkPwStrength(val) {
+    const wrap = document.getElementById("pwStrength");
+    const hint = document.getElementById("pwHint");
+    const bars = ["bar1", "bar2", "bar3"].map((id) => document.getElementById(id));
+
+    if (!val) { wrap.style.display = "none"; return; }
+    wrap.style.display = "block";
+
+    let score = 0;
+    if (val.length >= 8) score++;
+    if (/[A-Z]/.test(val) && /[0-9]/.test(val)) score++;
+    if (/[^A-Za-z0-9]/.test(val)) score++;
+    if (score === 0) score = 1;
+
+    const colors = ["#ff6b6b", "#ffd166", "#06d6a0"];
+    const labels = ["Weak — add numbers & capitals", "Good — add a symbol like !@#", "Strong password ✓"];
+
+    bars.forEach((b, i) => {
+      b.style.background = i < score ? colors[score - 1] : "var(--border2)";
     });
+    hint.style.color = colors[score - 1];
+    hint.textContent = labels[score - 1];
+  }
 
-    function switchTab(tab) {
-      currentTab = tab;
-      const isLogin = tab === "login";
+  // ================================================
+  // LOCATION (optional, GPS only, with permission)
+  // Refused or failed = we store nothing and signup continues.
+  // Coordinates are rounded to 2 decimals (about 1 km).
+  // ================================================
+  async function detectLocation() {
+    const badge = document.getElementById("locationBadge");
+    const text = document.getElementById("locationText");
 
-      document.getElementById("tabLogin").classList.toggle("active", isLogin);
-      document
-        .getElementById("tabSignup")
-        .classList.toggle("active", !isLogin);
-      document.getElementById("loginForm").style.display = isLogin
-        ? "block"
-        : "none";
-      document.getElementById("signupForm").style.display = isLogin
-        ? "none"
-        : "block";
-      document.getElementById("authTitle").textContent = isLogin
-        ? "Welcome back"
-        : "Join DevShowcase";
-      document.getElementById("authSub").textContent = isLogin
-        ? "Sign in to your account"
-        : "Create your free developer profile";
+    if (userLocation) return; // already have it
 
-      clearAlert();
-      if (tab === 'signup') {
-        // Reset signup steps kila wakati tab inabadilika
-        document.getElementById('step1').style.display = 'block';
-        document.getElementById('step2').style.display = 'none';
-        document.getElementById('stepProgress').style.width = '0%';
-        document.getElementById('stepDot2').style.background = 'var(--border2)';
-      }
+    badge.style.display = "none";
+    if (!navigator.geolocation) return;
+
+    try {
+      const position = await new Promise((resolve, reject) =>
+        navigator.geolocation.getCurrentPosition(resolve, reject, {
+          enableHighAccuracy: false,
+          timeout: 15000,
+          maximumAge: 600000,
+        })
+      );
+
+      const latitude = Number(position.coords.latitude.toFixed(2));
+      const longitude = Number(position.coords.longitude.toFixed(2));
+
+      const res = await fetch(
+        `https://nominatim.openstreetmap.org/reverse?format=jsonv2&zoom=10&accept-language=en&lat=${latitude}&lon=${longitude}`
+      );
+      if (!res.ok) throw new Error("reverse geocoding failed");
+
+      const { address = {} } = await res.json();
+      const city = address.city || address.town || address.village || "";
+      const country = address.country || "";
+      const countryCode = (address.country_code || "").toUpperCase();
+      if (!country) return;
+
+      userLocation = { city, country, countryCode, latitude, longitude };
+
+      text.textContent = city ? `${city}, ${country}` : country;
+      badge.style.display = "flex";
+    } catch (err) {
+      userLocation = null;
+      badge.style.display = "none";
+      console.info("Location skipped:", err?.message || err);
     }
+  }
 
-
-
-    // ================================================
-    // PASSWORD TOGGLE
-    // ================================================
-    function togglePassword(inputId, btn) {
-      const input = document.getElementById(inputId);
-      const icon = btn.querySelector("i");
-      if (input.type === "password") {
-        input.type = "text";
-        icon.className = "fa-regular fa-eye-slash";
-      } else {
-        input.type = "password";
-        icon.className = "fa-regular fa-eye";
-      }
-    }
-
-    // ================================================
-    // ALERTS
-    // ================================================
-    function showAlert(msg, type = "error") {
-      const el = document.getElementById("authAlert");
-      el.className = `auth-alert ${type}`;
-      el.innerHTML = `<i class="fa-solid fa-${type === "error" ? "circle-exclamation" : "circle-check"}"></i> ${msg}`;
-    }
-
-    function clearAlert() {
-      const el = document.getElementById("authAlert");
-      el.className = "auth-alert";
-      el.innerHTML = "";
-    }
-
-    // ================================================
-    // SOCIAL AUTH
-    // ================================================
-    async function socialAuth(provider) {
-      clearAlert();
-      const btn = event.currentTarget;
-      const original = btn.innerHTML;
-      btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Connecting...`;
+  // ================================================
+  // SOCIAL AUTH
+  // ================================================
+  async function socialAuth(provider) {
+    clearAlert();
+    const btn = window.event?.currentTarget || null;
+    const original = btn ? btn.innerHTML : "";
+    if (btn) {
+      btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Connecting...';
       btn.disabled = true;
+    }
 
-      try {
-        const { error } = await _supabase.auth.signInWithOAuth({
-          provider: provider,
-          options: {
-            redirectTo: 'https://devshowcase.braxcode.com/devshowcase-dashboard.html',
-            queryParams: { prompt: 'select_account' }
-          },
-        });
-        if (error) throw error;
-      } catch (e) {
-        showAlert(e.message || "Connection failed. Try again!");
+    try {
+      const { error } = await _supabase.auth.signInWithOAuth({
+        provider,
+        options: {
+          redirectTo: "https://devshowcase.braxcode.com/devshowcase-dashboard.html",
+          queryParams: { prompt: "select_account" },
+        },
+      });
+      if (error) throw error;
+    } catch (e) {
+      showAlert(e.message || "Connection failed. Try again!");
+      if (btn) {
         btn.innerHTML = original;
         btn.disabled = false;
       }
     }
+  }
 
-    // ================================================
-    // EMAIL AUTH & FORGOT PASSWORD LOGIC
+  // ================================================
+  // EMAIL AUTH
+  // ================================================
+  async function forgotPassword() {
+    clearAlert();
+    const emailInput = document.getElementById("loginEmail");
+    const email = emailInput.value.trim();
+    if (!email) {
+      showAlert("Please type your email address first!");
+      emailInput.focus();
+      return;
+    }
+    try {
+      const { error } = await _supabase.auth.resetPasswordForEmail(email, {
+        redirectTo: "https://devshowcase.braxcode.com",
+      });
+      if (error) throw error;
+      showAlert("Reset link sent! Check your inbox 📬", "success");
+    } catch (e) {
+      showAlert(e.message);
+    }
+  }
 
-    async function forgotPassword() {
-      clearAlert();
-      const emailInput = document.getElementById("loginEmail");
-      const email = emailInput.value.trim();
-      if (!email) {
-        showAlert("Please type your Email address first!");
-        emailInput.focus();
+  function goToSignIn(email) {
+    switchTab("login");
+    document.getElementById("loginEmail").value = email;
+    showAlert("You already have an account with this email. Sign in below, or use Google/GitHub if that's how you joined.");
+  }
+
+  async function submitAuth() {
+    clearAlert();
+    const btn = document.getElementById(currentTab === "login" ? "authSubmitBtn" : "authSubmitBtn2");
+    const original = btn.innerHTML;
+
+    if (currentTab === "login") {
+      const email = document.getElementById("loginEmail").value.trim();
+      const password = document.getElementById("loginPassword").value;
+
+      if (!email || !password) return showAlert("Please fill in all fields!");
+      if (!email.includes("@")) return showAlert("Please enter a valid email!");
+
+      btn.disabled = true;
+      btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Signing in...';
+
+      const { error } = await _supabase.auth.signInWithPassword({ email, password });
+
+      if (error) {
+        showAlert(error.message.includes("Invalid") ? "Wrong email or password!" : error.message);
+        btn.disabled = false;
+        btn.innerHTML = original;
         return;
       }
-      try {
-        const { error } = await _supabase.auth.resetPasswordForEmail(email, {
-          redirectTo: "https://devshowcase.braxcode.com",
-        });
-        if (error) throw error;
-        showAlert("Reset link sent! Check your inbox 📬", "success");
-      } catch (e) {
-        showAlert(e.message);
-      }
+
+      showAlert("Welcome back! Redirecting...", "success");
+      if (navigator.vibrate) navigator.vibrate([40, 20, 40]);
+      setTimeout(() => {
+        window.location.href = window.location.origin + "/devshowcase-dashboard.html";
+      }, 1200);
+      return;
     }
-    function goToSignIn(email) {
+
+    // ---- SIGNUP ----
+    const first = document.getElementById("signupFirst").value.trim();
+    const last = document.getElementById("signupLast").value.trim();
+    const email = document.getElementById("signupEmail").value.trim();
+    const role = document.getElementById("signupRole").value;
+    const password = document.getElementById("signupPassword").value;
+
+    if (!first || !email || !role || !password) return showAlert("Please fill in all required fields!");
+    if (!email.includes("@")) return showAlert("Please enter a valid email!");
+    if (password.length < 8) return showAlert("Password must be at least 8 characters!");
+
+    btn.disabled = true;
+    btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Creating account...';
+
+    const { data, error } = await _supabase.auth.signUp({
+      email,
+      password,
+      options: {
+        data: {
+          full_name: `${first} ${last}`.trim(),
+          role,
+          // empty if the user refused location
+          location: userLocation ? `${userLocation.city}, ${userLocation.country}`.replace(/^, /, "") : "",
+          country: userLocation?.country || "",
+          country_code: userLocation?.countryCode || "",
+          latitude: userLocation?.latitude ?? null,
+          longitude: userLocation?.longitude ?? null,
+          avatar_initials: first.slice(0, 1).toUpperCase() + (last.slice(0, 1) || "").toUpperCase(),
+        },
+      },
+    });
+
+    if (error || data?.user?.identities?.length === 0) {
+      btn.disabled = false;
+      btn.innerHTML = original;
+      if (!error || error.message.toLowerCase().includes("already")) goToSignIn(email);
+      else showAlert(error.message);
+      return;
+    }
+
+    showAlert("Account created! Check your email to verify. 🎉", "success");
+    if (navigator.vibrate) navigator.vibrate([40, 20, 40, 20, 80]);
+
+    setTimeout(() => {
+      btn.disabled = false;
+      btn.innerHTML = original;
       switchTab("login");
-      document.getElementById("loginEmail").value = email;
-      showAlert("You already have an account with this email. Sign in below, or use Google/GitHub if that's how you joined.");
+    }, 3000);
+  }
+
+  // ================================================
+  // PASSWORD RESET
+  // ================================================
+  function openResetModal() {
+    document.getElementById("resetModal").classList.add("open");
+    document.body.style.overflow = "hidden";
+  }
+
+  async function doReset() {
+    const np = document.getElementById("newPassword").value;
+    const cp = document.getElementById("confirmPassword").value;
+    const alertEl = document.getElementById("resetAlert");
+    alertEl.className = "auth-alert";
+
+    if (np.length < 8) return paintAlert(alertEl, "Password must be at least 8 characters!", "error");
+    if (np !== cp) return paintAlert(alertEl, "Passwords do not match!", "error");
+
+    const { error } = await _supabase.auth.updateUser({ password: np });
+    if (error) return paintAlert(alertEl, error.message, "error");
+
+    paintAlert(alertEl, "Password updated! Redirecting... 🎉", "success");
+    setTimeout(() => {
+      window.location.href = "https://devshowcase.braxcode.com/devshowcase-dashboard.html";
+    }, 2000);
+  }
+
+  // Supabase fires PASSWORD_RECOVERY when someone opens a reset link
+  _supabase.auth.onAuthStateChange((event) => {
+    if (event === "PASSWORD_RECOVERY") openResetModal();
+  });
+
+  // Newer email-link format: ?token_hash=...&type=recovery
+  (async () => {
+    const params = new URLSearchParams(window.location.search);
+    const tokenHash = params.get("token_hash");
+    if (params.get("type") === "recovery" && tokenHash) {
+      const { data, error } = await _supabase.auth.verifyOtp({ token_hash: tokenHash, type: "recovery" });
+      if (!error && data?.session) openResetModal();
     }
-    // ================================================
-    // EMAIL AUTH
-    // ================================================
-    async function submitAuth() {
-      clearAlert();
-      const btn = document.getElementById(
-        currentTab === "login" ? "authSubmitBtn" : "authSubmitBtn2",
-      );
-      const original = btn.innerHTML;
+  })();
 
-      if (currentTab === "login") {
-        const email = document.getElementById("loginEmail").value.trim();
-        const password = document.getElementById("loginPassword").value;
-
-        if (!email || !password) {
-          showAlert("Please fill in all fields!");
-          return;
-        }
-        if (!email.includes("@")) {
-          showAlert("Please enter a valid email!");
-          return;
-        }
-
-        btn.disabled = true;
-        btn.innerHTML =
-          '<i class="fa-solid fa-spinner fa-spin"></i> Signing in...';
-
-        const { data, error } = await _supabase.auth.signInWithPassword({
-          email,
-          password,
-        });
-
-        if (error) {
-          showAlert(error.message.includes("Invalid") ? "Wrong email or password!" : error.message);
-          btn.disabled = false;
-          btn.innerHTML = original;
-          return;
-        }
-
-        showAlert("Welcome back! Redirecting...", "success");
-        if (navigator.vibrate) navigator.vibrate([40, 20, 40]);
-        setTimeout(() => {
-          window.location.href =
-            window.location.origin + "/devshowcase-dashboard.html";
-        }, 1200);
-      } else {
-        const first = document.getElementById("signupFirst").value.trim();
-        const last = document.getElementById("signupLast").value.trim();
-        const email = document.getElementById("signupEmail").value.trim();
-        const role = document.getElementById("signupRole").value;
-        const password = document.getElementById("signupPassword").value;
-
-        if (!first || !email || !role || !password) {
-          showAlert("Please fill in all required fields!");
-          return;
-        }
-        if (!email.includes("@")) {
-          showAlert("Please enter a valid email!");
-          return;
-        }
-        if (password.length < 8) {
-          showAlert("Password must be at least 8 characters!");
-          return;
-        }
-
-        btn.disabled = true;
-        btn.innerHTML =
-          '<i class="fa-solid fa-spinner fa-spin"></i> Creating account...';
-
-        const { data, error } = await _supabase.auth.signUp({
-          email,
-          password,
-          options: {
-            data: {
-              full_name: `${first} ${last}`.trim(),
-              role,
-              // Kama userLocation ni null (mteja alikataa), itasave empty string
-              location: userLocation
-                ? `${userLocation.city}, ${userLocation.country}`
-                : "",
-              country: userLocation?.country || "",
-              latitude: userLocation?.latitude || null,
-              longitude: userLocation?.longitude || null,
-              avatar_initials:
-                first.slice(0, 1).toUpperCase() +
-                (last.slice(0, 1) || "").toUpperCase(),
-            },
-          },
-        });
-
-        if (error || data?.user?.identities?.length === 0) {
-          btn.disabled = false;
-          btn.innerHTML = original;
-          if (!error || error.message.toLowerCase().includes("already")) goToSignIn(email);
-          else showAlert(error.message);
-          return;
-        }
-
-        showAlert(
-          "Account created! Check your email to verify. 🎉",
-          "success",
-        );
-        if (navigator.vibrate) navigator.vibrate([40, 20, 40, 20, 80]);
-
-        setTimeout(() => {
-          btn.disabled = false;
-          btn.innerHTML = original;
-          switchTab("login");
-        }, 3000);
-      }
-    }
-
-    // ================================================
-    // TOAST
-    // ================================================
-    function showToast(msg) {
-      const t = document.getElementById("toast");
-      t.innerHTML = msg;
-      t.classList.add("show");
-      setTimeout(() => t.classList.remove("show"), 3000);
-    }
-
-    // ================================================
-    // CHECK EXISTING SESSION
-    // ================================================
-    async function checkSession() {
+  // ================================================
+  // EXISTING SESSION (nav + CTA become "Dashboard")
+  // ================================================
+  async function checkSession() {
+    const navRight = document.getElementById("navAuth");
+    try {
       const { data } = await _supabase.auth.getSession();
-      if (!data?.session) { document.getElementById('navAuth').classList.add('ready'); return; }
+      if (!data?.session) return;
 
       const user = data.session.user;
-
       const meta = user.user_metadata || {};
-      const provider = user.app_metadata?.provider;
-      const navRight = document.getElementById('navAuth');
+      const shortName = meta.full_name?.split(" ")[0] || user.email?.split("@")[0] || "Developer";
 
-      let shortName = '';
-      if ((provider === 'github' || provider === 'google') && !meta.location) {
-        detectAndSaveLocation(user.id);
-      }
-
-      if (provider === 'google' || provider === 'github') {
-        shortName = meta.full_name?.split(' ')[0] || 'Developer';
-      } else {
-        shortName = meta.full_name?.split(' ')[0] || user.email?.split('@')[0] || 'Developer';
-      }
-
-      const avatarUrl = /^https?:\/\//i.test(meta.avatar_url || '') ? meta.avatar_url : '';
-      const first = Array.from(shortName)[0] || 'D';
-      const initial = /[<>&"']/.test(first) ? 'D' : first.toUpperCase();
+      const avatarUrl = /^https?:\/\//i.test(meta.avatar_url || "") ? meta.avatar_url : "";
+      const initial = (Array.from(shortName)[0] || "D").toUpperCase();
       const avatarHTML = avatarUrl
-        ? `<img class="av" src="${avatarUrl.replace(/"/g, '&quot;')}" alt="">`
-        : `<div class="av">${initial}</div>`;
+        ? `<img class="av" src="${esc(avatarUrl)}" alt="">`
+        : `<div class="av">${esc(initial)}</div>`;
 
       navRight.innerHTML = `
         <a class="btn btn-primary nav-account" href="devshowcase-dashboard.html">
           ${avatarHTML}<span>Dashboard</span>
         </a>`;
-      navRight.classList.add('ready');
-      document.querySelectorAll('[onclick="openAuth(\'signup\')"]').forEach(btn => {
-        btn.removeAttribute('onclick');
+
+      document.querySelectorAll("[onclick=\"openAuth('signup')\"]").forEach((btn) => {
+        btn.removeAttribute("onclick");
         btn.innerHTML = '<i class="fa-solid fa-table-columns"></i> Go to Dashboard';
-        btn.addEventListener('click', () => window.location.href = 'devshowcase-dashboard.html');
+        btn.addEventListener("click", () => (window.location.href = "devshowcase-dashboard.html"));
       });
-      const cta = document.querySelector('.cta-box');
+
+      const cta = document.querySelector(".cta-box");
       if (cta) cta.innerHTML = `
-  <h2>Welcome back 👋</h2>
-  <p>Your dashboard is ready. Add a new project or update your profile.</p>
-  <a class="btn btn-primary btn-hero" href="devshowcase-dashboard.html" style="margin:0 auto">
-    <i class="fa-solid fa-table-columns"></i> Go to Dashboard
-  </a>`;
+        <h2>Welcome back 👋</h2>
+        <p>Your dashboard is ready. Add a new project or update your profile.</p>
+        <a class="btn btn-primary btn-hero" href="devshowcase-dashboard.html" style="margin:0 auto">
+          <i class="fa-solid fa-table-columns"></i> Go to Dashboard
+        </a>`;
+    } catch (e) {
+      console.info("Session check failed:", e?.message || e);
+    } finally {
+      navRight.classList.add("ready"); // nav always shows, whatever happens
     }
+  }
 
-    // ================================================
-    // INIT
-    function openResetModal() {
-      document.getElementById('resetModal').classList.add('open');
-      document.body.style.overflow = 'hidden';
-    }
-
-    async function doReset() {
-      const np = document.getElementById('newPassword').value;
-      const cp = document.getElementById('confirmPassword').value;
-      const alertEl = document.getElementById('resetAlert');
-      alertEl.className = 'auth-alert';
-
-      if (np.length < 8) {
-        alertEl.className = 'auth-alert error';
-        alertEl.innerHTML = '<i class="fa-solid fa-circle-exclamation"></i> Password must be at least 8 characters!';
-        return;
-      }
-      if (np !== cp) {
-        alertEl.className = 'auth-alert error';
-        alertEl.innerHTML = '<i class="fa-solid fa-circle-exclamation"></i> Passwords do not match!';
-        return;
-      }
-
-      const { error } = await _supabase.auth.updateUser({ password: np });
-      if (error) {
-        alertEl.className = 'auth-alert error';
-        alertEl.innerHTML = `<i class="fa-solid fa-circle-exclamation"></i> ${error.message}`;
-        return;
-      }
-
-      alertEl.className = 'auth-alert success';
-      alertEl.innerHTML = '<i class="fa-solid fa-circle-check"></i> Password updated! Redirecting... 🎉';
-      setTimeout(() => window.location.href = 'https://devshowcase.braxcode.com/devshowcase-dashboard.html', 2000);
-    }
-
-    // CHECK RESET TOKEN UKIFUNGUA LANDING
-    (async () => {
-      const hash = window.location.hash;
-      const search = window.location.search;
-
-      let access_token = null;
-      let refresh_token = null;
-      let type = null;
-
-      // Format ya zamani: #access_token=xxx&type=recovery
-      if (hash && hash.includes('access_token')) {
-        const params = new URLSearchParams(hash.replace('#', ''));
-        access_token = params.get('access_token');
-        refresh_token = params.get('refresh_token');
-        type = params.get('type');
-      }
-
-      // Supabase v2 PKCE format: ?token_hash=xxx&type=recovery
-      if (search && search.includes('token_hash')) {
-        const params = new URLSearchParams(search);
-        const token_hash = params.get('token_hash');
-        type = params.get('type');
-
-        if (type === 'recovery' && token_hash) {
-          const { data, error } = await _supabase.auth.verifyOtp({
-            token_hash,
-            type: 'recovery'
-          });
-          if (!error && data?.session) {
-            openResetModal();
-            return;
-          }
-        }
-      }
-
-      // Implicit token format (fallback)
-      if (type === 'recovery' && access_token) {
-        const { error } = await _supabase.auth.setSession({
-          access_token,
-          refresh_token: refresh_token || ''
-        });
-        if (!error) openResetModal();
-      }
-    })();
-    // ================================================
-    checkSession();
-
-    function goStep2() {
-      clearAlert();
-      const first = document.getElementById('signupFirst').value.trim();
-      const email = document.getElementById('signupEmail').value.trim();
-      if (!first) { showAlert('Please enter your first name!'); return; }
-      if (!email || !email.includes('@')) { showAlert('Please enter a valid email!'); return; }
-      document.getElementById('step1').style.display = 'none';
-      document.getElementById('step2').style.display = 'block';
-      document.getElementById('stepProgress').style.width = '100%';
-      detectLocation();
-      document.getElementById('stepDot2').style.background = 'var(--a1)';
-    }
-
-    function goStep1() {
-      clearAlert();
-      document.getElementById('step2').style.display = 'none';
-      document.getElementById('step1').style.display = 'block';
-      document.getElementById('stepProgress').style.width = '0%';
-      document.getElementById('stepDot2').style.background = 'var(--border2)';
-    }
-
-    function checkPwStrength(val) {
-      const wrap = document.getElementById('pwStrength');
-      const hint = document.getElementById('pwHint');
-      const bars = [document.getElementById('bar1'), document.getElementById('bar2'), document.getElementById('bar3')];
-
-      if (!val) { wrap.style.display = 'none'; return; }
-      wrap.style.display = 'block';
-
-      let score = 0;
-      if (val.length >= 8) score++;
-      if (/[A-Z]/.test(val) && /[0-9]/.test(val)) score++;
-      if (/[^A-Za-z0-9]/.test(val)) score++;
-
-      const colors = ['#ff6b6b', '#ffd166', '#06d6a0'];
-      const labels = ['Weak — add numbers & capitals', 'Good — add a symbol like !@#', 'Strong password ✓'];
-
-      bars.forEach((b, i) => {
-        b.style.background = i < score ? colors[score - 1] : 'var(--border2)';
-      });
-      hint.style.color = colors[score - 1];
-      hint.textContent = labels[score - 1];
-    }
-    // ================================================
-    // LOCATION DETECTION (signup)
-    // GPS tu, kwa ruhusa. Ikikataliwa au ikishindwa, hatuhifadhi chochote.
-    // ================================================
-    async function detectLocation() {
-      const badge = document.getElementById("locationBadge");
-      const text = document.getElementById("locationText");
-
-      // Tayari tumepata, usiombe tena mtu akirudi step 2
-      if (userLocation) return;
-
-      userLocation = null;
-      badge.style.display = "none";
-
-      if (!navigator.geolocation) return;
-
-      try {
-        const position = await new Promise((resolve, reject) =>
-          navigator.geolocation.getCurrentPosition(resolve, reject, {
-            enableHighAccuracy: false,
-            timeout: 15000,
-            maximumAge: 600000,
-          })
-        );
-
-        // Tarakimu 2 = takriban kilomita 1, inatosha kwa mji
-        const latitude = Number(position.coords.latitude.toFixed(2));
-        const longitude = Number(position.coords.longitude.toFixed(2));
-
-        const res = await fetch(
-          `https://nominatim.openstreetmap.org/reverse?format=jsonv2&zoom=10&accept-language=en&lat=${latitude}&lon=${longitude}`
-        );
-        if (!res.ok) throw new Error("reverse geocoding failed");
-
-        const { address = {} } = await res.json();
-        const city = address.city || address.town || address.village || "";
-        const country = address.country || "";
-        if (!country) return;
-
-        userLocation = { city, country, latitude, longitude };
-
-        text.textContent = city ? `${city}, ${country}` : country;
-        badge.style.display = "flex";
-      } catch (err) {
-        // Ruhusa imekataliwa, muda umeisha, au mtandao umekwama:
-        // hatuhifadhi chochote na signup inaendelea bila location.
-        userLocation = null;
-        badge.style.display = "none";
-        console.info("Location skipped:", err?.message || err);
-      }
-    }
-    const categoryIcons = {
-      Web: 'fa-solid fa-globe',
-      Mobile: 'fa-solid fa-mobile-screen',
-      AI: 'fa-solid fa-robot',
-      Design: 'fa-solid fa-palette'
-    };
-    const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) =>
-      ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
-    function buildHeroPreviewCard(p) {
-      const tech = (p.tech_stack || '').split(',').map(t => t.trim()).filter(Boolean).slice(0, 3);
-      const icon = categoryIcons[p.category] || 'fa-solid fa-code';
-      return `
-    <div class="preview-card" onclick="window.location.href='devshowcase-gallery.html?project=${p.id}'">
+  // ================================================
+  // HERO PREVIEW
+  // ================================================
+  function buildHeroPreviewCard(p) {
+    const tech = (p.tech_stack || "").split(",").map((t) => t.trim()).filter(Boolean).slice(0, 3);
+    const icon = categoryIcons[p.category] || "fa-solid fa-code";
+    return `
+    <a class="preview-card" href="devshowcase-gallery.html?project=${Number(p.id)}"
+       style="display:block;text-decoration:none;color:inherit;">
       <div class="pc-img" style="background: linear-gradient(135deg, #D9775722, #06d6a022);">
         <i class="${icon}" style="color:var(--a1);"></i>
       </div>
       <div class="pc-body">
         <div class="pc-title">${esc(p.project_name)}</div>
-        <div class="pc-sub">by ${esc(p.dev_name || 'Developer')} : ${esc(p.dev_role || '')}</div>
+        <div class="pc-sub">by ${esc(p.dev_name || "Developer")}${p.dev_role ? " : " + esc(p.dev_role) : ""}</div>
         <div class="pc-tags">
-          ${tech.map(t => `<span class="pc-tag">${esc(t)}</span>`).join('')}
+          ${tech.map((t) => `<span class="pc-tag">${esc(t)}</span>`).join("")}
         </div>
       </div>
       <div class="pc-footer">
@@ -2416,50 +2274,60 @@
         <span class="pc-reaction"><i class="fa-solid fa-fire"></i> ${p.fire || 0}</span>
         <span class="pc-reaction"><i class="fa-solid fa-hands-clapping"></i> ${p.clap || 0}</span>
       </div>
-    </div>`;
+    </a>`;
+  }
+
+  function seededShuffle(arr, seed) {
+    const a = [...arr];
+    let s = seed;
+    const rand = () => {
+      s = (s * 9301 + 49297) % 233280;
+      return s / 233280;
+    };
+    for (let i = a.length - 1; i > 0; i--) {
+      const j = Math.floor(rand() * (i + 1));
+      [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
+  }
+
+  async function loadHeroPreview() {
+    const grid = document.getElementById("heroPreviewGrid");
+    const { data, error } = await _supabase
+      .from("showcase_projects")
+      .select("id,project_name,dev_name,dev_role,tech_stack,category,likes,fire,clap")
+      .order("created_at", { ascending: false })
+      .limit(50);
+
+    if (error || !data || !data.length) {
+      grid.innerHTML =
+        '<div class="preview-card" style="display:flex;align-items:center;justify-content:center;min-height:160px;color:var(--muted);font-size:0.8rem;">No projects yet</div>';
+      return;
     }
 
-    function seededShuffle(arr, seed) {
-      const a = [...arr];
-      let s = seed;
-      function rand() {
-        s = (s * 9301 + 49297) % 233280;
-        return s / 233280;
-      }
-      for (let i = a.length - 1; i > 0; i--) {
-        const j = Math.floor(rand() * (i + 1));
-        [a[i], a[j]] = [a[j], a[i]];
-      }
-      return a;
-    }
+    // order changes every 6 hours, not on every reload
+    const seed = Math.floor(Date.now() / (1000 * 60 * 60 * 6));
+    grid.innerHTML = seededShuffle(data, seed).slice(0, 3).map(buildHeroPreviewCard).join("");
+  }
 
-    async function loadHeroPreview() {
-      const grid = document.getElementById('heroPreviewGrid');
-      const { data, error } = await _supabase
-        .from('showcase_projects')
-        .select('*')
-        .order('created_at', { ascending: false })
-        .limit(50);
+  // reload at most once per 1.5s when the table changes
+  let heroTimer;
+  const scheduleHeroReload = () => {
+    clearTimeout(heroTimer);
+    heroTimer = setTimeout(loadHeroPreview, 1500);
+  };
 
-      if (error || !data || !data.length) {
-        grid.innerHTML = '<div class="preview-card" style="display:flex;align-items:center;justify-content:center;min-height:160px;color:var(--muted);font-size:0.8rem;">No projects yet</div>';
-        return;
-      }
+  // ================================================
+  // INIT
+  // ================================================
+  checkSession();
+  loadHeroPreview();
 
-      // Rotates kila masaa 6 — sio kila reload
-      const rotationSeed = Math.floor(Date.now() / (1000 * 60 * 60 * 6));
-      const picked = seededShuffle(data, rotationSeed).slice(0, 3);
-      grid.innerHTML = picked.map(buildHeroPreviewCard).join('');
-    }
-
-    loadHeroPreview();
-
-    _supabase
-      .channel('hero-preview-changes')
-      .on('postgres_changes', { event: '*', schema: 'public', table: 'showcase_projects' }, loadHeroPreview)
-      .subscribe();
-
-  </script>
+  _supabase
+    .channel("hero-preview-changes")
+    .on("postgres_changes", { event: "*", schema: "public", table: "showcase_projects" }, scheduleHeroReload)
+    .subscribe();
+</script>
 </body>
 
 </html>
