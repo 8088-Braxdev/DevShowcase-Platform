@@ -1,48 +1,33 @@
-export default async function handler(req, res) {
-  const SUPABASE_URL = process.env.SUPABASE_URL;
-  const SUPABASE_ANON_KEY = process.env.SUPABASE_ANON_KEY;
+const SUPABASE_URL = 'https://embhkmxkuprdjkspsdii.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_B9vhC35VSzJ3VskrtSETYw_ueSS6p1e';
+const SITE = 'https://devshowcase.braxcode.com';
 
-  const query = `${SUPABASE_URL}/rest/v1/profiles?select=id,updated_at&full_name=not.is.null&order=updated_at.desc`;
+module.exports = async (req, res) => {
+  const r = await fetch(
+    `${SUPABASE_URL}/rest/v1/showcase_projects?select=user_id,created_at,updated_at&order=created_at.desc`,
+    { headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${SUPABASE_KEY}` } }
+  );
+  const rows = r.ok ? await r.json() : [];
 
-  const response = await fetch(query, {
-    headers: {
-      'apikey': SUPABASE_ANON_KEY,
-      'Authorization': `Bearer ${SUPABASE_ANON_KEY}`
-    }
-  });
-
-  if (!response.ok) {
-    res.status(500).send('Error generating sitemap');
-    return;
+  // newest activity per developer
+  const devs = new Map();
+  for (const p of rows) {
+    if (!p.user_id) continue;
+    const t = p.updated_at || p.created_at;
+    if (!devs.has(p.user_id) || t > devs.get(p.user_id)) devs.set(p.user_id, t);
   }
 
-  const profiles = await response.json();
-
-  const staticUrls = [
-    { loc: 'https://devshowcase.braxcode.com/', priority: '1.00' },
-    { loc: 'https://devshowcase.braxcode.com/devshowcase-help.html', priority: '0.80' },
-    { loc: 'https://devshowcase.braxcode.com/devshowcase-gallery.html', priority: '0.64' },
-    { loc: 'https://devshowcase.braxcode.com/devshowcase-legal.html', priority: '0.30' },
+  const urls = [
+    `<url><loc>${SITE}/</loc></url>`,
+    `<url><loc>${SITE}/devshowcase-gallery.html</loc></url>`,
+    `<url><loc>${SITE}/devshowcase-developers.html</loc></url>`,
+    ...[...devs].map(([id, t]) =>
+      `<url><loc>${SITE}/devshowcase-profile.html?dev=${encodeURIComponent(id)}</loc><lastmod>${new Date(t).toISOString()}</lastmod></url>`)
   ];
-
-  const staticXml = staticUrls.map(u => `
-<url>
-  <loc>${u.loc}</loc>
-  <priority>${u.priority}</priority>
-</url>`).join('');
-
-  const profileXml = profiles.map(p => `
-<url>
-  <loc>https://devshowcase.braxcode.com/devshowcase-profile.html?dev=${p.id}</loc>
-  <lastmod>${new Date(p.updated_at).toISOString()}</lastmod>
-  <priority>0.50</priority>
-</url>`).join('');
-
-  const xml = `<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${staticXml}${profileXml}
-</urlset>`;
 
   res.setHeader('Content-Type', 'application/xml');
   res.setHeader('Cache-Control', 's-maxage=3600, stale-while-revalidate');
-  res.status(200).send(xml);
-}
+  res.status(200).send(
+    `<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${urls.join('')}</urlset>`
+  );
+};
