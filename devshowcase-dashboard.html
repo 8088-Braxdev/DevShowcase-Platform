@@ -2150,7 +2150,7 @@ updateLocBanner();
         .from('avatars')
         .getPublicUrl(fileName);
 
-      const avatarUrl = urlData.publicUrl;
+      const avatarUrl = urlData.publicUrl + '?v=' + Date.now();
 
       const { error: updateError } = await _supabase.auth.updateUser({
         data: { avatar_url: avatarUrl }
@@ -2159,7 +2159,9 @@ updateLocBanner();
       if (updateError) {
         showToast('Failed to save avatar', 'error'); return;
       }
-
+await _supabase.from('showcase_projects')
+  .update({ dev_avatar_url: avatarUrl })
+  .eq('user_id', currentUser.id);
       // Update everywhere
       const avatarImg = `<img src="${avatarUrl}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">`;
 
