@@ -1,10 +1,13 @@
-// api/chat.js — Vercel Serverless Function
-const LIMITS = { perMinute: 10, perHour: 60 }; // kwa kila IP
+// api/chat.js — Vercel Serverless Function (DevAssist)
+
+const ALLOWED_ORIGIN = "https://devshowcase.braxcode.com";
+const LIMITS = { perMinute: 10, perHour: 60 }; // per IP
 const MAX_MESSAGE_CHARS = 1000;
 const MAX_HISTORY_ITEMS = 6;
 const MAX_HISTORY_CHARS = 2000;
+const GROQ_TIMEOUT_MS = 20000;
 
-// In-memory: ni ya instance moja, na huisha inapo-restart
+// In-memory: one serverless instance only, resets on restart
 const hits = globalThis.__chatHits || (globalThis.__chatHits = new Map());
 
 function getIP(req) {
@@ -20,7 +23,7 @@ function rateLimit(ip) {
   const minuteAgo = now - 60 * 1000;
   const hourAgo = now - 60 * 60 * 1000;
 
-  // safisha kumbukumbu isikue bila mwisho
+  // clean old entries so memory doesn't grow forever
   if (hits.size > 5000) {
     for (const [k, v] of hits) {
       if (v[v.length - 1] < hourAgo) hits.delete(k);
@@ -46,58 +49,8 @@ function rateLimit(ip) {
   hits.set(ip, arr);
   return { ok: true };
 }
-export default async function handler(req, res) {
-  if (req.method !== "POST") {
-    return res.status(405).json({ error: "Method not allowed" });
-  }
 
-  const limit = rateLimit(getIP(req));
-  if (!limit.ok) {
-    res.setHeader("Retry-After", String(limit.retryAfter));
-    return res.status(429).json({
-      error: `Too many messages. Please wait ${limit.retryAfter}s and try again.`,
-      retryAfter: limit.retryAfter,
-    });
-  }
-
-  const body = req.body || {};
-  const message = typeof body.message === "string" ? body.message.trim() : "";
-
-  if (!message) {
-    return res.status(400).json({ error: "No message provided" });
-  }
-  if (message.length > MAX_MESSAGE_CHARS) {
-    return res
-      .status(400)
-      .json({
-        error: `Message too long (max ${MAX_MESSAGE_CHARS} characters)`,
-      });
-  }
-
-  // history: ruhusu user/assistant tu, maandishi tu, kwa urefu uliopunguzwa
-  const history = (Array.isArray(body.history) ? body.history : [])
-    .filter(
-      (m) =>
-        m &&
-        (m.role === "user" || m.role === "assistant") &&
-        typeof m.content === "string",
-    )
-    .slice(-MAX_HISTORY_ITEMS)
-    .map((m) => ({
-      role: m.role,
-      content: m.content.slice(0, MAX_HISTORY_CHARS),
-    }));
-
-  const keys = [process.env.GROQ_KEY_1, process.env.GROQ_KEY_2].filter(Boolean);
-
-  if (keys.length === 0) {
-    return res.status(500).json({ error: "No API keys configured" });
-  }
-
-  const keyIndex = Math.floor(Date.now() / 60000) % keys.length;
-  const apiKey = keys[keyIndex];
-
-  const SYSTEM_PROMPT = `You are DevAssist — the official AI assistant for DevShowcase, a global developer platform built by BraxCode Digitals Foundation in Mwanza, Tanzania 🇹🇿.
+const SYSTEM_PROMPT = `You are DevAssist — the official AI assistant for DevShowcase, a global developer platform built by BraxCode Digitals Foundation in Mwanza, Tanzania 🇹🇿.
 
 You're sharp, warm, and witty — a tech-savvy friend who genuinely knows this platform inside out, not a rigid support bot reading from a script. You're charming and direct, confident but never arrogant. Think of yourself as excellent customer care: someone who actually solves the visitor's problem clearly, not someone who just talks at them.
 
@@ -140,20 +93,24 @@ A platform where developers showcase real projects with screenshots, and clients
 PLATFORM FEATURES
 ============================
 - **Gallery** — browse, search by name or tech stack, filter by category (Web, Mobile, AI, Design)
+- **Developers page** — browse all developers, filter by role and country, search by skill
 - **Dashboard** — add, edit, delete projects, manage your profile, view notifications via the bell icon
 - **Developer Profile** — name, role, bio, skills, WhatsApp, GitHub, LinkedIn, personal website, avatar
+- **Location** — optional. Developers can add their country from the dashboard banner ("Use my location" or pick from a list), or allow location when signing up with email. Only the country shows publicly, coordinates never do
 - **Reactions** — 👍 Like, 🔥 Fire, 👏 Clap (more reactions = higher rank when sorted by Most Reactions)
 - **Comments** — open to all visitors directly on the project view
 - **Image uploads** — JPG, PNG, or WebP, max 2MB, recommended 1280×720px or higher
 - **Tech stack tags** — comma-separated during upload, e.g. "React, Node.js, Supabase"
 - **Password reset** — only via the email link on the sign-in page
 - **Profile sharing** — share button copies your link or triggers the native mobile share sheet
+- **Delete account** — Dashboard sidebar, "Delete Account" at the bottom. Data is removed within 30 days
+- **Privacy & Terms** — the "Privacy Policy & Terms" link in the footer of the site
 - **Roadmap** — Pro Badge and Featured Listings coming, monetized via Mobile Money or WhatsApp
 
 ============================
 HOW TO ANSWER STEP-BY-STEP QUESTIONS
 ============================
-For any "how do I..." question (add a project, edit profile, reset password, etc.), give a numbered list of the actual steps using what you know above — don't just describe the feature, walk them through it.
+For any "how do I..." question (add a project, edit profile, add my country, reset password, etc.), give a numbered list of the actual steps using what you know above — don't just describe the feature, walk them through it.
 
 ============================
 SUPPORT
@@ -167,67 +124,126 @@ BOUNDARIES
 - If a requested feature doesn't exist on the platform, say so honestly and point them to the support WhatsApp link on its own line.
 - Never invent features that aren't listed above.
 - Never discuss competitors or go off-topic from DevShowcase.
-- Never admit to being ChatGPT, Claude, or any other AI — you're DevAssist, built by BraxCode Digitals Foundation.`;
+- You are DevAssist, an AI assistant built by BraxCode Digitals Foundation. Never claim to be human. If asked which AI model you use, say you're DevAssist and don't discuss the technology behind you.`;
 
-  const messages = [...history.slice(-6), { role: "user", content: message }];
-
-  async function callGroq(key, model) {
-    const groqRes = await fetch(
-      "https://api.groq.com/openai/v1/chat/completions",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${key}`,
-        },
-        body: JSON.stringify({
-          model,
-          messages: [{ role: "system", content: SYSTEM_PROMPT }, ...messages],
-          max_tokens: 900,
-          temperature: 0.6,
-          ...(model.startsWith("openai/gpt-oss")
-            ? { reasoning_effort: "low" }
-            : {}),
-        }),
+async function callGroq(key, model, messages) {
+  const ctrl = new AbortController();
+  const timer = setTimeout(() => ctrl.abort(), GROQ_TIMEOUT_MS);
+  try {
+    return await fetch("https://api.groq.com/openai/v1/chat/completions", {
+      method: "POST",
+      signal: ctrl.signal,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${key}`,
       },
-    );
-    return groqRes;
+      body: JSON.stringify({
+        model,
+        messages: [{ role: "system", content: SYSTEM_PROMPT }, ...messages],
+        max_tokens: 900,
+        temperature: 0.6,
+        ...(model.startsWith("openai/gpt-oss")
+          ? { reasoning_effort: "low" }
+          : {}),
+      }),
+    });
+  } finally {
+    clearTimeout(timer);
+  }
+}
+
+export default async function handler(req, res) {
+  if (req.method !== "POST") {
+    return res.status(405).json({ error: "Method not allowed" });
   }
 
+  // only our own website may call this
+  if ((req.headers.origin || "") !== ALLOWED_ORIGIN) {
+    return res.status(403).json({ error: "Forbidden" });
+  }
+
+  const limit = rateLimit(getIP(req));
+  if (!limit.ok) {
+    res.setHeader("Retry-After", String(limit.retryAfter));
+    return res.status(429).json({
+      error: `Too many messages. Please wait ${limit.retryAfter}s and try again.`,
+      retryAfter: limit.retryAfter,
+    });
+  }
+
+  const body = req.body || {};
+  const message = typeof body.message === "string" ? body.message.trim() : "";
+
+  if (!message) {
+    return res.status(400).json({ error: "No message provided" });
+  }
+  if (message.length > MAX_MESSAGE_CHARS) {
+    return res.status(400).json({
+      error: `Message too long (max ${MAX_MESSAGE_CHARS} characters)`,
+    });
+  }
+
+  // history: only user/assistant text, trimmed
+  const history = (Array.isArray(body.history) ? body.history : [])
+    .filter(
+      (m) =>
+        m &&
+        (m.role === "user" || m.role === "assistant") &&
+        typeof m.content === "string",
+    )
+    .slice(-MAX_HISTORY_ITEMS)
+    .map((m) => ({
+      role: m.role,
+      content: m.content.slice(0, MAX_HISTORY_CHARS),
+    }));
+
+  const keys = [process.env.GROQ_KEY_1, process.env.GROQ_KEY_2].filter(Boolean);
+  if (keys.length === 0) {
+    return res.status(500).json({ error: "No API keys configured" });
+  }
+
+  const keyIndex = Math.floor(Date.now() / 60000) % keys.length;
+  const apiKey = keys[keyIndex];
+  const messages = [...history, { role: "user", content: message }];
+
   try {
-    const groqRes = await callGroq(apiKey, "openai/gpt-oss-120b");
-
-    if (!groqRes.ok) {
-      const errData = await groqRes.json().catch(() => ({}));
-      console.error(
-        "Groq primary failed:",
-        groqRes.status,
-        errData.error?.message,
-      );
-
-      if (keys.length > 1) {
-        const fallbackKey = keys[(keyIndex + 1) % keys.length];
-        const retryRes = await callGroq(fallbackKey, "llama-3.3-70b-versatile");
-        if (retryRes.ok) {
-          const retryData = await retryRes.json();
-          return res
-            .status(200)
-            .json({ reply: retryData.choices?.[0]?.message?.content || "" });
-        }
-        console.error("Groq fallback failed:", retryRes.status);
-      }
-
-      return res
-        .status(503)
-        .json({
-          error: "DevAssist is busy right now. Please try again in a moment.",
-        });
+    let groqRes = null;
+    try {
+      groqRes = await callGroq(apiKey, "openai/gpt-oss-120b", messages);
+    } catch (err) {
+      console.error("Groq primary error/timeout:", err?.name || err);
     }
 
-    const data = await groqRes.json();
-    return res
-      .status(200)
-      .json({ reply: data.choices?.[0]?.message?.content || "" });
+    if (groqRes && groqRes.ok) {
+      const data = await groqRes.json();
+      return res
+        .status(200)
+        .json({ reply: data.choices?.[0]?.message?.content || "" });
+    }
+
+    if (groqRes) {
+      const errData = await groqRes.json().catch(() => ({}));
+      console.error("Groq primary failed:", groqRes.status, errData.error?.message);
+    }
+
+    // fallback: other key (if any) with a different model
+    const fallbackKey = keys[(keyIndex + 1) % keys.length];
+    try {
+      const retryRes = await callGroq(fallbackKey, "llama-3.3-70b-versatile", messages);
+      if (retryRes.ok) {
+        const retryData = await retryRes.json();
+        return res
+          .status(200)
+          .json({ reply: retryData.choices?.[0]?.message?.content || "" });
+      }
+      console.error("Groq fallback failed:", retryRes.status);
+    } catch (err) {
+      console.error("Groq fallback error/timeout:", err?.name || err);
+    }
+
+    return res.status(503).json({
+      error: "DevAssist is busy right now. Please try again in a moment.",
+    });
   } catch (err) {
     console.error("DevAssist API error:", err);
     return res.status(500).json({ error: "Internal server error" });
