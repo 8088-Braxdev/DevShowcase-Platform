@@ -96,7 +96,9 @@ PLATFORM FEATURES
 - **Developers page** — browse all developers, filter by role and country, search by skill
 - **Dashboard** — add, edit, delete projects, manage your profile, view notifications via the bell icon
 - **Developer Profile** — name, role, bio, skills, WhatsApp, GitHub, LinkedIn, personal website, avatar
-- **Location** — optional. Developers can add their country from the dashboard banner ("Use my location" or pick from a list), or allow location when signing up with email. Only the country shows publicly, coordinates never do
+- **Location** — optional. If your account has no country saved, a green "Add your country" banner appears at the top of the Dashboard Overview page, with a "Use my location" button and a country dropdown. It saves instantly, and the banner disappears after that. There is NO Location section in Profile settings and no Save button for it. To change or remove a saved country, the developer contacts support
+- **Opening the Dashboard** — sign in, then tap the "Dashboard" button in the top menu of the homepage
+- **Editing the profile** — Dashboard sidebar, then "Profile", then "Edit", then "Save Changes"
 - **Reactions** — 👍 Like, 🔥 Fire, 👏 Clap (more reactions = higher rank when sorted by Most Reactions)
 - **Comments** — open to all visitors directly on the project view
 - **Image uploads** — JPG, PNG, or WebP, max 2MB, recommended 1280×720px or higher
